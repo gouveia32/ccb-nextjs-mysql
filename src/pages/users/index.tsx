@@ -1,61 +1,44 @@
-import React from "react";
-import { useRef } from 'react';
-import Head from 'next/head'
-import dynamic from 'next/dynamic'
-import Slider from "react-slick";
-import { ClienteProps } from "components/clientes/Cliente"
 import { PrismaClient, Cliente } from "@prisma/client";
+import Router from "next/router";
+import { GetServerSideProps } from "next";
+import Layout from "components/Layout";
+import { ClienteProps } from "components/clientes/Cliente"
+import { useRouter } from 'next/router'
+import React, { useState } from "react";
+
 import {
-  Flex,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react"
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react"
+
+import {
+  Table,
   Thead,
   Tbody,
   Tr,
   Th,
+  Td,
   TableCaption,
 } from "@chakra-ui/react"
-import Layout from 'src/components/Layout';
 
-import TablePerso from "components/table";
 
+import { Box, Flex, Link } from "@chakra-ui/layout";
 
 const prisma = new PrismaClient();
 
-const ClienteCard = dynamic(
-  () => import('components/clientes/ClienteCard'),
-  { loading: () => <p>carregando</p> }
-)
-
-const settings = {
-  dots: false,
-  slidesToShow: 1,
-  slidesToScroll: 4,
-  variableWidth: true,
-  initialSlide: 0,
-  infinite: false,
-  responsive: [
-    {
-      breakpoint: 640,
-      settings: {
-        slidesToShow: 1.5,
-        slidesToScroll: 1,
-        initialSlide: 0,
-      }
-    },
-    {
-      breakpoint: 375,
-      settings: {
-        slidesToShow: 1.5,
-        slidesToScroll: 1,
-        initialSlide: 0,
-      }
-    }
-  ]
-};
-
-export async function getStaticProps() {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const clientes = await prisma.cliente.findMany();
-  //console.log("cli:",clientes);
   return {
     props: { clientes },
   };
@@ -65,62 +48,131 @@ type Props = {
   clientes: ClienteProps[];
 };
 
-const Users: React.FC<Props> = (props) => {
-  const ref = useRef(null)
+const Clientes: React.FC<Props> = (props) => {
+  const { isOpen: isDeleteUmOpen, onOpen: onDeleteUmOpen, onClose: onDeleteUmClose } = useDisclosure()
+  const { isOpen: isDeleteTodosOpen, onOpen: onDeleteTodosOpen, onClose: onDeleteTodosClose } = useDisclosure()
+  const router = useRouter()
+  const [selectedClientes, setSelectedClientes] = useState([]);
 
-  const handlePrev = () => {
-    ref.current.slickPrev()
-  }
+  const handleSelectCliente = (event) => {
+    const id = event.target.value;
 
-  const handleNext = () => {
-    ref.current.slickNext()
-  }
-  //console.log("props:",props);
-
-  
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Id",
-        accessor: "id",
-      },
-      {
-        Header: "Nome",
-        accessor: "nome",
-      },
-      {
-        Header: "Telefone",
-        accessor: "telefone1",
-        isNumeric: false,
-      },
-      {
-        Header: "Email",
-        accessor: "email",
-      },
-    ],
-    []
-  );
-
-  //console.log("clientes:",props.clientes)
+    if (!selectedClientes.includes(id)) {
+      setSelectedClientes([...selectedClientes, id]);
+    } else {
+      setSelectedClientes(
+        selectedClientes.filter((selectedClienteId) => {
+          return selectedClienteId !== id;
+        })
+      );
+    }
+  };
 
   return (
     <>
       <Layout>
-        <TablePerso
-          data={props.clientes}
-          columns={columns}
-          isResponsive={true}
-          onRowClick={(row: any) => console.log(row)}
-          responsiveView={<Flex>responsive here....</Flex>}
-          isPaginate
-          onPageChanged={(f: any) => alert(JSON.stringify(f))}
-          currentPage={1}
-          totalRecords={300}
-          pageLimit={2}
-        />
+        <div style={{ textAlign: 'end', marginBottom: '.5rem' }}>
+
+          <Button colorScheme="teal" size="xs" mr='2' onClick={() => { }}>Novo</Button>
+          {/* Delete Todos */}
+          <Button colorScheme="red" size="xs" onClick={onDeleteTodosOpen}>
+            Apagar todos
+          </Button>
+          <Modal isOpen={isDeleteTodosOpen} onClose={onDeleteTodosClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Apagar todos os clientes</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Tem certeza ?
+              </ModalBody>
+
+              <ModalFooter>
+                <Button variant="ghost" mr={3} onClick={onDeleteTodosClose}>Não</Button>
+                <Button colorScheme="red" onClick={() => { }}>
+                  Apagar
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </div>
+
+        <div style={{ textAlign: 'center', borderTop: '1px solid grey' }}>
+          <Table width="100%" variant="striped" colorScheme="teal">
+            <TableCaption>Clientes</TableCaption>
+            <Thead>
+              <Tr style={{ alignContent: 'center' }}>
+                <Th>
+                  <h3>id</h3>
+                </Th>
+                <Th align="left">
+                  <h3>Nome</h3>
+                </Th>
+                <Th align="left">
+                  <h3>Telefone</h3>
+                </Th>
+                <Th>
+                  <h3>Email</h3>
+                </Th>
+                <Th>
+                  <h3>Ação</h3>
+                </Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {props.clientes?.map((value, index) => {
+                return (
+                  <Tr key={`${value.nome}${index}`} style={{ alignContent: 'center' }}>
+                    <Td>
+                      <p>{value.id}</p>
+                    </Td>
+                    <Td align="left">
+                      <p>{value.nome}</p>
+                    </Td>
+                    <Td align="left">
+                      <p>{value.telefone1}</p>
+                    </Td>
+                    <Td>
+                      <p>{value.email}</p>
+                    </Td>
+                    <Td>
+                      <Button colorScheme="teal" size="xs" mr='2' onClick={() => router.push(`/cliente/edit/${value.id}`)}>Alterar</Button>
+                      {/* Delete Um */}
+                      <Button colorScheme="red" size="xs" onClick={onDeleteUmOpen}>
+                        Apagar
+                      </Button>
+                      <Modal isOpen={isDeleteUmOpen} onClose={onDeleteUmClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                          <ModalHeader>Apagar: {selectedClientes}</ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody>
+                            Tem certeza ?
+                          </ModalBody>
+
+                          <ModalFooter>
+                            <Button variant="ghost" mr={3} onClick={onDeleteUmClose}>Não</Button>
+                            <Button colorScheme="red" onClick={() => { }}>
+                              Apagar
+                            </Button>
+                          </ModalFooter>
+                        </ModalContent>
+                      </Modal>
+                    </Td>
+                  </Tr>
+                )
+              })}
+            </Tbody>
+          </Table>
+        </div>
+
+        {/*<Box>
+            Clientes
+            <p>{JSON.stringify(clientes)}</p>
+        </Box>*/}
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default Users;
+export default Clientes;
