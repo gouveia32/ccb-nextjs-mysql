@@ -9,6 +9,7 @@ import {
 import Layout from 'src/components/Layout';
 
 import TablePerso from "components/table";
+import Table2 from "components/table/Table"
 
 
 const prisma = new PrismaClient();
@@ -32,17 +33,6 @@ type Props = {
 };
 
 const Users: React.FC<Props> = (props) => {
-  const ref = useRef(null)
-
-  const handlePrev = () => {
-    ref.current.slickPrev()
-  }
-
-  const handleNext = () => {
-    ref.current.slickNext()
-  }
-  //console.log("props:",props);
-
 
   const columns = React.useMemo(
     () => [
@@ -72,7 +62,7 @@ const Users: React.FC<Props> = (props) => {
   return (
     <>
       <Layout>
-        <TablePerso
+        {/*<TablePerso
           data={props.clientes}
           columns={columns}
           isResponsive={false}
@@ -83,6 +73,11 @@ const Users: React.FC<Props> = (props) => {
           currentPage={1}
           totalRecords={300}
           pageLimit={2}
+        />*/}
+
+        <Table2
+          data={props.clientes}
+          columns={columns}
         />
       </Layout>
     </>

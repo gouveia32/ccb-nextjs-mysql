@@ -1,4 +1,5 @@
 import React from "react";
+import { useRef } from 'react';
 
 import {
   Table,
@@ -29,6 +30,7 @@ interface TablePersoProps {
   onPageChanged?: (f: PageProps) => void;
 }
 
+
 const TablePerso: React.FC<TablePersoProps> = ({
   data,
   columns,
@@ -50,6 +52,19 @@ const TablePerso: React.FC<TablePersoProps> = ({
     prepareRow,
   } = useTable({ columns, data }, useSortBy);
 
+  const ref = useRef(null)
+
+  const handlePrev = () => {
+    ref.current.slickPrev()
+  }
+
+  const handleNext = () => {
+    ref.current.slickNext()
+  }
+
+  console.log("props:",currentPage)
+
+
   return (
     <>
       {isResponsive && !isLargerThan1120 ? (
@@ -63,8 +78,8 @@ const TablePerso: React.FC<TablePersoProps> = ({
         </Flex>
       ) : (
         <Flex flexDirection="column" w="100%">
-          <Table variant="unstyled" {...getTableProps()}>
-            <Thead bg="gray.200">
+          <Table size="sm" variant="simple" {...getTableProps()}>
+            <Thead bg="gray.300" >
               {headerGroups.map((headerGroup) => (
                 <Tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column, index) => (
