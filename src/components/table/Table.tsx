@@ -1,5 +1,6 @@
 import React from 'react'
-import { useTable, usePagination } from 'react-table'
+import { useTable, useSortBy, usePagination } from 'react-table'
+import PaginationPerso, { PageProps } from "./Pagination";
 import {
   Table,
   Thead,
@@ -8,24 +9,42 @@ import {
   Th,
   Td,
   chakra,
-  Flex,
   useMediaQuery,
-} from "@chakra-ui/react";
+} from "@chakra-ui/react"
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 
 function onRowClick(row) {
-  console.log("row:",row)
+  console.log("row:", row)
 }
 
+interface TablePersoProps {
+  data: any;
+  columns: any;
+  isResponsive?: boolean;
+  onRowClick?: (row: any) => void;
+  responsiveView?: React.ReactElement<{ data: Array<any> }>;
+  isPaginate?: boolean;
+  currentPage?: number;
+  totalRecords?: number;
+  pageLimit?: number;
+  onPageChanged?: (f: PageProps) => void;
+}
 
-function Table2({ columns, data }) {
-  // Use the state and functions returned from useTable to build your UI
+const Table2: React.FC<TablePersoProps> = ({
+  columns,
+  data,
+}: TablePersoProps): React.ReactElement => {
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
+  } = useTable({ columns, data }, useSortBy);
+
+
+  // Use the state and functions returned from useTable to build your UI
+  const {
     page, // Instead of using 'rows', we'll use page,
     // which has only the rows for the active page
 
@@ -43,7 +62,7 @@ function Table2({ columns, data }) {
     {
       columns,
       data,
-      initialState: { pageIndex: 2 },
+      initialState: { pageIndex: 0 },
     },
     usePagination
   )
@@ -51,34 +70,19 @@ function Table2({ columns, data }) {
   // Render the UI for your table
   return (
     <>
-      <pre>
-        {/*<code>
-          {JSON.stringify(
-            {
-              pageIndex,
-              pageSize,
-              pageCount,
-              canNextPage,
-              canPreviousPage,
-            },
-            null,
-            2
-          )}
-          </code>*/}
-      </pre>
 
       <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
+          {'|< '}
         </button>{' '}
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
+          {' < '}
         </button>{' '}
         <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
+          {' > '}
         </button>{' '}
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
+          {' >|'}
         </button>{' '}
         <span>
           Page{' '}
@@ -104,7 +108,7 @@ function Table2({ columns, data }) {
             setPageSize(Number(e.target.value))
           }}
         >
-          {[10, 20, 30, 40, 50].map(pageSize => (
+          {[3, 10, 20, 30, 0].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
@@ -120,7 +124,7 @@ function Table2({ columns, data }) {
                 <Th
                   fontWeight="bold"
                   fontSize="sm"
-                  {...column.getHeaderProps(column.getSortByToggleProps)}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   isNumeric={column.isNumeric}
                 >
                   {column.render("Header")}

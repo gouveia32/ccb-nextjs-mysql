@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, usePagination } from "react-table";
 import PaginationPerso, { PageProps } from "./Pagination";
 
 interface TablePersoProps {
@@ -30,115 +30,142 @@ interface TablePersoProps {
   onPageChanged?: (f: PageProps) => void;
 }
 
-
 const TablePerso: React.FC<TablePersoProps> = ({
-  data,
   columns,
-  isResponsive,
-  responsiveView,
+  data,
   onRowClick,
-  isPaginate,
   currentPage,
-  totalRecords,
-  pageLimit,
-  onPageChanged,
 }: TablePersoProps): React.ReactElement => {
   const [isLargerThan1120] = useMediaQuery("(min-width: 1120px)");
+
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    // rows, -> we change 'rows' to 'page'
+    page,
     prepareRow,
-  } = useTable({ columns, data }, useSortBy);
-
-  const ref = useRef(null)
-
-  const handlePrev = () => {
-    ref.current.slickPrev()
-  }
-
-  const handleNext = () => {
-    ref.current.slickNext()
-  }
-
-  console.log("props:",currentPage)
-
+    visibleColumns,
+    // below new props related to 'usePagination' hook
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize }
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 10 }
+    },
+    useSortBy,
+    usePagination
+  );
 
   return (
     <>
-      {isResponsive && !isLargerThan1120 ? (
-        <Flex
-          display="flex"
-          direction="column"
-          align={["center", "center", "unset", "unset"]}
-          width="100%"
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'|< '}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {' < '}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {' > '}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {' >|'}
+        </button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} de {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <span>
+          | Ir para a pag:{' '}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={e => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              gotoPage(page)
+            }}
+            style={{ width: '100px' }}
+          />
+        </span>{' '}
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
         >
-          {responsiveView}
-        </Flex>
-      ) : (
-        <Flex flexDirection="column" w="100%">
-          <Table size="sm" variant="simple" {...getTableProps()}>
-            <Thead bg="gray.300" >
-              {headerGroups.map((headerGroup) => (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column, index) => (
-                    <Th
-                      fontWeight="bold"
+          {[3, 10, 20, 30, 0].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <Flex flexDirection="column" w="100%">
+        <Table size="sm" variant="simple" {...getTableProps()}>
+          <Thead bg="gray.300" >
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column, index) => (
+                  <Th
+                    fontWeight="bold"
+                    fontSize="sm"
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    isNumeric={column.isNumeric}
+                  >
+                    {column.render("Header")}
+                    <chakra.span pl="4">
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <TriangleDownIcon aria-label="sorted descending" />
+                        ) : (
+                          <TriangleUpIcon aria-label="sorted ascending" />
+                        )
+                      ) : null}
+                    </chakra.span>
+                  </Th>
+                ))}
+              </Tr>
+            ))}
+          </Thead>
+          <Tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <Tr
+                  onClick={(): void => onRowClick(row)}
+                  _active={{ bg: "green.25", borderRadius: "10px" }}
+                  {...row.getRowProps()}
+                >
+                  {row.cells.map((cell) => (
+                    <Td
                       fontSize="sm"
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      isNumeric={column.isNumeric}
+                      {...cell.getCellProps()}
+                      isNumeric={cell.column.isNumeric}
                     >
-                      {column.render("Header")}
-                      <chakra.span pl="4">
-                        {column.isSorted ? (
-                          column.isSortedDesc ? (
-                            <TriangleDownIcon aria-label="sorted descending" />
-                          ) : (
-                            <TriangleUpIcon aria-label="sorted ascending" />
-                          )
-                        ) : null}
-                      </chakra.span>
-                    </Th>
+                      {cell.render("Cell")}
+                    </Td>
                   ))}
                 </Tr>
-              ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-                return (
-                  <Tr
-                    onClick={(): void => onRowClick(row)}
-                    _active={{ bg: "green.25", borderRadius: "10px" }}
-                    {...row.getRowProps()}
-                  >
-                    {row.cells.map((cell) => (
-                      <Td
-                        fontSize="sm"
-                        {...cell.getCellProps()}
-                        isNumeric={cell.column.isNumeric}
-                      >
-                        {cell.render("Cell")}
-                      </Td>
-                    ))}
-                  </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
-
-          {isPaginate && (
-            <PaginationPerso
-              alignSelf="flex-end"
-              currentPage={currentPage}
-              totalRecords={totalRecords}
-              pageLimit={pageLimit}
-              onPageChanged={onPageChanged}
-            />
-          )}
-        </Flex>
-      )}
+              );
+            })}
+          </Tbody>
+        </Table>
+      </Flex>
+      )
     </>
   );
 };

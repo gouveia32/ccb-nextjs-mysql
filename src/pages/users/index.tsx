@@ -48,7 +48,7 @@ type Props = {
   clientes: ClienteProps[];
 };
 
-const Clientes: React.FC<Props> = (props) => {
+const Users: React.FC<Props> = (props) => {
   const { isOpen: isDeleteUmOpen, onOpen: onDeleteUmOpen, onClose: onDeleteUmClose } = useDisclosure()
   const { isOpen: isDeleteTodosOpen, onOpen: onDeleteTodosOpen, onClose: onDeleteTodosClose } = useDisclosure()
   const router = useRouter()
@@ -175,4 +175,4 @@ const Clientes: React.FC<Props> = (props) => {
   );
 };
 
-export default Clientes;
+export default Users;

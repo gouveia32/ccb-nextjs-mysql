@@ -149,7 +149,7 @@ export default function Navbar() {
                 </a>
               </li>
               <li>
-                <a href="/products/3" className="bg-gray-200 hover:bg-gray-400 py-2 block whitespace-no-wrap">
+                <a href="/users" className="bg-gray-200 hover:bg-gray-400 py-2 block whitespace-no-wrap">
                   Fornecedor
                 </a>
               </li>
