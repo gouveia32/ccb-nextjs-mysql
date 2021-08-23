@@ -1,7 +1,8 @@
 import Layout from 'src/components/Layout';
 
 import React, { useEffect, useState, useMemo } from 'react';
-import TableContainer from 'components/table';
+import TableContainer from 'components/table/TableContainer'
+import {SelectColumnFilter} from "components/table/filters"
 import {
   Card,
   CardText,
@@ -30,16 +31,19 @@ const Clientes = (props) => {
         Header: () => null,
         id: 'expander', // 'id' is required
         Cell: ({ row }) => (
-          <span {...row.getToggleRowExpandedProps}>
+          <span {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
           </span>
         ),
       },
       {
+        Header: 'Id',
+        accessor: 'id',
+      },
+      {
         Header: 'Nome',
         accessor: 'nome',
-        //Filter: SelectColumnFilter,
-        filter: 'equals',
+        filter: true,
       },
       {
         Header: 'Telefone',
@@ -54,25 +58,35 @@ const Clientes = (props) => {
       {
         Header: 'Cidade',
         accessor: 'cidade',
+        Filter: SelectColumnFilter,
+        filter: 'equals',
       },
     ],
     []
   );
 
   const renderRowSubComponent = (row) => {
-    console.log("row:",row)
     const {
-      name: { nome, email, telefone1 },
-      cell,
+      nome,
+      contato_nome,
+      email,
+      endereco,
+      cidade,
+      uf,
+      cep,
+      telefone1,
+      telefone2,
+      telefone3,
     } = row.original;
     return (
-      <Card style={{ width: '18rem', margin: '0 auto' }}>
+      <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333', width: '18rem', margin: '0 auto' }}>
         <CardBody>
           <CardTitle>
-            <strong>{`${nome} ${email}`} </strong>
+            <strong>{nome}  </strong>
           </CardTitle>
           <CardText>
-            <strong>Telefone</strong>: {telefone1} <br />
+            <strong>Email</strong>: {email} <br />
+            <strong>Telefone</strong>: {`${telefone1} ${telefone2} ${telefone3}`} <br />
           </CardText>
         </CardBody>
       </Card>
@@ -84,26 +98,11 @@ const Clientes = (props) => {
   return (
     <>
       <Layout>
-        {/*<TablePerso
-          columns={columns}
-          data={props.clientes}
-          onRowClick={(row: any) => console.log(row)}
-          isPaginate
-          onPageChanged={(f: any) => alert(JSON.stringify(f))}
-          currentPage={1}
-          totalRecords={12}
-          pageLimit={2}
-        />*/}
-
-        {/*<Table2
-          data={props.clientes}
-          columns={columns}
-        />*/}
         <TableContainer
         columns={columns}
         data={props.clientes}
         renderRowSubComponent={renderRowSubComponent}
-      />
+        />
       </Layout>
     </>
   )
