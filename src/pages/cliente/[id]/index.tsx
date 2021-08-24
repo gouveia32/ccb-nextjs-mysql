@@ -1,6 +1,5 @@
 import { PrismaClient, Cliente } from "@prisma/client";
 import Layout from "components/Layout";
-import ProductImage from "components/ProductImage";
 
 const prisma = new PrismaClient();
 

@@ -6,7 +6,7 @@ import {
   Tr,
   Th,
   Td,
-  Strong,
+  Text,
   useMediaQuery,
 } from "@chakra-ui/react"
 
@@ -76,6 +76,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   return (
     <Fragment>
       <Row style={{ maxWidth: "100%", margin: '0 auto', textAlign: 'left' }}>
+        <strong>{'CLIENTES     => '}</strong>
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'|< '}
         </Button>{' '}
