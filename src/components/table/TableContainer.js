@@ -20,6 +20,10 @@ import {
 import { Row, Col, Button, Input, CustomInput } from 'reactstrap';
 import { Filter, DefaultColumnFilter } from './filters';
 
+function onRowClick(row) {
+  console.log("row:",row)
+}
+
 const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   const {
     getTableProps,
@@ -117,7 +121,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
       </Row>
 
       <Table variant="simple" bordered hover {...getTableProps()}>
-        <Thead bg="gray.100" >
+        <Thead bg="gray.200" >
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
@@ -153,7 +157,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
                 {row.isExpanded && (
                   <Tr>
                     <Td colSpan={visibleColumns.length}>
-                      {renderRowSubComponent(row)}
+                      {renderRowSubComponent(row)} 
                     </Td>
                   </Tr>
                 )}

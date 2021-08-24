@@ -15,7 +15,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
@@ -34,6 +34,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/components/Table.js"
-, "src/components/table/filters.js", "src/pages/clientes/index.js"  ]
+    "src/components/Table.js",
+    "src/components/table/filters.js",
+    "src/pages/clientes/index.js"
+  ]
 }

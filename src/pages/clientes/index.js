@@ -79,14 +79,15 @@ const Clientes = (props) => {
       telefone3,
     } = row.original;
     return (
-      <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333', width: '18rem', margin: '0 auto' }}>
+      <Card text="white" style={{ backgroundColor: '#081b1ba8', width: '32rem', margin: '0 auto' }}>
         <CardBody>
           <CardTitle>
             <strong>{nome}  </strong>
           </CardTitle>
           <CardText>
+            <strong>Endereço</strong>: {endereco} {cidade}/{uf} <br />
             <strong>Email</strong>: {email} <br />
-            <strong>Telefone</strong>: {`${telefone1} ${telefone2} ${telefone3}`} <br />
+            <strong>Telefone</strong>: {`${telefone1}  ${telefone2}  ${telefone3}`} <br />
           </CardText>
         </CardBody>
       </Card>
