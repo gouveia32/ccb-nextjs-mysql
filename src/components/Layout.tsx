@@ -19,7 +19,7 @@ export default function Layout({ children }) {
         <link rel="image_src" href="/logo.jpg" />
       </Head>
       <div className="flex flex-col min-h-screen">
-        <header className="sticky top-0 z-50">
+        <header className="sticky top-0 z-40">
           <Navbar />
         </header>
         <main className="container mx-auto relative flex-auto">{children}</main>
