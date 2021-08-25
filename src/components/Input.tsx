@@ -5,6 +5,7 @@ interface InputProps {
   }
   
   export default function Input({ placeholder, name, formRef }: InputProps) {
+    console.log("formRef:",formRef)
     return (
       <input
         className="rounded p-4 text-xl w-full"

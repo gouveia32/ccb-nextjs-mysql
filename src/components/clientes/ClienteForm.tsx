@@ -10,26 +10,28 @@ interface ClienteFormProps {
 export default function ClienteForm(props: ClienteFormProps) {
   const { register, handleSubmit, errors } = useForm();
 
+  
+
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(props.onSubmit)}>
       <Gap>
         <Input
-          placeholder="First Name"
-          name="firstName"
+          placeholder="Nome"
+          name="Nome"
           formRef={register({ required: true })}
         />
-        {errors.firstName && (
-          <ErrorHelper errorMessage="First Name is required" />
+        {errors.Nome && (
+          <ErrorHelper errorMessage="Nome é obrigatório" />
         )}
       </Gap>
       <Gap>
         <Input
-          placeholder="Last Name"
-          name="lastName"
+          placeholder="Nome de Contato"
+          name="ContatoNome"
           formRef={register({ required: true })}
         />
-        {errors.lastName && (
-          <ErrorHelper errorMessage="Last Name is required" />
+        {errors.contatoNome && (
+          <ErrorHelper errorMessage="Name de contato é obrigatório" />
         )}
       </Gap>
       <Gap>
@@ -38,22 +40,22 @@ export default function ClienteForm(props: ClienteFormProps) {
           name="email"
           formRef={register({ required: true })}
         />
-        {errors.email && <ErrorHelper errorMessage="Email is required" />}
+        {errors.email && <ErrorHelper errorMessage="Email é obrigatório" />}
       </Gap>
       <Gap>
         <Input
-          placeholder="Avatar"
-          name="avatar"
-          formRef={register({ required: true })}
+          placeholder="Telefone"
+          name="telefone1"
+          formRef={register({ required: false })}
         />
-        {errors.avatar && <ErrorHelper errorMessage="Avatar is required" />}
+        {errors.telefone1 && <ErrorHelper errorMessage="Falha" />}
       </Gap>
 
       <button
         className="bg-blue-500 rounded-md p-4 text-blue-100"
         type="submit"
       >
-        Submit
+        Enviar
       </button>
     </form>
   );

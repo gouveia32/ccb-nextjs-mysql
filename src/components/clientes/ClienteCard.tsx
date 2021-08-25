@@ -1,70 +1,21 @@
-import { IClienteCard } from "src/Cliente.interface"
-import { useRouter } from 'next/router'
-import {
-  Tr,
-  Td,
-} from "@chakra-ui/react"
+import Image from 'next/image';
+import { Cliente } from '@prisma/client';
 
-import {
-  Button,
-  useDisclosure,
-} from "@chakra-ui/react"
+interface ClienteCardProps {
+  cliente: Cliente;
+}
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from "@chakra-ui/react"
-
-export default function ClienteCard({ item, customContainerClassName }: IClienteCard) {
-  const { isOpen: isDeleteUmOpen, onOpen: onDeleteUmOpen, onClose: onDeleteUmClose } = useDisclosure()
-  const { isOpen: isDeleteTodosOpen, onOpen: onDeleteTodosOpen, onClose: onDeleteTodosClose } = useDisclosure()
-  const router = useRouter()
-  
+export default function ClienteCard(props: ClienteCardProps) {
   return (
-    <>
-      <Tr key={`${item.nome}${item.id}`} style={{ alignContent: 'center' }}>
-        <Td>
-          <p>{item.id}</p>
-        </Td>
-        <Td align="left">
-          <p>{item.nome}</p>
-        </Td>
-        <Td align="left">
-          <p>{item.telefone1}</p>
-        </Td>
-        <Td>
-          <p>{item.telefone1}</p>
-        </Td>
-        <Td>
-          <Button colorScheme="teal" size="xs" mr='2' onClick={() => router.push(`/cliente/edit/${item.id}`)}>Alterar</Button>
-          {/* Delete Um */}
-          <Button colorScheme="red" size="xs" onClick={onDeleteUmOpen}>
-            Apagar
-          </Button>
-          <Modal isOpen={isDeleteUmOpen} onClose={onDeleteUmClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Apagar: </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                Tem certeza ?
-              </ModalBody>
-
-              <ModalFooter>
-                <Button variant="ghost" mr={3} onClick={onDeleteUmClose}>Não</Button>
-                <Button colorScheme="red" onClick={() => { }}>
-                  Apagar
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-        </Td>
-      </Tr>
-    </>
-  )
+    <div className="border rounded-lg p-4 flex">
+      <div className="my-auto">
+      <div className="ml-4">
+      </div>
+        <p className="text-xl text-gray-700">
+          {props.cliente.nome} {props.cliente.contato_nome}
+        </p>
+        <p className="text-gray-500">{props.cliente.email}</p>
+      </div>
+    </div>
+  );
 }
