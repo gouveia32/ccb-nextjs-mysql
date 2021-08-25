@@ -8,7 +8,7 @@ interface ClienteFormProps {
 }
 
 export default function ClienteForm(props: ClienteFormProps) {
-  const { register, handleSubmit, errors } = useForm();  
+  const { register, handleSubmit } = useForm();  
 
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(props.onSubmit)}>

@@ -86,7 +86,7 @@ const Clientes = (props) => {
       telefone3,
     } = row.original;
     return (
-      <Box bg="gray.200" borderRadius="md" align="right" isTruncated style={{ width: '32rem', margin: '0 auto' }}>
+      <Box bg="gray.200" borderRadius="md" isTruncated style={{ width: '32rem', margin: '0 auto' }}>
         <Text fontSize="2xl" align="center">
           {nome}
         </Text>
