@@ -7,9 +7,19 @@ import Head from 'next/head';
 import { Cliente, PrismaClient, Prisma } from '@prisma/client';
 import { useState } from 'react';
 
-async function saveCliente(cliente: Prisma.ClienteCreateInput) {
-  return null
+async function saveCliente(clente: Prisma.ClienteCreateInput) {
+  const response = await fetch('api/clientes', {
+    method: 'POST',
+    body: JSON.stringify(clente),
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return await response.json();
 }
+
 
 const prisma = new PrismaClient();
 

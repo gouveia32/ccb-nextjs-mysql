@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import Input from '../Input';
+import { Input } from "@chakra-ui/react"
 import Gap from '../Gap';
 import ErrorHelper from '../ErrorHelper';
 
@@ -8,9 +8,7 @@ interface ClienteFormProps {
 }
 
 export default function ClienteForm(props: ClienteFormProps) {
-  const { register, handleSubmit, errors } = useForm();
-
-  
+  const { register, handleSubmit, errors } = useForm();  
 
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(props.onSubmit)}>
@@ -18,37 +16,25 @@ export default function ClienteForm(props: ClienteFormProps) {
         <Input
           placeholder="Nome"
           name="Nome"
-          formRef={register({ required: true })}
         />
-        {errors.Nome && (
-          <ErrorHelper errorMessage="Nome é obrigatório" />
-        )}
       </Gap>
       <Gap>
         <Input
           placeholder="Nome de Contato"
           name="ContatoNome"
-          formRef={register({ required: true })}
         />
-        {errors.contatoNome && (
-          <ErrorHelper errorMessage="Name de contato é obrigatório" />
-        )}
       </Gap>
       <Gap>
         <Input
           placeholder="Email"
           name="email"
-          formRef={register({ required: true })}
         />
-        {errors.email && <ErrorHelper errorMessage="Email é obrigatório" />}
       </Gap>
       <Gap>
         <Input
           placeholder="Telefone"
           name="telefone1"
-          formRef={register({ required: false })}
         />
-        {errors.telefone1 && <ErrorHelper errorMessage="Falha" />}
       </Gap>
 
       <button
