@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import fetch from 'isomorphic-unfetch';
 import { Button, Form, Loader } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
-import style from '../../components/css/style.module.css';
 
 const Edit = ({ note }) => {
     const [formState, setformState] = useState({ title: note.title, description: note.description })
