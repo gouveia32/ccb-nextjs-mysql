@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import fetch from 'isomorphic-unfetch';
 import { useRouter } from 'next/router';
+import { Cliente } from '@prisma/client';
 
-const Edit = ({ note }) => {
-    const [formState, setformState] = useState({ title: note.title, description: note.description })
+const prisma = new PrismaClient();
+
+const Edit = ({ cliente }) => {
+    const [formState, setformState] = useState({ nome: cliente.nome, telefone1: cliente.telefone1 })
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const router = useRouter();
@@ -21,22 +23,18 @@ const Edit = ({ note }) => {
         }
     }, [errors]);
 
-    const updateNote = async () => {
-        try {
-            const res = await fetch(`/api/notes/${router.query.id}`, {
-                method: 'PUT',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formState)
-            })
+    const updatedCliente = await prisma.updateCliente({
+        data: {
+          nome: nome,
+          telefone1: telefone1,
+        },
+        where: {
+          id: cliente.id,
+        },
+      })
 
-            router.push('/');
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    router.push('/');
+
     const handleSubmit = (e) => {
         e.preventDefault();
         let errs = validate();
@@ -53,19 +51,19 @@ const Edit = ({ note }) => {
     const validate = () => {
         let err = {};
 
-        if (!formState.title) {
-            err.title = 'Title is Required'
+        if (!formState.nome) {
+            err.nome = 'Title is Required'
         }
 
-        if (!formState.description) {
-            err.description = 'Description is Required'
+        if (!formState.telefone1) {
+            err.telefone1 = 'Telefone is Required'
         }
 
         return err;
     };
     return (
         <div className={style.formcontainer}>
-            <h1>Update Note</h1>
+            <h1>Alteração de Cliente</h1>
             <div>
                 {
                     isSubmitting ? <Loader active inline='centered' />
@@ -89,7 +87,7 @@ const Edit = ({ note }) => {
                                 value={formState.description}
                             />
 
-                            <Button type='submit'>Update</Button>
+                            <Button type='submit'>Alterar</Button>
                         </Form>
                 }
             </div>
@@ -100,9 +98,9 @@ const Edit = ({ note }) => {
 
 
 Edit.getInitialProps = async ({ query: { id } }) => {
-    const res = await fetch(`/api/notes/${id}`);
-    const { data } = await res.json();
-    return { note: data }
+    const cliente = await prisma.cliente.findMany({ id: query });
+    console.log("cliente:",cliente)
+    return { ncliente: cliente }
 }
 
 export default Edit;
