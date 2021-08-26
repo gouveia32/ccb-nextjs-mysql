@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Cliente } from '@prisma/client';
+import { Cliente, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const Edit = async ({ cliente }) => {
+const Edit = async  ({ cliente }) => {
     const [formState, setformState] = useState({ nome: cliente.nome, telefone1: cliente.telefone1 })
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const router = useRouter();
+    //console.log("Aqui", cliente)
 
     useEffect(() => {
         if (isSubmitting) {
@@ -23,15 +24,13 @@ const Edit = async ({ cliente }) => {
         }
     }, [errors]);
 
-    const updatedCliente = await prisma.updateCliente({
-        data: {
-          nome: nome,
-          telefone1: telefone1,
-        },
-        where: {
-          id: cliente.id,
-        },
-      })
+    const updatedCliente = await prisma.cliente.update({
+        where: { id: Number(cliente.id) },
+        nome: cliente.nome,
+        telefone1: cliente.telefone1,
+    });
+    res.json(post);
+
 
     router.push('/');
 
@@ -96,11 +95,15 @@ const Edit = async ({ cliente }) => {
     );
 }
 
-
 Edit.getInitialProps = async ({ query: { id } }) => {
-    const cliente = await prisma.cliente.findMany({ id: query });
-    console.log("cliente:",cliente)
-    return { ncliente: cliente }
+    const cliente = await prisma.cliente.findFirst({
+        where: {
+            id,
+        },
+    });
+    //console.log("cliente:", cliente)
+    return { cliente: cliente }
 }
+
 
 export default Edit;
