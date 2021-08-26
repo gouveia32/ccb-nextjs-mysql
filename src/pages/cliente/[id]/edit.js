@@ -5,7 +5,7 @@ import { Cliente } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const Edit = ({ cliente }) => {
+const Edit = async ({ cliente }) => {
     const [formState, setformState] = useState({ nome: cliente.nome, telefone1: cliente.telefone1 })
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
