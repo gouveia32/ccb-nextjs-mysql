@@ -1,9 +1,9 @@
 import { GetServerSideProps } from 'next';
 import Layout from "components/Layout";
-import { ClienteProps } from "components/clientes/Cliente"
+import ClienteProps from "components/clientes/Cliente"
 import Router from 'next/router';
 
-import ClienteCard from 'components/clientes/ClienteCard';
+import ClienteForm from 'components/clientes/ClienteForm';
 
 import { PrismaClient } from '@prisma/client';
 
@@ -20,6 +20,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
+async function saveCliente(Cliente) {
+  const clienteId = Cliente.id;
+  const cliente = await prisma.cliente.update({
+    where: { id: Number(clienteId) },
+    data: Cliente.nome,
+  });
+
+}
+
+
 async function publishCliente(id: number): Promise<void> {
   await fetch(`http://localhost:3000/api/cliente/${id}`, {
     method: 'PUT',
@@ -32,6 +42,7 @@ const Cliente: React.FC<ClienteProps> = (props) => {
 
   return (
     <Layout>
+      <ClienteForm cliente={props} cancel={() => null} clienteChange={saveCliente} />
       <div>
         <h2>{nome}</h2>
         <button onClick={() => null}>Gravar</button>
