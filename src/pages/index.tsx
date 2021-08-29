@@ -5,9 +5,9 @@ import Layout from "components/Layout";
 import HeroSection from "components/HeroSection";
 import HeroSection2 from "../components/HeroSection2";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
-export default function Home({ categorydata, productdata, postdata, clientedata }) {
+export default function Home({ clientedata }) {
   const [clientes, setClientes] = useState<Cliente[]>(clientedata);
   //console.log("Clientes0:",clientes)
   return (

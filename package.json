@@ -20,6 +20,7 @@
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "@prisma/client": "^2.29.1",
+    "axios": "^0.21.1",
     "framer-motion": "4",
     "next": "10.2.3",
     "nextjs-cors": "^1.0.5",
