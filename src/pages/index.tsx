@@ -1,9 +1,6 @@
 import { PrismaClient, Cliente } from "@prisma/client";
 import { useState } from "react";
-import ClienteList from "components/ClienteList";
 import Layout from "components/Layout";
-import HeroSection from "components/HeroSection";
-import HeroSection2 from "../components/HeroSection2";
 
 const prisma = new PrismaClient()
 
