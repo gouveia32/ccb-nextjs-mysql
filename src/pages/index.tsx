@@ -12,8 +12,7 @@ export default function Home({ clientedata }) {
   //console.log("Clientes0:",clientes)
   return (
     <Layout>
-      <HeroSection2 />
-      <HeroSection />
+      <div>HOME</div>
     </Layout>
   );
 }

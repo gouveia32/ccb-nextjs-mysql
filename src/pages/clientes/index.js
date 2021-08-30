@@ -14,7 +14,7 @@ function Clientes(props) {
     <div className={styles.clientesCnt}>
       <div className={styles.clientesBreadcrumb}>
         <div>
-          <h2>Recipes 🥗🥘🍱🍛</h2>
+          <h2>CLIENTES</h2>
         </div>
         <div>
           <button
