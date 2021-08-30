@@ -1,6 +1,5 @@
 import { PrismaClient, Cliente } from "@prisma/client";
 import { useState } from "react";
-import Layout from "components/Layout";
 
 const prisma = new PrismaClient()
 

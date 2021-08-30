@@ -1,8 +1,6 @@
-import Layout from "../components/Layout";
 
 export default function About() {
   return (
-    <Layout>
       <div className="container mx-auto px-6 py-6">
         <h3 className="text-gray-700 text-2xl font-medium">About us</h3>
         <div className="text-gray-800 mt-6">
@@ -62,6 +60,5 @@ export default function About() {
           mollis non.
         </div>
       </div>
-    </Layout>
   );
 }
