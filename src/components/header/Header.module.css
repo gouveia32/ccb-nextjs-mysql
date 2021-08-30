@@ -1,6 +1,6 @@
 .header {
   height: 40px;
-  background-color: rgb(243 136 5);
+  background-color: hsl(0, 0%, 3%);
   color: white;
   display: flex;
   align-items: center;
@@ -8,5 +8,5 @@
   font-family: sans-serif;
 }
 .headerName {
-  font-size: 1.8em;
+  font-size: 1.1em;
 }

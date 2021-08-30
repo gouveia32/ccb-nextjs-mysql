@@ -8,9 +8,7 @@ export default function Home({ clientedata }) {
   const [clientes, setClientes] = useState<Cliente[]>(clientedata);
   //console.log("Clientes0:",clientes)
   return (
-    <Layout>
-      <div>HOME</div>
-    </Layout>
+      <div>Bemvindo a Ponto Fino Bordados</div>
   );
 }
 
