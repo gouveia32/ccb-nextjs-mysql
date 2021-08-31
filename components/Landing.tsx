@@ -5,7 +5,6 @@ import useGreaterThan from "../utils/useGreaterThan";
 import MeComponent from "./MeComponent";
 
 import AnimatedText from "./Animated/AnimatedText";
-import Carousel from "../components/Carousel";
 
 
 interface LandingProps {imagens}
