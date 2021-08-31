@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -16,26 +13,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "src/*": [
-        "src/*"
-      ],
-      "components/*": [
-        "src/components/*"
-      ]
-    }
+    "jsx": "preserve"
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/components/Table.js",
-    "src/components/table/filters.js",
-    "src/pages/clientes/index.js"
-, "src/components/clientes/ClienteForm.js", "src/components/ClienteList.js"  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/contact.js", "components/Carousel.js", "components/lib/dato-cms.ts"],
+  "exclude": ["node_modules"]
 }

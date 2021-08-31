@@ -32,7 +32,4 @@ yarn-error.log*
 
 # vercel
 .vercel
-
-.env
-
-seed.ts
+node_modules
