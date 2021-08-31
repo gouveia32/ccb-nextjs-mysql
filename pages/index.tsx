@@ -2,11 +2,8 @@ import classes from "../styles/Home.module.css";
 
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import Landing from "../components/Landing";
-import Testimonials from "../components/home/Testimonials";
-import ServicoList from "../components/home/ServicoList";
-import CompaniesList from "../components/home/CompaniesList";
 import { useContext, useEffect, useState } from "react";
-import FeatureList from "../components/home/FeaturesList";
+
 import { ThemeContext } from "../context/ThemeContext";
 
 import { getCarouselVisiveis,getAmostrasLogo } from "../components/lib/dato-cms"
