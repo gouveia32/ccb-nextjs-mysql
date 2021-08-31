@@ -19,7 +19,7 @@ model Cliente {
   Razao_social   String?  
   inscr_estadual String?  
   endereco       String?  
-  cidade         String   
+  cidade         String?   
   uf             String?  
   cep            String?  
   telefone1      String?  

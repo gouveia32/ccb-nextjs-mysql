@@ -8,11 +8,11 @@ interface LogoProps {
 
 const logoPath = (color?: "YELLOW" | "BLUE") => {
   if (!color) {
-    return "/logo-yellow.png";
+    return "/logo-red.png";
   }
 
   if (color === "YELLOW") {
-    return "/logo-yellow.png";
+    return "/logo-red.png";
   } else {
     return "/logo-blue.png";
   }
