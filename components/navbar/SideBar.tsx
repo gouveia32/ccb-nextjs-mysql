@@ -43,8 +43,8 @@ const SideBar: React.FC<SideBarProps> = ({ theme }) => {
       </AnimatedListItem>
       
       <AnimatedListItem indx={0.3}>
-        <ActiveLink href="/servicos" activeClassName="nav-link-active-side-bar">
-          <a className="menu-item">Serviços</a>
+        <ActiveLink href="/clientes" activeClassName="nav-link-active-side-bar">
+          <a className="menu-item">Clientes</a>
         </ActiveLink>
       </AnimatedListItem>
       <AnimatedListItem indx={0.3}>

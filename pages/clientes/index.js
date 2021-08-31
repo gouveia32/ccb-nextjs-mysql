@@ -11,6 +11,8 @@ import {
 
 import AddCliente from "../../components/Cliente/addcliente";
 
+import ClienteCard from "../../components/Cliente/clientecard"
+
 import { PrismaClient, Cliente } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -88,7 +90,7 @@ const Clientes = (props) => {
       telefone3,
     } = row.original;
     return (
-      
+      //<ClienteCard  cliente={row.original}/>      
       <Box bg="gray.200" borderRadius="md" isTruncated style={{ width: '32rem', margin: '0 auto' }}>
         <Text fontSize="2xl" align="center">
           {nome}
@@ -100,9 +102,7 @@ const Clientes = (props) => {
         </Text>
         <Box align="center">
           <Button colorScheme="teal" size="xs" onClick={() => {
-            setShowAddClienteModal((pV) => !pV)
-            row.isExpanded = false
-
+            ClienteCard(row.original)
           }}>
             Editar
           </Button>

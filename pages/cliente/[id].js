@@ -13,7 +13,7 @@ export default function Cliente(props) {
   const { cliente } = props;
 
   async function deleteCliente() {
-    if (window.confirm("Do you want to delete this cliente?")) {
+    if (window.confirm("Você quer realmente apagar este cliente?")) {
       // ...
       await axios.post("/api/cliente/deleteCliente", { id: parseInt(cliente?.id) });
       router.push("/clientes");
@@ -22,12 +22,6 @@ export default function Cliente(props) {
   return (
     <div className={styles.clienteContainer}>
       <div className={styles.cliente}>
-        <div
-          alt={`Cliente Image of: ${cliente?.nome}`}
-          aria-label={`Cliente Image of: ${cliente?.nome}`}
-          className={styles.clienteImage}
-          style={{ backgroundImage: `url(${cliente?.imageUrl})` }}
-        ></div>
 
         <div className={styles.clienteDetails}>
           <div className={styles.clienteName}>
