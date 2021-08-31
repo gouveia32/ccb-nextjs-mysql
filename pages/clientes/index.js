@@ -1,4 +1,3 @@
-import Layout from '../../components/Layout';
 import { useRouter } from 'next/router'
 
 import React, { useEffect, useState, useMemo } from 'react';
@@ -9,6 +8,8 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react"
+
+import AddCliente from "../../components/Cliente/addcliente";
 
 import { PrismaClient, Cliente } from "@prisma/client";
 
@@ -29,6 +30,7 @@ function DeleteRec() {
 }
 
 const Clientes = (props) => {
+  const [showAddClienteModal, setShowAddClienteModal] = useState(false);
   //console.log("props:",props)  
   const router = useRouter()
   const columns = useMemo(
@@ -86,6 +88,7 @@ const Clientes = (props) => {
       telefone3,
     } = row.original;
     return (
+      
       <Box bg="gray.200" borderRadius="md" isTruncated style={{ width: '32rem', margin: '0 auto' }}>
         <Text fontSize="2xl" align="center">
           {nome}
@@ -96,13 +99,20 @@ const Clientes = (props) => {
           <strong>Telefone</strong>: {`${telefone1}  ${telefone2}  ${telefone3}`} <br />
         </Text>
         <Box align="center">
-          <Button colorScheme="teal" size="xs" onClick={() => router.push(`/cliente/${id}`)}>
+          <Button colorScheme="teal" size="xs" onClick={() => {
+            setShowAddClienteModal((pV) => !pV)
+            row.isExpanded = false
+
+          }}>
             Editar
           </Button>
           <Button colorScheme="red" size="xs" onClick={DeleteRec}>
             Apagar
           </Button>
         </Box>
+        {showAddClienteModal ? (
+        <AddCliente closeModal={() => setShowAddClienteModal(false)} />
+      ) : null}
       </Box>
 
     );
