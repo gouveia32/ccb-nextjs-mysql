@@ -124,9 +124,9 @@ export default function LandingPage() {
           style={{ originX: 0.5 }}
         >
           <h5 className="fw-bold">Shopping list</h5>
-          <FormControlLabel control={<Checkbox />} label="Bread" />
-          <FormControlLabel control={<Checkbox />} label="Eggs" />
-          <FormControlLabel control={<Checkbox />} label="Ham" />
+          <FormControlLabel control={<Checkbox />} label="Pão" />
+          <FormControlLabel control={<Checkbox />} label="Ovos" />
+          <FormControlLabel control={<Checkbox />} label="Leite" />
           <Divider className="bg-dark" />
           <FormControlLabel
             control={<Checkbox color={"default"} checked={true} />}
