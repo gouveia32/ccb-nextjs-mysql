@@ -1,37 +1,28 @@
-import "../styles/globals.css";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { useState } from "react";
-import {
-  ChakraProvider,
-  theme as chakraTheme,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import React from "react";
+import { AppProps } from "next/app";
+import { Provider as ReduxProvider } from "react-redux";
+import { initializeStore } from "../store/configureStore";
+import { Provider } from "next-auth/client";
+import Navbar from "../components/Navigation/Navbar/navbar.component";
+import { ToastContainer } from "react-toastify";
 
-import { ThemeType } from "../context/theme";
+import "bootstrap/dist/css/bootstrap.css";
+import "../resources/styles/main.scss";
+import "@fontsource/roboto";
+import "react-toastify/dist/ReactToastify.css";
 
-import { ThemeContext } from "../context/ThemeContext";
-import SideBar from "../components/navbar/SideBar";
-import Layout from "../components/Layout";
+export const store = initializeStore();
 
-function MyApp({ Component, pageProps }) {
-  const [theme, setTheme] = useState<"DARK" | "LIGHT">("LIGHT");
-
-  const toggleTheme = (theme: ThemeType) => {
-    return setTheme((th) => (th === "LIGHT" ? "DARK" : "LIGHT"));
-  };
-
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div id="outer-container">
-      <SideBar theme={theme} />
-      <ChakraProvider theme={chakraTheme}>
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeContext.Provider>
-      </ChakraProvider>
-    </div>
+    <Provider session={pageProps.session}>
+      <ReduxProvider store={store}>
+        <Navbar>
+          <Component {...pageProps} />
+        </Navbar>
+        <ToastContainer position={"bottom-right"} />
+      </ReduxProvider>
+    </Provider>
   );
 }
-
 export default MyApp;

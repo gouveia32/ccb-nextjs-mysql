@@ -1,26 +1,31 @@
-This is a [Next.js](https://nextjs.org/) landing page example project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Notes app
+Notes demo application inspired by Google Keep and developed in Typescript with Next.js, NextAuth.js, styled-components, Framer motion, Material-UI and Prisma.
 
-#### [Live demo](https://nextjs-landing-page-five.vercel.app/)  
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
 
-first clone the repo then install dependencies :
-
+### Installation
 ```bash
-npm install
+$ yarn install
 ```
 
-Second, run the development server:
-
+### Run the app
+In the project directory, you can run:
 ```bash
-npm run dev
-# or
-yarn dev
+$ yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+### Run tests
+In the project directory, you can run:
 
+```bash
+$ yarn test
+```
 
+### Sign In
+It is possible to sign in either with Github account or guest credentials account.
 
-"C:\Programas Locais\sqlite\sqlite3.exe" "C:\projetos\nextjs\ccb-nextjs-mysql\prisma\dev.db"
+To guest sign in please use username: `guest` 

@@ -1,28 +1,36 @@
-import { Box } from "@chakra-ui/react";
-import { useContext } from "react";
+import React from "react";
+import {
+  NotFoundPageContentWrapper,
+  NotFoundPageHeading,
+  NotFoundPageWrapper,
+} from "../views/404.styles";
+import Image from "next/image";
+import notFoundGif from "../resources/assets/404.gif";
+import { useRouter } from "next/router";
+import { Button } from "@material-ui/core";
+import { PageLinks } from "../lib/Links";
+import DirectionsRunOutlinedIcon from "@material-ui/icons/DirectionsRunOutlined";
+import FastRewindOutlinedIcon from "@material-ui/icons/FastRewindOutlined";
 
-import { Player } from "@lottiefiles/react-lottie-player";
-
-import { ThemeContext } from "../context/ThemeContext";
-import AnimatedListItem from "../components/Animated/AnimatedListItem";
-
-const Custom404 = () => {
-  const { theme } = useContext(ThemeContext);
+export default function NotFoundPage() {
+  const { push } = useRouter();
 
   return (
-    <Box bgColor={theme === "DARK" && "black"}>
-      <Box minH="calc(100vh - 60px)">
-        <AnimatedListItem indx={0.7}>
-          <Player
-            autoplay
-            loop
-            src="/404-animation.json"
-            style={{ width: "80%" }}
-          />
-        </AnimatedListItem>
-      </Box>
-    </Box>
+    <NotFoundPageWrapper>
+      <NotFoundPageContentWrapper>
+        <NotFoundPageHeading>404</NotFoundPageHeading>
+        <Image src={notFoundGif} alt="Confused John Travolta GIF" />
+        <Button
+          fullWidth={true}
+          variant={"outlined"}
+          size={"large"}
+          startIcon={<DirectionsRunOutlinedIcon />}
+          endIcon={<FastRewindOutlinedIcon />}
+          onClick={() => push(PageLinks.landingPage)}
+        >
+          Go back to safety
+        </Button>
+      </NotFoundPageContentWrapper>
+    </NotFoundPageWrapper>
   );
-};
-
-export default Custom404;
+}

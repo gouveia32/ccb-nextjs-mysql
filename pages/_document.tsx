@@ -1,33 +1,43 @@
 import Document, {
-  Html,
+  DocumentContext,
   Head,
+  Html,
   Main,
   NextScript,
-  DocumentContext,
 } from "next/document";
+import { ServerStyleSheet } from "styled-components";
+import React from "react";
 
-class MyDocument extends Document {
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext) {
+    const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        });
+
+      const initialProps = await Document.getInitialProps(ctx);
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
+  }
   render() {
     return (
       <Html>
-        <Head>
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
-            rel="stylesheet"
-          />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
-            rel="stylesheet"
-          />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Anton&family=Fredoka+One&family=Roboto:wght@300;400;500;700&display=swap"
-            rel="stylesheet"
-          ></link>
-          <link rel="icon" href="/logo/PF_Logo.png" />
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
@@ -36,9 +46,3 @@ class MyDocument extends Document {
     );
   }
 }
-
-//font-family: 'Anton', sans-serif;
-//font-family: 'Fredoka One', cursive;
-//font-family: 'Roboto', sans-serif;
-
-export default MyDocument;

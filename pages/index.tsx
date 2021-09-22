@@ -1,53 +1,196 @@
-import classes from "../styles/Home.module.css";
+import React from "react";
+import Head from "next/head";
+import { getSession, signIn } from "next-auth/client";
+import { GetServerSideProps } from "next";
+import { Session } from "next-auth";
+import { PageLinks } from "../lib/Links";
+import {
+  LandingPageBanner,
+  LandingPageBannerText,
+  LandingPageBannerWrapper,
+  LandingPageCardWrapper,
+  LandingPageContentWrapper,
+  LandingPageHeading,
+  LandingPageSubHeading,
+  LandingPageWrapper,
+} from "../views/styles";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  IconButton,
+} from "@material-ui/core";
+import NoteIcon from "@material-ui/icons/Note";
+import ListIcon from "@material-ui/icons/List";
+import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
+import useSwitchTimeout from "../hooks/useSwitchTimeout";
 
-import { Box, useMediaQuery } from "@chakra-ui/react";
-import Landing from "../components/Landing";
-import { useContext, useEffect, useState } from "react";
+const transition = {
+  type: "spring",
+  stiffness: 80,
+};
 
-import { ThemeContext } from "../context/ThemeContext";
+const bannerVariants = {
+  exit: { height: "0px", y: "-100%", transition },
+  enter: {
+    height: "300px",
+    y: "0%",
+    transition,
+  },
+};
 
-import { getCarouselVisiveis,getAmostrasLogo } from "../components/lib/dato-cms"
+export default function LandingPage() {
+  const {
+    switchContent: firstCardSwitch,
+    setSwitchContent: setFirstCardSwitch,
+  } = useSwitchTimeout(3);
 
+  const {
+    switchContent: secondCardSwitch,
+    setSwitchContent: setSecondCardSwitch,
+  } = useSwitchTimeout(4);
 
-export default function Home({imagens,amostras}) {
-  const { theme } = useContext(ThemeContext);
+  const renderHeader = (
+    <>
+      <LandingPageHeading>Notas</LandingPageHeading>
+      <Button
+        variant={"outlined"}
+        size={"large"}
+        startIcon={<ArrowForwardOutlinedIcon />}
+        onClick={() => signIn()}
+      >
+        Entrar
+      </Button>
+      <LandingPageSubHeading>
+        Capiture o que vier na sua mente
+      </LandingPageSubHeading>
+    </>
+  );
 
-  const [greaterThan764, setGreaterThan764] = useState(true);
+  const renderLeftShowNoteWrapper = (
+    <LandingPageCardWrapper>
+      <LandingPageBannerWrapper>
+        <LandingPageBanner
+          imageUrl={
+            "https://www.google.com/keep/img/capture/note-item-bg-2x.jpg"
+          }
+          position="absolute"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+        >
+          <LandingPageBannerText>Diferentes tipos de notas</LandingPageBannerText>
+        </LandingPageBanner>
+        <LandingPageBanner
+          position="absolute"
+          color="#ffe900"
+          initial={"exit"}
+          animate={firstCardSwitch ? "enter" : "exit"}
+          exit={"exit"}
+          variants={bannerVariants}
+          style={{ originX: 0.5 }}
+        >
+          Cool awesome exciting note
+        </LandingPageBanner>
+      </LandingPageBannerWrapper>
+      <IconButton onClick={() => setFirstCardSwitch(!firstCardSwitch)}>
+        <NoteIcon />
+      </IconButton>
+    </LandingPageCardWrapper>
+  );
 
-  const [isLargerThan764] = useMediaQuery("(min-width: 764px)");
+  const renderRightShowNoteWrapper = (
+    <LandingPageCardWrapper className="ms-5">
+      <LandingPageBannerWrapper>
+        <LandingPageBanner
+          imageUrl={
+            "https://www.google.com/keep/img/capture/list-item-bg-2x.jpg"
+          }
+          position="absolute"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+        >
+          <LandingPageBannerText>Some useful note</LandingPageBannerText>
+        </LandingPageBanner>
+        <LandingPageBanner
+          position="absolute"
+          color="#1ce8b5"
+          initial={"exit"}
+          animate={secondCardSwitch ? "enter" : "exit"}
+          exit={"exit"}
+          variants={bannerVariants}
+          style={{ originX: 0.5 }}
+        >
+          <h5 className="fw-bold">Shopping list</h5>
+          <FormControlLabel control={<Checkbox />} label="Bread" />
+          <FormControlLabel control={<Checkbox />} label="Eggs" />
+          <FormControlLabel control={<Checkbox />} label="Ham" />
+          <Divider className="bg-dark" />
+          <FormControlLabel
+            control={<Checkbox color={"default"} checked={true} />}
+            label="Salad"
+            style={{ textDecoration: "line-through" }}
+          />
+          <FormControlLabel
+            control={<Checkbox color={"default"} checked={true} />}
+            label="Milk"
+            style={{ textDecoration: "line-through" }}
+          />
+        </LandingPageBanner>
+      </LandingPageBannerWrapper>
+      <IconButton
+        onClick={() => setSecondCardSwitch(!secondCardSwitch)}
+        size={"medium"}
+      >
+        <ListIcon />
+      </IconButton>
+    </LandingPageCardWrapper>
+  );
 
-  const [isGreaterThan1000, setIsGreaterThan1000] = useState(true);
-  const [isLargerThan1000] = useMediaQuery("(min-width: 1000px)");
-
-  useEffect(() => {
-    setIsGreaterThan1000(isLargerThan1000);
-  }, [isLargerThan1000]);
-
-  useEffect(() => {
-    setGreaterThan764(isLargerThan764);
-  }, [isLargerThan764]);
-
-  //console.log("Imagens1:",imagens)
-  //console.log("Asmostras1:",amostras)
+  const renderMainContent = (
+    <LandingPageWrapper>
+      {renderHeader}
+      <LandingPageContentWrapper>
+        {renderLeftShowNoteWrapper}
+        {renderRightShowNoteWrapper}
+      </LandingPageContentWrapper>
+    </LandingPageWrapper>
+  );
 
   return (
-    <Box bgColor={theme === "DARK" ? "black" : "white"}>
-      <Landing imagens={ imagens }/>
-    </Box>
+    <>
+      <Head>
+        <title>Notas</title>
+        <meta
+          name="description"
+          content="Aplicativo de Notas para guardar suas propostas"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {renderMainContent}
+    </>
   );
 }
 
-export async function getStaticProps() {
-  const imagens = await getCarouselVisiveis();
-  const amostras = await getAmostrasLogo();
-  //console.log("amostras1:",amostras)
+export const getServerSideProps: GetServerSideProps<{
+  session: Session | null;
+}> = async (context) => {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: PageLinks.notesPage,
+      },
+    };
+  }
 
   return {
     props: {
-      imagens: imagens ?? null,
-      amostras: amostras ?? null,
-
+      session: session,
     },
-    revalidate: 120,
   };
-}
+};
