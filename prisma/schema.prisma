@@ -94,3 +94,16 @@ model CheckPoint {
   note Note @relation(fields: [noteId], references: [id])
   noteId String
 }
+
+model Paciente {
+  id              Int        @id @default(autoincrement())
+  nome            String
+  cpf             String?
+  email           String?
+  data_nascimento DateTime? 
+  data_cadastro   DateTime?  @default(now())
+  peso            Int
+  altura          Int
+  tipo_sanguineo  String
+  status          Int        @default(1)
+}
