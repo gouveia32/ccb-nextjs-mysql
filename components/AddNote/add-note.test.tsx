@@ -9,7 +9,7 @@ import {
   AddNoteInputNameInput,
   AddNoteInputTag,
 } from "./add-note.styles";
-import { CheckPointObject } from "../../models/CheckPointObject";
+import { CheckPointObject } from "../../models/ControleObject";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
 import { Divider } from "@material-ui/core";
 

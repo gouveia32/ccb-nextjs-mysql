@@ -18,7 +18,7 @@ import { TagType } from "../../../models/Tag";
 import { selectTags } from "../../../API/TagsAPI/TagsAPI";
 import { ApiLinks, PageLinks } from "../../../lib/Links";
 import { ChangeActionType } from "../../../lib/helpers";
-import { CheckPointType } from "../../../models/CheckPointObject";
+import { CheckPointType } from "../../../models/ControleObject";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 import Head from "next/head";

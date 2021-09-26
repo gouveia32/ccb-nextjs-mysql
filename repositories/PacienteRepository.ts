@@ -1,33 +1,52 @@
-import { PrismaClient, Paciente } from "@prisma/client";
+import { Note, PrismaClient, Paciente } from "@prisma/client";
 import { Session } from "next-auth";
-import { PacienteType } from "../models/Paciente";
+import { TipoPaciente } from "../models/Paciente";
 import prisma from "../lib/prisma";
 
-export const getAllPacientes = async (userSession: Session): Promise<Paciente[]> => {
-  const pacientes = await prisma.paciente.findMany({});
-  console.log("pacientes:",pacientes)
-  
-  if (userSession) {
-    return pacientes;
+/**
+ * Get all pacientes of current signed medico
+ * @param medicoSession - session object of current medico
+ */
+export const getAllMedicoPacientes = async (medicoSession: Session): Promise<Paciente[]> => {
+  const medico = await prisma.medico.findFirst({
+    where: { nome: medicoSession?.user?.name },
+    include: {
+      pacientes: {
+        orderBy: {
+          criadoEm: "asc",
+        },
+      },
+    },
+  });
+  if (medico) {
+    return medico.pacientes;
   } else {
     return [];
   }
 };
 
 /**
- * Add new tag for current logged user
- * @param tag - tag to add
- * @param userSession - session object of current user
+ * Add new paciente for current logged medico
+ * @param paciente - paciente to add
+ * @param medicoSession - session object of current medico
  */
- export const addNewPaciente = async (
+export const addNewPaciente = async (
   paciente: Paciente,
-  userSession: Session
+  medicoSession: Session
 ): Promise<Paciente | undefined> => {
+  const medico = await prisma.medico.findFirst({
+    where: { nome: medicoSession?.user?.name },
+  });
 
-  if (userSession) {
+  if (medico) {
     const newPaciente = await prisma.paciente.create({
       data: {
         nome: paciente.nome,
+        medico: {
+          connect: {
+            id: medico.id,
+          },
+        },
       },
     });
     return newPaciente;
@@ -46,6 +65,24 @@ export const updatePaciente = async (paciente: PacienteType): Promise<Paciente |
     },
     data: {
       nome: paciente.nome,
+    },
+  });
+};
+
+/**
+ * Get all searchNotes of given paciente by its ID
+ * @param pacienteId
+ */
+export const getPacienteNotes = async (pacienteId: string): Promise<Note[]> => {
+  return await prisma.note.findMany({
+    where: {
+      pacientes: {
+        some: { id: pacienteId },
+      },
+    },
+    include: {
+      pacientes: true,
+      checkPoints: true,
     },
   });
 };

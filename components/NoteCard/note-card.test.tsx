@@ -4,7 +4,7 @@ import {Dialog, Divider, IconButton} from "@material-ui/core";
 import NoteCard, {NoteCardProps} from "./note-card.component";
 import {NoteObject, NoteTypeEnum} from "../../models/Note";
 import {NoteCardComponent} from "./note-card.styles";
-import {CheckPointObject} from "../../models/CheckPointObject";
+import {CheckPointObject} from "../../models/ControleObject";
 import NoteCardCheckItem from "./NoteCardCheckItem/note-card-checkitem.component";
 
 describe("NoteCard component", () => {

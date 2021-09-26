@@ -53,7 +53,7 @@ export default function LandingPage() {
 
   const renderHeader = (
     <>
-      <LandingPageHeading>Notas</LandingPageHeading>
+      <LandingPageHeading>Notas++</LandingPageHeading>
       <Button
         variant={"outlined"}
         size={"large"}
@@ -162,7 +162,7 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>Notas</title>
+        <title>Notas (não logado)</title>
         <meta
           name="description"
           content="Aplicativo de Notas para guardar suas propostas"

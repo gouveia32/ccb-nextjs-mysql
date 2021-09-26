@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
+import PersonSearch from "@material-ui/icons/CheckOutlined";
 import { cTagModel, TagType } from "../../models/Tag";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
@@ -36,9 +37,51 @@ const TagsModal: React.FC<TagsModalProps> = ({
 }: TagsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
+  const [openP, setOpenP] = useState<boolean>(false);
+
   const renderModal = (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Edit tags</DialogTitle>
+      <DialogTitle>Alterar tags</DialogTitle>
+      <DialogContent>
+        <Grid container={true} className="mb-2">
+          <Grid item={true}>
+            <TextField
+              value={newTag.name}
+              fullWidth={true}
+              size={"small"}
+              variant={"standard"}
+              onChange={(event) =>
+                onChange({ attr: cTagModel.name, value: event.target.value })
+              }
+              onKeyDown={(event) => event.code === "Enter" && onAddTag()}
+            />
+          </Grid>
+          <Grid item={true}>
+            <IconButton size={"small"} onClick={onAddTag}>
+              <CheckOutlinedIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+        {tagsLoading ? (
+          <Loading size={20} />
+        ) : (
+          tags &&
+          tags.map((tag: TagType, k: number) => (
+            <TagModalItem
+              key={tag.id}
+              tag={tag}
+              onDeleteTag={onDeleteTag}
+              onUpdateTag={onUpdateTag}
+            />
+          ))
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+
+  const renderModalP = (
+    <Dialog open={openP} onClose={() => setOpenP(false)}>
+      <DialogTitle>PACIENTES</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-2">
           <Grid item={true}>
@@ -82,6 +125,13 @@ const TagsModal: React.FC<TagsModalProps> = ({
         name={"Altera tags"}
         onClick={() => setOpen((prevState) => !prevState)}
         icon={<EditOutlinedIcon />}
+      />
+
+      {renderModalP}
+      <NavigationItem
+        name={"Pacientes"}
+        onClick={() => setOpenP((prevStateP) => !prevStateP)}
+        icon={<PersonSearch />}
       />
     </>
   );

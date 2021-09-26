@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { CheckPointObject } from "../../../models/CheckPointObject";
+import { CheckPointObject } from "../../../models/ControleObject";
 import { Checkbox } from "@material-ui/core";
 import NoteCardCheckItem, {
   NoteCardCheckItemProps,

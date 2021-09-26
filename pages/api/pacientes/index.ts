@@ -4,7 +4,7 @@ import { getSession } from "next-auth/client";
 import { cRestMethods } from "../../../lib/RestAPI";
 import {
   addNewPaciente,
-  getAllPacientes,
+  getAllMedicoPacientes,
   updatePaciente,
 } from "../../../repositories/PacienteRepository";
 
@@ -27,8 +27,8 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const userPacientes = await getAllPacientes(session);
-        res.status(200).json(userPacientes);
+        const medicoPacientes = await getAllMedicoPacientes(session);
+        res.status(200).json(medicoPacientes);
         break;
       case cRestMethods.POST:
         await addNewPaciente(body, session);

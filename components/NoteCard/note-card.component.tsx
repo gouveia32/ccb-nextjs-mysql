@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NoteObject, NoteType, NoteTypeEnum } from "../../models/Note";
-import { CheckPointType } from "../../models/CheckPointObject";
+import { CheckPointType } from "../../models/ControleObject";
 import NoteCardCheckItem from "./NoteCardCheckItem/note-card-checkitem.component";
 import { TagType } from "../../models/Tag";
 import { ChangeActionType } from "../../lib/helpers";

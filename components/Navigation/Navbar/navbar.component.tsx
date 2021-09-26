@@ -103,7 +103,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       router.pathname.includes("/tags")) && (
       <NavLeft open={openNav}>
         <NavigationItem
-          name={"Notas"}
+          name={"Notas+"}
           url={PageLinks.notesPage}
           icon={<EmojiObjectsOutlinedIcon />}
           isActive={
@@ -158,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <Link href={PageLinks.landingPage}>
       <NavLogo>
         <KeepLogo className="ms-2" />
-        <h2 className="m-0 ms-2">Notas</h2>
+        <h2 className="m-0 ms-2"></h2>
       </NavLogo>
     </Link>
   );

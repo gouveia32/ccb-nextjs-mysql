@@ -95,15 +95,109 @@ model CheckPoint {
   noteId String
 }
 
-model Paciente {
-  id              Int        @id @default(autoincrement())
-  nome            String
-  cpf             String?
-  email           String?
-  data_nascimento DateTime? 
-  data_cadastro   DateTime?  @default(now())
-  peso            Int
-  altura          Int
-  tipo_sanguineo  String
-  status          Int        @default(1)
+
+
+
+//
+//
+////////////////////////
+
+
+model Conta {
+  id                 String    @id @default(cuid())
+  medicoId           String
+  tipoProvedor       String
+  provedorId         String
+  contaProvedorId    Int
+  tokenRefresh       String?
+  tokenAcesso        String?
+  tokenAcessoExpira  DateTime?
+  criadoEm           DateTime  @default(now())
+  alteradoEm         DateTime  @updatedAt
+  medico             Medico    @relation(fields: [medicoId], references: [id])
+
+  @@unique([provedorId, contaProvedorId])
 }
+
+model Sessao {
+  id           String   @id @default(cuid())
+  medicoId     String
+  expira       DateTime
+  tokenSessao  String   @unique
+  tokenAcesso  String   @unique
+  criadoEm     DateTime @default(now())
+  alteradoEm   DateTime @updatedAt
+  medico       Medico   @relation(fields: [medicoId], references: [id])
+}
+
+model Medico {
+  id              String    @id @default(cuid())
+  nome            String?
+  email           String?   @unique
+  emailVerificado DateTime?
+  imagem          String?
+  criadoEm        DateTime  @default(now())
+  alteradoEm      DateTime  @updatedAt
+  contas          Conta[]
+  sessoes         Sessao[]
+  notas           Nota[]
+  pacientes       Paciente[]
+}
+
+model SolVerificacao {
+  id            String   @id @default(cuid())
+  identificador String
+  token         String   @unique
+  expira        DateTime
+  criadoEm     DateTime @default(now())
+  alteradoEm   DateTime @updatedAt
+
+  @@unique([identificador, token])
+}
+
+
+
+model Nota {
+  id          String @default(cuid()) @id
+  nome        String
+  tipoNota    String @default("TEXT")
+  conteudo    String
+  cor         String
+  pino        Boolean
+  criadoEm     DateTime @default(now())
+  pacientes   Paciente[]
+  controles   Controle[]
+  medico      Medico @relation(fields: [medicoId], references: [id])
+  medicoId    String
+}
+
+model Paciente {
+  id            String @default(cuid()) @id
+  nome          String
+  criadoEm      DateTime @default(now())
+  notas         Nota[]
+  medico        Medico @relation(fields: [medicoId], references: [id])
+  medicoId      String
+}
+
+model Controle {
+  id        String @default(cuid()) @id
+  texto     String
+  marcado   Boolean
+  nota      Nota @relation(fields: [notaId], references: [id])
+  notaId    String
+}
+
+
+//model Paciente2 {
+//  id              Int        @id @default(autoincrement())
+//  nome            String
+//  cpf             String?
+//  email           String?
+//  data_nascimento DateTime? 
+//  data_cadastro   DateTime?  @default(now())
+//  peso            Int
+//  altura          Int
+//  tipo_sanguineo  String
+//  status          Int        @default(1)
+//}
