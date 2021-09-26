@@ -2,13 +2,13 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { all, call, delay, put, select, takeLatest } from "redux-saga/effects";
 import { RootState } from "../../store/RootState";
 import { ChangeActionType } from "../../lib/helpers";
-import { cNotaModel, NotaObject, NotaType } from "../../models/Nota";
+import { cNotaModel, NotaObject, TipoNota } from "../../models/Nota";
 import { del, get, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
-import { TagType } from "../../models/Tag";
+import { TipoPaciente } from "../../models/Paciente";
 import {
-  CheckPointObject,
-  CheckPointType,
+  ControleObject,
+  TipoControle,
 } from "../../models/ControleObject";
 import { ApiLinks, PageLinks } from "../../lib/Links";
 
@@ -16,26 +16,25 @@ import { ApiLinks, PageLinks } from "../../lib/Links";
  * NotasPage API State interface
  */
 export interface NotasApiInterface {
-  newNota: NotaType;
-  editNota: NotaType | null;
-  searchNotas: NotaType[];
+  newNota: TipoNota;
+  editNota: TipoNota | null;
+  searchNotas: TipoNota[];
   searchNotaQuery: string;
   searchNotasLoading: boolean;
   currentRoute: string;
 }
 
 export type SetNotaType = {
-  nota: NotaType;
+  nota: TipoNota;
   edit?: boolean;
 };
 
 export type SearchNotaQuery = {
   query: string;
-  tagId?: string;
+  pacienteId?: string;
 };
 
-const NotaInit: NotaType = { ...NotaObject };
-NotaInit.checkPoints = [CheckPointObject];
+const NotaInit: TipoNota = [ControleObject];
 
 export const getInitialState = (): NotasApiInterface => {
   return {
@@ -83,22 +82,22 @@ class NotasApi {
       handleChange(state, action: PayloadAction<ChangeActionType>) {},
       setNota(state, action: PayloadAction<SetNotaType>) {
         if (action.payload.edit) {
-          const checkPoints: CheckPointType[] = action.payload.nota.checkPoints!.map(
-            (ch: CheckPointType, i: number) => ({
+          const controles: TipoControle[] = action.payload.nota.controles!.map(
+            (ch: TipoControle, i: number) => ({
               id: i,
-              text: ch.text,
-              checked: ch.checked,
+              texto: ch.texto,
+              marcado: ch.marcado,
             })
           );
           const editedNota = { ...action.payload.nota };
-          editedNota.checkPoints = checkPoints;
+          editedNota.controles = controles;
 
           state.editNota = editedNota;
         } else {
           state.newNota = action.payload.nota;
         }
       },
-      setSearchNotas(state, action: PayloadAction<NotaType[]>) {
+      setSearchNotas(state, action: PayloadAction<TipoNota[]>) {
         state.searchNotas = action.payload;
         state.searchNotasLoading = false;
       },
@@ -106,10 +105,10 @@ class NotasApi {
         state.currentRoute = action.payload;
       },
       addNota(state, action: PayloadAction<boolean>) {},
-      deleteNota(state, action: PayloadAction<NotaType>) {},
+      deleteNota(state, action: PayloadAction<TipoNota>) {},
       checkNotaAndSubmit(
         state,
-        action: PayloadAction<{ nota: NotaType; checkitem: CheckPointType }>
+        action: PayloadAction<{ nota: TipoNota; checkitem: TipoControle }>
       ) {},
       searchNotas(state, action: PayloadAction<SearchNotaQuery>) {
         state.searchNotasLoading = true;
@@ -126,54 +125,54 @@ class NotasApi {
   ): Generator<any> {
     const { attr, value, edit } = action.payload;
 
-    const nota: NotaType | any = Object.assign(
+    const nota: TipoNota | any = Object.assign(
       {},
       edit ? yield select(this.selectEditNota) : yield select(this.selectNota)
     );
 
-    if (attr === cNotaModel.tags) {
-      if (nota.tags.find((f: TagType) => f.id === value.id)) {
-        nota.tags = nota.tags.filter((t: TagType) => t.id !== value.id);
+    if (attr === cNotaModel.pacientes) {
+      if (nota.pacientes.find((f: TipoPaciente) => f.id === value.id)) {
+        nota.pacientes = nota.pacientes.filter((t: TipoPaciente) => t.id !== value.id);
       } else {
-        nota.tags = [...nota.tags, value];
+        nota.pacientes = [...nota.pacientes, value];
       }
       return yield put(this.slice.actions.setNota({ nota: nota, edit: edit }));
     }
 
-    if (attr === cNotaModel.checkPoints) {
-      if (value === CheckPointObject) {
-        const lastCheckPointId = nota.checkPoints![nota.checkPoints!.length - 1]
+    if (attr === cNotaModel.controles) {
+      if (value === ControleObject) {
+        const lastControleId = nota.controles![nota.controles!.length - 1]
           .id;
 
-        const newCheckPoint: CheckPointType = {
-          checked: false,
-          id: lastCheckPointId! + 1,
-          text: "",
+        const newControle: TipoControle = {
+          marcado: false,
+          id: lastControleId! + 1,
+          texto: "",
         };
 
-        nota.checkPoints = [...nota.checkPoints!, newCheckPoint];
+        nota.controles = [...nota.controles!, newControle];
 
         return yield put(
           this.slice.actions.setNota({ nota: nota, edit: edit })
         );
       } else {
         if (typeof value === "number") {
-          if (nota.checkPoints?.length === 1) {
-            nota.checkPoints = [CheckPointObject];
+          if (nota.controles?.length === 1) {
+            nota.controles = [ControleObject];
           } else {
-            nota.checkPoints = nota.checkPoints?.filter(
+            nota.controles = nota.controles?.filter(
               (f: any) => f.id !== value
             );
           }
         } else {
-          const checkPoints: CheckPointType[] = [...nota.checkPoints!];
-          const checkPointIndex = checkPoints.findIndex(
-            (f: CheckPointType) => f.id === value.id
+          const controles: TipoControle[] = [...nota.controles!];
+          const controleIndex = controles.findIndex(
+            (f: TipoControle) => f.id === value.id
           );
 
-          checkPoints[checkPointIndex] = value;
+          controles[controleIndex] = value;
 
-          nota.checkPoints = [...checkPoints];
+          nota.controles = [...controles];
         }
         return yield put(
           this.slice.actions.setNota({ nota: nota, edit: edit })
@@ -193,7 +192,7 @@ class NotasApi {
 
     toast.info(`${action.payload ? "Updating" : "Adding"} nota...`);
 
-    const nota: NotaType | any = action.payload
+    const nota: TipoNota | any = action.payload
       ? yield select(this.selectEditNota)
       : yield select(this.selectNota);
 
@@ -218,7 +217,7 @@ class NotasApi {
     yield put(this.slice.actions.changeCurrentRoute(PageLinks.notasPage));
   }
 
-  public *handleDeleteNota(action: PayloadAction<NotaType>): Generator<any> {
+  public *handleDeleteNota(action: PayloadAction<TipoNota>): Generator<any> {
     yield put(
       this.slice.actions.changeCurrentRoute(PageLinks.notasPageDeleteNota)
     );
@@ -238,7 +237,7 @@ class NotasApi {
   }
 
   public *handleCheckNotaAndSubmit(
-    action: PayloadAction<{ nota: NotaType; checkitem: CheckPointType }>
+    action: PayloadAction<{ nota: TipoNota; checkitem: TipoControle }>
   ): Generator<any> {
     yield put(
       this.slice.actions.changeCurrentRoute(PageLinks.notasPageNewNota)
@@ -247,13 +246,13 @@ class NotasApi {
 
     const { nota, checkitem } = action.payload;
 
-    const notaCopy: NotaType = { ...nota };
+    const notaCopy: TipoNota = { ...nota };
 
-    const editedCheckitems: CheckPointType[] = nota.checkPoints!.map(
-      (ch: CheckPointType) => (ch.id === checkitem.id ? checkitem : ch)
+    const editedCheckitems: TipoControle[] = nota.controles!.map(
+      (ch: TipoControle) => (ch.id === checkitem.id ? checkitem : ch)
     );
 
-    notaCopy.checkPoints = editedCheckitems;
+    notaCopy.controles = editedCheckitems;
 
     try {
       const response = yield call(update, ApiLinks.notas, notaCopy);
@@ -271,7 +270,7 @@ class NotasApi {
   public *handleOnSearchNotas(
     action: PayloadAction<SearchNotaQuery>
   ): Generator<any> {
-    const { query, tagId } = action.payload;
+    const { query, pacienteId } = action.payload;
 
     yield delay(500);
 
@@ -281,10 +280,10 @@ class NotasApi {
     }
 
     try {
-      const response: NotaType[] | any = yield call(
+      const response: TipoNota[] | any = yield call(
         get,
         `${ApiLinks.notas}/search?query=${query}${
-          tagId ? `&tagId=${tagId}` : ""
+          pacienteId ? `&pacienteId=${pacienteId}` : ""
         }`
       );
 
