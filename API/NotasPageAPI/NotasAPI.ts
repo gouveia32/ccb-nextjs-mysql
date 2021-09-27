@@ -34,7 +34,7 @@ export type SearchNotaQuery = {
   pacienteId?: string;
 };
 
-const NotaInit: TipoNota = [ControleObject];
+const NotaInit: TipoNota = { ...NotaObject };
 
 export const getInitialState = (): NotasApiInterface => {
   return {
