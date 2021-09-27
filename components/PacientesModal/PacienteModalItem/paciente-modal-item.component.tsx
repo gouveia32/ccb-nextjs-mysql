@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { PacienteType } from "../../../models/Paciente";
+import { TipoPaciente } from "../../../models/Paciente";
 import { Grid, IconButton, TextField } from "@material-ui/core";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 
 export interface PacienteModalItemProps {
-  paciente: PacienteType;
-  onDeletePaciente: (paciente: PacienteType) => void;
-  onUpdatePaciente: (paciente: PacienteType) => void;
+  paciente: TipoPaciente;
+  onDeletePaciente: (paciente: TipoPaciente) => void;
+  onUpdatePaciente: (paciente: TipoPaciente) => void;
 }
 
 const PacienteModalItem: React.FC<PacienteModalItemProps> = ({

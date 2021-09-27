@@ -10,20 +10,20 @@ import {
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 import PersonSearch from "@material-ui/icons/CheckOutlined";
-import { cPacienteModel, PacienteType } from "../../models/Paciente";
+import { cPacienteModel, TipoPaciente } from "../../models/Paciente";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
 import { Loading } from "../Loading/loading.component";
 import PacienteModalItem from  "./PacienteModalItem/paciente-modal-item.component";
 
 export interface PacientesModalProps {
-  newPaciente: PacienteType;
-  pacientes: PacienteType[];
+  newPaciente: TipoPaciente;
+  pacientes: TipoPaciente[];
   pacientesLoading: boolean;
   onChange: (value: ChangeActionType) => void;
   onAddPaciente: () => void;
-  onUpdatePaciente: (paciente: PacienteType) => void;
-  onDeletePaciente: (paciente: PacienteType) => void;
+  onUpdatePaciente: (paciente: TipoPaciente) => void;
+  onDeletePaciente: (paciente: TipoPaciente) => void;
 }
 
 const PacientesModal: React.FC<PacientesModalProps> = ({
@@ -66,7 +66,7 @@ const PacientesModal: React.FC<PacientesModalProps> = ({
           <Loading size={20} />
         ) : (
           pacientes &&
-          pacientes.map((paciente: PacienteType, k: number) => (
+          pacientes.map((paciente: TipoPaciente, k: number) => (
             <PacienteModalItem
               key={paciente.id}
               paciente={paciente}
@@ -106,7 +106,7 @@ const PacientesModal: React.FC<PacientesModalProps> = ({
           <Loading size={20} />
         ) : (
           pacientes &&
-          pacientes.map((paciente: PacienteType, k: number) => (
+          pacientes.map((paciente: TipoPaciente, k: number) => (
             <PacienteModalItem
               key={paciente.id}
               paciente={paciente}

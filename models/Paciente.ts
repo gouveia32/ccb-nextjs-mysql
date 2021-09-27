@@ -7,7 +7,7 @@ export type TipoPaciente = PacienteModel;
 
 export const cPacienteModel = {
   id: "id",
-  name: "nome"
+  nome: "nome"
 };
 
 export const PacienteObject: TipoPaciente = {
