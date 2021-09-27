@@ -161,7 +161,7 @@ class PacientesApi {
    * SELECTORS
    */
   private selectDomain(state: RootState) {
-    return state.pacientesApiSlice || getInitialState();
+    return state.pacientesPageApiSlice || getInitialState();
   }
 
   public selectNewPaciente = createSelector(
