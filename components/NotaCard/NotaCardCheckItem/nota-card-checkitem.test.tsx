@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { CheckPointObject } from "../../../models/ControleObject";
+import { ControleObject } from "../../../models/ControleObject";
 import { Checkbox } from "@material-ui/core";
 import NotaCardCheckItem, {
   NotaCardCheckItemProps,
@@ -10,15 +10,15 @@ import { NotaCardCheckItemText } from "./nota-card-checkitem.styles";
 describe("NotaCardCheckItem component", () => {
   let wrapper: ShallowWrapper;
   let mockOnChecked: any;
-  const checkPoint = CheckPointObject;
-  checkPoint.checked = true;
-  checkPoint.text = "text";
+  const controle = ControleObject;
+  controle.checked = true;
+  controle.text = "text";
 
   beforeEach(() => {
     mockOnChecked = jest.fn();
 
     const mockProps: NotaCardCheckItemProps = {
-      checkItem: checkPoint,
+      checkItem: controle,
       onChecked: mockOnChecked,
     };
 
@@ -37,7 +37,7 @@ describe("NotaCardCheckItem component", () => {
   it("should render when NotaCardCheckItemText component with checkItem values", () => {
     const checkItem = wrapper.find(NotaCardCheckItemText);
     expect(checkItem).toHaveLength(1);
-    expect(checkItem.prop("checked")).toBe(checkPoint.checked);
-    expect(checkItem.contains(checkPoint.text)).toEqual(true);
+    expect(checkItem.prop("checked")).toBe(controle.checked);
+    expect(checkItem.contains(controle.text)).toEqual(true);
   });
 });

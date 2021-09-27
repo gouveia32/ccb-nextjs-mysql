@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from "enzyme";
 import NotaCheckItem, {
   NotaCheckItemProps,
 } from "./add-nota-checkitem.component";
-import { CheckPointObject } from "../../../models/ControleObject";
+import { ControleObject } from "../../../models/ControleObject";
 import { Checkbox, IconButton, TextField } from "@material-ui/core";
 
 describe("AddNotaCheckItem component", () => {
@@ -16,7 +16,7 @@ describe("AddNotaCheckItem component", () => {
     mockOnHandleChange = jest.fn();
 
     const mockProps: NotaCheckItemProps = {
-      checkItem: CheckPointObject,
+      checkItem: ControleObject,
       onDelete: mockOnDelete,
       onHandleChange: mockOnHandleChange,
     };

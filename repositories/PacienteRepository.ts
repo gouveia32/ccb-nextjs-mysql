@@ -82,7 +82,7 @@ export const getPacienteNotes = async (pacienteId: string): Promise<Note[]> => {
     },
     include: {
       pacientes: true,
-      checkPoints: true,
+      controles: true,
     },
   });
 };

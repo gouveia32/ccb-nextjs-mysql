@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChangeActionType } from "../../lib/helpers";
 import {
   AddNotaInput,
-  AddNotaInputAddCheckPoint,
-  AddNotaInputCheckPoints,
+  AddNotaInputAddControle,
+  AddNotaInputControles,
   AddNotaInputContent,
   AddNotaInputContentSwitch,
   AddNotaInputContentWrapper,
@@ -162,9 +162,9 @@ const AddNota: React.FC<AddNotaProps> = ({
     </>
   );
 
-  const renderCheckPointsContentInput = (
+  const renderControlesContentInput = (
     <>
-      <AddNotaInputCheckPoints edit={!!edit}>
+      <AddNotaInputControles edit={!!edit}>
         {notaModel.controles
           ?.filter((f) => !f.marcado)
           .map((c: TipoControle, i: number) => (
@@ -208,8 +208,8 @@ const AddNota: React.FC<AddNotaProps> = ({
               }
             />
           ))}
-      </AddNotaInputCheckPoints>
-      <AddNotaInputAddCheckPoint>
+      </AddNotaInputControles>
+      <AddNotaInputAddControle>
         <IconButton
           size={"small"}
           onClick={() =>
@@ -221,7 +221,7 @@ const AddNota: React.FC<AddNotaProps> = ({
         >
           <AddOutlinedIcon />
         </IconButton>
-      </AddNotaInputAddCheckPoint>
+      </AddNotaInputAddControle>
     </>
   );
 
@@ -253,7 +253,7 @@ const AddNota: React.FC<AddNotaProps> = ({
         >
           {notaModel.tipoNota === tipoNotaEnum.TEXT
             ? renderTextContentInput
-            : renderCheckPointsContentInput}
+            : renderControlesContentInput}
           {renderBottomMenu}
           <Button
             id={"add-button"}

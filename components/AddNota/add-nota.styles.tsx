@@ -112,12 +112,12 @@ export const AddNotaInputContentSwitch = styled.div`
   }
 `;
 
-interface AddNotaInputCheckPointsInterface {
+interface AddNotaInputControlesInterface {
   edit: boolean;
 }
 
-export const AddNotaInputCheckPoints = styled.div<
-  AddNotaInputCheckPointsInterface
+export const AddNotaInputControles = styled.div<
+  AddNotaInputControlesInterface
 >`
   width: 100%;
   display: flex;
@@ -128,7 +128,7 @@ export const AddNotaInputCheckPoints = styled.div<
   overflow-y: auto;
 `;
 
-export const AddNotaInputAddCheckPoint = styled.div`
+export const AddNotaInputAddControle = styled.div`
   margin: 0.2rem 0;
   cursor: pointer;
 

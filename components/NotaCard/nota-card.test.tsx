@@ -4,7 +4,7 @@ import {Dialog, Divider, IconButton} from "@material-ui/core";
 import NotaCard, {NotaCardProps} from "./nota-card.component";
 import {NotaObject, NotaTypeEnum} from "../../models/Nota";
 import {NotaCardComponent} from "./nota-card.styles";
-import {CheckPointObject} from "../../models/ControleObject";
+import {ControleObject} from "../../models/ControleObject";
 import NotaCardCheckItem from "./NotaCardCheckItem/nota-card-checkitem.component";
 
 describe("NotaCard component", () => {
@@ -64,9 +64,9 @@ describe("NotaCard component", () => {
         const notaModel = NotaObject;
         notaModel.notaType = NotaTypeEnum.CHECK;
 
-        const checkedCheckpoint = CheckPointObject;
-        checkedCheckpoint.checked = true;
-        notaModel.checkPoints = [CheckPointObject, checkedCheckpoint];
+        const checkedControle = ControleObject;
+        checkedControle.checked = true;
+        notaModel.controles = [ControleObject, checkedControle];
 
         const mockProps: NotaCardProps = {
             nota: NotaObject,
@@ -82,8 +82,8 @@ describe("NotaCard component", () => {
 
         wrapper = shallow(<NotaCard {...mockProps} />);
 
-        const notaCardCheckpoints = wrapper.find(NotaCardCheckItem);
-        expect(notaCardCheckpoints).toHaveLength(2);
+        const notaCardControles = wrapper.find(NotaCardCheckItem);
+        expect(notaCardControles).toHaveLength(2);
 
         const divider = wrapper.find(Divider);
         expect(divider).toHaveLength(1);

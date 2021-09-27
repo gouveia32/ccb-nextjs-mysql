@@ -4,12 +4,12 @@ import AddNota, { AddNotaProps } from "./add-nota.component";
 import { NotaObject, NotaTypeEnum } from "../../models/Nota";
 import { TagObject } from "../../models/Tag";
 import {
-  AddNotaInputCheckPoints,
+  AddNotaInputControles,
   AddNotaInputContent,
   AddNotaInputNameInput,
   AddNotaInputTag,
 } from "./add-nota.styles";
-import { CheckPointObject } from "../../models/ControleObject";
+import { ControleObject } from "../../models/ControleObject";
 import NotaCheckItem from "./AddNotaCheckItem/add-nota-checkitem.component";
 import { Divider } from "@material-ui/core";
 
@@ -69,13 +69,13 @@ describe("AddNota component", () => {
     expect(addNotaInputContent.prop("value")).toBe(mockProps.notaModel.content);
   });
 
-  it("should render AddNotaInputCheckPoints, Divider, NotaCheckItem when notaType is CHECK", () => {
+  it("should render AddNotaInputControles, Divider, NotaCheckItem when notaType is CHECK", () => {
     const notaModel = NotaObject;
     notaModel.notaType = NotaTypeEnum.CHECK;
 
-    const checkedCheckpoint = CheckPointObject;
-    checkedCheckpoint.checked = true;
-    notaModel.checkPoints = [CheckPointObject, checkedCheckpoint];
+    const checkedControle = ControleObject;
+    checkedControle.checked = true;
+    notaModel.controles = [ControleObject, checkedControle];
 
     const mockProps: AddNotaProps = {
       edit: true,
@@ -87,14 +87,14 @@ describe("AddNota component", () => {
     };
 
     wrapper = shallow(<AddNota {...mockProps} />);
-    const addNotaInputCheckPoints = wrapper.find(AddNotaInputCheckPoints);
-    expect(addNotaInputCheckPoints).toHaveLength(1);
+    const addNotaInputControles = wrapper.find(AddNotaInputControles);
+    expect(addNotaInputControles).toHaveLength(1);
 
     const notaCheckItemChecked: any = wrapper.find(NotaCheckItem);
     expect(notaCheckItemChecked).toHaveLength(2);
-    expect(notaCheckItemChecked.at(0).prop("checkItem")).toBe(CheckPointObject);
+    expect(notaCheckItemChecked.at(0).prop("checkItem")).toBe(ControleObject);
     expect(notaCheckItemChecked.at(1).prop("checkItem")).toBe(
-      checkedCheckpoint
+      checkedControle
     );
 
     const divider = wrapper.find(Divider);
