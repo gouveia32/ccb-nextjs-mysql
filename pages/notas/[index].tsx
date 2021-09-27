@@ -21,7 +21,7 @@ import { TipoNota } from "../../models/Nota";
 import React, { useEffect, useState } from "react";
 import NotaCard from "../../components/NotaCard/nota-card.component";
 import { TipoPaciente } from "../../models/Paciente";
-import { selectPacientes } from "../../API/PacientesPageAPI/PacientesAPI";
+import { selectPacientes } from "../../API/PacientesAPI/PacientesAPI";
 import { ChangeActionType } from "../../lib/helpers";
 import { useRouter } from "next/router";
 import { ApiLinks, PageLinks } from "../../lib/Links";

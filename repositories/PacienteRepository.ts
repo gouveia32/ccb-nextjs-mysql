@@ -1,4 +1,4 @@
-import { Note, PrismaClient, Paciente } from "@prisma/client";
+import { Nota, PrismaClient, Paciente } from "@prisma/client";
 import { Session } from "next-auth";
 import { TipoPaciente } from "../models/Paciente";
 import prisma from "../lib/prisma";
@@ -70,11 +70,11 @@ export const updatePaciente = async (paciente: TipoPaciente): Promise<Paciente |
 };
 
 /**
- * Get all searchNotes of given paciente by its ID
+ * Get all searchNotas of given paciente by its ID
  * @param pacienteId
  */
-export const getPacienteNotes = async (pacienteId: string): Promise<Note[]> => {
-  return await prisma.note.findMany({
+export const getPacienteNotas = async (pacienteId: string): Promise<Nota[]> => {
+  return await prisma.Nota.findMany({
     where: {
       pacientes: {
         some: { id: pacienteId },

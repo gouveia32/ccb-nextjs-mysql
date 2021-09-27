@@ -10,7 +10,7 @@ import {
   NotasApiReducer,
   NotasApiSaga,
 } from "../API/NotasPageAPI/NotasAPI";
-import { PacientesApiInterface, PacientesApiReducer } from "../API/PacientesPageAPI/PacientesAPI";
+import { PacientesApiInterface, PacientesApiReducer } from "../API/PacientesAPI/PacientesAPI";
 import { TagsAPIInterface, TagsApiReducer, TagsApiSaga } from "../API/TagsAPI/TagsAPI";
 
 export interface RootState {
