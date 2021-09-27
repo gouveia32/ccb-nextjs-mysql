@@ -44,7 +44,7 @@ const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
   const handleOnChange = (value: string) => {
     setUpdatePaciente((prevState) => {
       const newPaciente = Object.assign({}, prevState);
-      newPaciente.name = value;
+      newPaciente.nome = value;
       return newPaciente;
     });
   };
@@ -62,7 +62,7 @@ const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
         <LabelOutlinedIcon />
       </Grid>
       <Grid item={true} style={{ flex: 1 }}>
-        <h5 className="m-0 ms-2">{paciente.name}</h5>
+        <h5 className="m-0 ms-2">{paciente.nome}</h5>
       </Grid>
       <Grid item={true}>
         <IconButton
@@ -87,7 +87,7 @@ const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
       </Grid>
       <Grid item={true} style={{ flex: 1 }}>
         <TextField
-          value={updatePaciente.name}
+          value={updatePaciente.nome}
           fullWidth={true}
           size={"small"}
           variant={"standard"}
