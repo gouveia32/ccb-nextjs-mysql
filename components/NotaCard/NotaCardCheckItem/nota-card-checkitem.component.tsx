@@ -1,11 +1,11 @@
 import React from "react";
-import {cControle, ControleType} from "../../../models/ControleObject";
+import {cControle, TipoControle} from "../../../models/ControleObject";
 import {Checkbox} from "@material-ui/core";
 import {NotaCardCheckItemCheck, NotaCardCheckItemComponent, NotaCardCheckItemText,} from "./nota-card-checkitem.styles";
 
 export interface NotaCardCheckItemProps {
-  checkItem: ControleType;
-  onChecked?: (checkItem: ControleType) => void;
+  checkItem: TipoControle;
+  onChecked?: (checkItem: TipoControle) => void;
 }
 
 const NotaCardCheckItem: React.FC<NotaCardCheckItemProps> = ({
@@ -26,14 +26,14 @@ const NotaCardCheckItem: React.FC<NotaCardCheckItemProps> = ({
         <Checkbox
           size={"small"}
           color={"default"}
-          checked={checkItem.checked}
+          checked={checkItem.marcado}
           className="p-1"
-          onChange={(event) => handleChange(cControle.checked, event)}
+          onChange={(event) => handleChange(cControle.marcado, event)}
           onClick={(event) => event.stopPropagation()}
         />
       </NotaCardCheckItemCheck>
-      <NotaCardCheckItemText checked={checkItem.checked}>
-        {checkItem.text}
+      <NotaCardCheckItemText checked={checkItem.marcado}>
+        {checkItem.texto}
       </NotaCardCheckItemText>
     </NotaCardCheckItemComponent>
   );

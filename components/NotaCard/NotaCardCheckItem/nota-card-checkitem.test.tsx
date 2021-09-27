@@ -11,8 +11,8 @@ describe("NotaCardCheckItem component", () => {
   let wrapper: ShallowWrapper;
   let mockOnChecked: any;
   const controle = ControleObject;
-  controle.checked = true;
-  controle.text = "text";
+  controle.marcado = true;
+  controle.texto = "text";
 
   beforeEach(() => {
     mockOnChecked = jest.fn();
@@ -37,7 +37,7 @@ describe("NotaCardCheckItem component", () => {
   it("should render when NotaCardCheckItemText component with checkItem values", () => {
     const checkItem = wrapper.find(NotaCardCheckItemText);
     expect(checkItem).toHaveLength(1);
-    expect(checkItem.prop("checked")).toBe(controle.checked);
-    expect(checkItem.contains(controle.text)).toEqual(true);
+    expect(checkItem.prop("checked")).toBe(controle.marcado);
+    expect(checkItem.contains(controle.texto)).toEqual(true);
   });
 });
