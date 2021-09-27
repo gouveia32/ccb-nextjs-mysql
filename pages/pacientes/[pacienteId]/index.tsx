@@ -1,102 +1,102 @@
 import { Session } from "next-auth";
 import React, { useEffect, useState } from "react";
-import { NoteType } from "../../../models/Note";
+import { TipoNota } from "../../../models/Nota";
 import { PacientesPageNoNotes, PacientesPageNotes } from "../../../views/pacientes/[pacienteId]/pacientes-page.styles";
 import { useDispatch, useSelector } from "react-redux";
-import NoteCard from "../../../components/NoteCard/note-card.component";
+import NotaCard from "../../../components/NotaCard/nota-card.component";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { get } from "../../../lib/RestAPI";
 import {
-  NotesAPI,
+  NotasAPI,
   selectCurrentRoute,
-  selectEditNote,
-  selectSearchNotes,
-  selectSearchNotesLoading,
-} from "../../../API/NotesPageAPI/NotesAPI";
-import { PacienteType } from "../../../models/Paciente";
+  selectEditNota,
+  selectSearchNotas,
+  selectSearchNotasLoading,
+} from "../../../API/NotasPageAPI/NotasAPI";
+import { TipoPaciente } from "../../../models/Paciente";
 import { selectPacientes } from "../../../API/PacientesAPI/PacientesAPI";
 import { ApiLinks, PageLinks } from "../../../lib/Links";
 import { ChangeActionType } from "../../../lib/helpers";
-import { CheckPointType } from "../../../models/ControleObject";
+import { TipoControle } from "../../../models/ControleObject";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 import Head from "next/head";
 
 export interface PacientesPageProps {
   session: Session | null;
-  pacienteNotes: NoteType[];
+  pacienteNotas: TipoNota[];
 }
 
-export default function PacientesPage({ session, pacienteNotes }: PacientesPageProps) {
+export default function PacientesPage({ session, pacienteNotas }: PacientesPageProps) {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const [notesToRender, setNotesToRender] = useState(pacienteNotes);
+  const [notasToRender, setNotasToRender] = useState(pacienteNotas);
 
-  const editNote = useSelector(selectEditNote);
+  const editNota = useSelector(selectEditNota);
   const currentRoute = useSelector(selectCurrentRoute);
-  const pacientes: PacienteType[] = useSelector(selectPacientes);
-  const searchNotes = useSelector(selectSearchNotes);
-  const searchNotesLoading = useSelector(selectSearchNotesLoading);
+  const pacientes: TipoPaciente[] = useSelector(selectPacientes);
+  const searchNotas = useSelector(selectSearchNotas);
+  const searchNotasLoading = useSelector(selectSearchNotasLoading);
 
   useEffect(() => {
     router.replace(router.asPath);
   }, [currentRoute]);
 
   useEffect(() => {
-    if (searchNotes.length > 0) {
-      setNotesToRender(searchNotes);
+    if (searchNotas.length > 0) {
+      setNotasToRender(searchNotas);
     } else {
-      setNotesToRender(pacienteNotes);
+      setNotasToRender(pacienteNotas);
     }
-  }, [pacienteNotes, searchNotes]);
+  }, [pacienteNotas, searchNotas]);
 
-  const handleOnAddNote = (update: boolean) => {
-    dispatch(NotesAPI.addNote(update));
+  const handleOnAddNota = (update: boolean) => {
+    dispatch(NotasAPI.addNota(update));
   };
 
-  const handleChangeNote = (action: ChangeActionType) => {
-    dispatch(NotesAPI.handleChange(action));
+  const handleChangeNota = (action: ChangeActionType) => {
+    dispatch(NotasAPI.handleChange(action));
   };
 
-  const handleOnDeleteNote = (note: NoteType) => {
-    dispatch(NotesAPI.deleteNote(note));
+  const handleOnDeleteNota = (nota: TipoNota) => {
+    dispatch(NotasAPI.deleteNota(nota));
   };
 
-  const handleClickNoteCheckItem = (
-    note: NoteType,
-    checkitem: CheckPointType
+  const handleClickNotaCheckItem = (
+    nota: TipoNota,
+    checkitem: TipoControle
   ) => {
-    dispatch(NotesAPI.checkNoteAndSubmit({ note: note, checkitem: checkitem }));
+    dispatch(NotasAPI.checkNotaAndSubmit({ nota: nota, checkitem: checkitem }));
   };
 
   return (
     <>
       <Head>
-        <title>Paciente notes</title>
+        <title>Paciente notas</title>
       </Head>
-      {searchNotesLoading ? (
+      {searchNotasLoading ? (
         <Loading size={30} classname="mt-4" />
-      ) : notesToRender && notesToRender.length > 0 ? (
+      ) : notasToRender && notasToRender.length > 0 ? (
         <PacientesPageNotes>
-          {notesToRender.map((note: NoteType, k: number) => (
-            <NoteCard
-              key={note.id}
-              note={note}
+          {notasToRender.map((nota: TipoNota, k: number) => (
+            <NotaCard
+              key={nota.id}
+              nota={nota}
               pacientes={pacientes}
-              editNote={editNote}
+              editNota={editNota}
               onHandleChange={(action) =>
-                handleChangeNote({ ...action, edit: true })
+                handleChangeNota({ ...action, edit: true })
               }
-              onAddNote={() => handleOnAddNote(true)}
+              onAddNota={() => handleOnAddNota(true)}
               onClick={() =>
-                dispatch(NotesAPI.setNote({ note: note, edit: true }))
+                dispatch(NotasAPI.setNota({ nota: nota, edit: true }))
               }
-              onDeleteNote={() => handleOnDeleteNote(note)}
+              onDeleteNota={() => handleOnDeleteNota(nota)}
               onCheckItemClick={(checkitem) =>
-                handleClickNoteCheckItem(note, checkitem)
+                handleClickNotaCheckItem(nota, checkitem)
               }
             />
           ))}
@@ -126,15 +126,15 @@ export const getServerSideProps: GetServerSideProps<PacientesPageProps> = async 
 
   const { pacienteId } = context.query;
 
-  const userNotes: NoteType[] = await get(
-    `${process.env.HOST}${ApiLinks.pacientesNotes}/${pacienteId}`,
+  const userNotas: TipoNota[] = await get(
+    `${process.env.HOST}${ApiLinks.pacientesNotas}/${pacienteId}`,
     context.req.headers.cookie!
   );
 
   return {
     props: {
       session: session,
-      pacienteNotes: userNotes,
+      pacienteNotas: userNotas,
     },
   };
 };
