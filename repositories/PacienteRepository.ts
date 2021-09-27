@@ -13,7 +13,7 @@ export const getAllMedicoPacientes = async (medicoSession: Session): Promise<Pac
     include: {
       pacientes: {
         orderBy: {
-          criadoEm: "asc",
+          createdAt: "asc",
         },
       },
     },
@@ -41,7 +41,7 @@ export const addNewPaciente = async (
   if (medico) {
     const newPaciente = await prisma.paciente.create({
       data: {
-        nome: paciente.nome,
+        name: paciente.nome,
         medico: {
           connect: {
             id: medico.id,
@@ -58,13 +58,13 @@ export const addNewPaciente = async (
  * Update given Paciente
  * @param paciente
  */
-export const updatePaciente = async (paciente: PacienteType): Promise<Paciente | undefined> => {
+export const updatePaciente = async (paciente: TipoPaciente): Promise<Paciente | undefined> => {
   return await prisma.paciente.update({
     where: {
       id: paciente.id,
     },
     data: {
-      nome: paciente.nome,
+      name: paciente.nome,
     },
   });
 };

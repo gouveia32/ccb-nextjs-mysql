@@ -17,21 +17,21 @@ import {
   selectSearchNotasLoading,
 } from "../../API/NotasPageAPI/NotasAPI";
 import { get } from "../../lib/RestAPI";
-import { NotaType } from "../../models/Nota";
+import { TipoNota } from "../../models/Nota";
 import React, { useEffect, useState } from "react";
 import NotaCard from "../../components/NotaCard/nota-card.component";
-import { TagType } from "../../models/Tag";
-import { selectTags } from "../../API/TagsAPI/TagsAPI";
+import { TipoPaciente } from "../../models/Paciente";
+import { selectPacientes } from "../../API/PacientesPageAPI/PacientesAPI";
 import { ChangeActionType } from "../../lib/helpers";
 import { useRouter } from "next/router";
 import { ApiLinks, PageLinks } from "../../lib/Links";
-import { CheckPointType } from "../../models/ControleObject";
+import { TipoControle } from "../../models/ControleObject";
 import { Loading } from "../../components/Loading/loading.component";
 import Head from "next/head";
 
 export interface NotasPageProps {
   session: Session | null;
-  userNotas: NotaType[];
+  userNotas: TipoNota[];
 }
 
 export default function NotasPage({ session, userNotas }: NotasPageProps) {
@@ -46,7 +46,7 @@ export default function NotasPage({ session, userNotas }: NotasPageProps) {
   const searchNotas = useSelector(selectSearchNotas);
   const searchNotasLoading = useSelector(selectSearchNotasLoading);
   const currentRoute = useSelector(selectCurrentRoute);
-  const tags: TagType[] = useSelector(selectTags);
+  const pacientes: TipoPaciente[] = useSelector(selectPacientes);
 
   useEffect(() => {
     router.replace(currentRoute);
@@ -68,13 +68,13 @@ export default function NotasPage({ session, userNotas }: NotasPageProps) {
     dispatch(NotasAPI.handleChange(action));
   };
 
-  const handleOnDeleteNota = (nota: NotaType) => {
+  const handleOnDeleteNota = (nota: TipoNota) => {
     dispatch(NotasAPI.deleteNota(nota));
   };
 
   const handleClickNotaCheckItem = (
-    nota: NotaType,
-    checkitem: CheckPointType
+    nota: TipoNota,
+    checkitem: TipoControle
   ) => {
     dispatch(NotasAPI.checkNotaAndSubmit({ nota: nota, checkitem: checkitem }));
   };
@@ -82,7 +82,7 @@ export default function NotasPage({ session, userNotas }: NotasPageProps) {
   const renderAddNotaInput = (
     <NotasPageAddNota>
       <AddNota
-        tags={tags}
+        pacientes={pacientes}
         onHandleChange={(action) =>
           handleChangeNota({ ...action, edit: false })
         }
@@ -96,11 +96,11 @@ export default function NotasPage({ session, userNotas }: NotasPageProps) {
     <Loading size={30} />
   ) : notasToRender && notasToRender.length > 0 ? (
     <NotasPageNotas>
-      {notasToRender.map((nota: NotaType, k: number) => (
+      {notasToRender.map((nota: TipoNota, k: number) => (
         <NotaCard
           key={nota.id}
           nota={nota}
-          tags={tags}
+          pacientes={pacientes}
           editNota={editNota}
           onHandleChange={(action) =>
             handleChangeNota({ ...action, edit: true })
@@ -145,7 +145,7 @@ export const getServerSideProps: GetServerSideProps<NotasPageProps> = async (
     };
   }
 
-  const userNotas: NotaType[] = await get(
+  const userNotas: TipoNota[] = await get(
     `${process.env.HOST}${ApiLinks.notas}`,
     context.req.headers.cookie!
   );

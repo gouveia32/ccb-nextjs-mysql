@@ -12,6 +12,7 @@ export interface RootState {
   // API
   notesPageApiSlice?: NotesApiInterface;
   tagsApiSlice?: TagsAPIInterface;
+  pacientesApiSlice?: PacientesApiInterface;
   pacientesPageApiSlice?: PacientesApiInterface;
 
 }

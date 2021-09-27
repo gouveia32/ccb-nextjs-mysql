@@ -1,5 +1,5 @@
 {
-  "name": "notes-app",
+  "name": "pe-app",
   "version": "1.0.0",
   "description": "Notes app implementation inspired by Google Keep developed with NextJS and Prisma.",
   "author": "Jan Bauer",
