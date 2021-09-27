@@ -2,7 +2,7 @@ import React from "react";
 import {Checkbox, IconButton, makeStyles, TextField} from "@material-ui/core";
 import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
 import {AddNotaCheckItem, AddNotaCheckItemText,} from "./add-nota-checkItem.styles";
-import {cCheckPoint, CheckPointType} from "../../../models/ControleObject";
+import {cControle, TipoControle} from "../../../models/ControleObject";
 
 const useStyles = makeStyles({
   root: {
@@ -11,8 +11,8 @@ const useStyles = makeStyles({
 });
 
 export interface NotaCheckItemProps {
-  checkItem: CheckPointType;
-  onHandleChange: (checkItem: CheckPointType) => void;
+  checkItem: TipoControle;
+  onHandleChange: (checkItem: TipoControle) => void;
   onDelete: (id: number) => void;
 }
 
@@ -32,22 +32,22 @@ const NotaCheckItem: React.FC<NotaCheckItemProps> = ({
   return (
     <AddNotaCheckItem>
       <Checkbox
-        onChange={(e) => handleChange(cCheckPoint.checked, e.target.checked)}
+        onChange={(e) => handleChange(cControle.marcado, e.target.checked)}
         onClick={(event) => event.stopPropagation()}
-        checked={checkItem.checked}
+        checked={checkItem.marcado}
         size={"small"}
         color={"default"}
       />
       <AddNotaCheckItemText>
         <TextField
           onChange={(event) =>
-            handleChange(cCheckPoint.text, event.target.value)
+            handleChange(cControle.texto, event.target.value)
           }
           fullWidth={true}
           placeholder={"Write something..."}
-          value={checkItem.text}
+          value={checkItem.texto}
           classes={{
-            root: checkItem.checked ? classes.root : "",
+            root: checkItem.marcado ? classes.root : "",
           }}
           autoFocus={true}
         />
