@@ -1,12 +1,12 @@
-import { Paciente } from "@prisma/client";
+import { Tag } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import { cRestMethods } from "../../../lib/RestAPI";
 import {
-  addNewPaciente,
-  getAllMedicoPacientes,
-  updatePaciente,
-} from "../../../repositories/PacienteRepository";
+  addNewTag,
+  getAllDoctorTags,
+  updateTag,
+} from "../../../repositories/TagRepository";
 
 type Data = {
   message: string;
@@ -14,7 +14,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | Paciente[]>
+  res: NextApiResponse<Data | Tag[]>
 ) {
   const session = await getSession({ req });
 
@@ -27,16 +27,16 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const medicoPacientes = await getAllMedicoPacientes(session);
-        res.status(200).json(medicoPacientes);
+        const doctorTags = await getAllDoctorTags(session);
+        res.status(200).json(doctorTags);
         break;
       case cRestMethods.POST:
-        await addNewPaciente(body, session);
-        res.status(201).json({ message: "Paciente created." });
+        await addNewTag(body, session);
+        res.status(201).json({ message: "Tag created." });
         break;
       case cRestMethods.PUT:
-        await updatePaciente(JSON.parse(body));
-        res.status(200).json({ message: "Paciente updated." });
+        await updateTag(JSON.parse(body));
+        res.status(200).json({ message: "Tag updated." });
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);

@@ -179,7 +179,7 @@ describe("NotesAPI", () => {
     });
 
     it("should create an action to search notes", () => {
-      const noteQuery: SearchNoteQuery = { query: "test", pacienteId: "test" };
+      const noteQuery: SearchNoteQuery = { query: "test", tagId: "test" };
       const expectedAction = {
         type: `${NotesApiName}/searchNotes`,
         payload: {

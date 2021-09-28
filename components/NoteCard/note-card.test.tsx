@@ -26,7 +26,7 @@ describe("NoteCard component", () => {
 
     const mockProps: NoteCardProps = {
       note: NoteObject,
-      pacientes: [],
+      tags: [],
       editNote: NoteObject,
       onHandleChange: mockOnHandleChange,
       onAddNote: mockOnAddNote,
@@ -70,7 +70,7 @@ describe("NoteCard component", () => {
 
         const mockProps: NoteCardProps = {
             note: NoteObject,
-            pacientes: [],
+            tags: [],
             editNote: NoteObject,
             onHandleChange: mockOnHandleChange,
             onAddNote: mockOnAddNote,

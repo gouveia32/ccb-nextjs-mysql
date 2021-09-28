@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import {
   addNewNote,
-  getAllMedicoNotes,
+  getAllDoctorNotes,
   updateNote,
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
@@ -27,8 +27,8 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const medicoNotes = await getAllMedicoNotes(session);
-        res.status(200).json(medicoNotes);
+        const doctorNotes = await getAllDoctorNotes(session);
+        res.status(200).json(doctorNotes);
         break;
       case cRestMethods.POST:
         await addNewNote(body, session);

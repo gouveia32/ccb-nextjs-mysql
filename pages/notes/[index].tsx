@@ -20,8 +20,8 @@ import { get } from "../../lib/RestAPI";
 import { NoteType } from "../../models/Note";
 import React, { useEffect, useState } from "react";
 import NoteCard from "../../components/NoteCard/note-card.component";
-import { PacienteType } from "../../models/Paciente";
-import { selectPacientes } from "../../API/PacientesAPI/PacientesAPI";
+import { TagType } from "../../models/Tag";
+import { selectTags } from "../../API/TagsAPI/TagsAPI";
 import { ChangeActionType } from "../../lib/helpers";
 import { useRouter } from "next/router";
 import { ApiLinks, PageLinks } from "../../lib/Links";
@@ -31,22 +31,22 @@ import Head from "next/head";
 
 export interface NotesPageProps {
   session: Session | null;
-  medicoNotes: NoteType[];
+  doctorNotes: NoteType[];
 }
 
-export default function NotesPage({ session, medicoNotes }: NotesPageProps) {
+export default function NotesPage({ session, doctorNotes }: NotesPageProps) {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const [notesToRender, setNotesToRender] = useState(medicoNotes);
+  const [notesToRender, setNotesToRender] = useState(doctorNotes);
 
   const newNote = useSelector(selectNote);
   const editNote = useSelector(selectEditNote);
   const searchNotes = useSelector(selectSearchNotes);
   const searchNotesLoading = useSelector(selectSearchNotesLoading);
   const currentRoute = useSelector(selectCurrentRoute);
-  const pacientes: PacienteType[] = useSelector(selectPacientes);
+  const tags: TagType[] = useSelector(selectTags);
 
   useEffect(() => {
     router.replace(currentRoute);
@@ -56,9 +56,9 @@ export default function NotesPage({ session, medicoNotes }: NotesPageProps) {
     if (searchNotes.length > 0) {
       setNotesToRender(searchNotes);
     } else {
-      setNotesToRender(medicoNotes);
+      setNotesToRender(doctorNotes);
     }
-  }, [medicoNotes, searchNotes]);
+  }, [doctorNotes, searchNotes]);
 
   const handleOnAddNote = (update: boolean) => {
     dispatch(NotesAPI.addNote(update));
@@ -82,7 +82,7 @@ export default function NotesPage({ session, medicoNotes }: NotesPageProps) {
   const renderAddNoteInput = (
     <NotesPageAddNote>
       <AddNote
-        pacientes={pacientes}
+        tags={tags}
         onHandleChange={(action) =>
           handleChangeNote({ ...action, edit: false })
         }
@@ -100,7 +100,7 @@ export default function NotesPage({ session, medicoNotes }: NotesPageProps) {
         <NoteCard
           key={note.id}
           note={note}
-          pacientes={pacientes}
+          tags={tags}
           editNote={editNote}
           onHandleChange={(action) =>
             handleChangeNote({ ...action, edit: true })
@@ -116,14 +116,14 @@ export default function NotesPage({ session, medicoNotes }: NotesPageProps) {
     </NotesPageNotes>
   ) : (
     <NotesPageNoNotes>
-      <h1>Sorry, no notes are available...</h1>
+      <h1>Desculpe, sem consulta disponível...</h1>
     </NotesPageNoNotes>
   );
 
   return (
     <>
       <Head>
-        <title>Minhas Notas</title>
+        <title>Prontuário</title>
       </Head>
       {renderAddNoteInput}
       {renderNoteCards}
@@ -145,7 +145,7 @@ export const getServerSideProps: GetServerSideProps<NotesPageProps> = async (
     };
   }
 
-  const medicoNotes: NoteType[] = await get(
+  const doctorNotes: NoteType[] = await get(
     `${process.env.HOST}${ApiLinks.notes}`,
     context.req.headers.cookie!
   );
@@ -153,7 +153,7 @@ export const getServerSideProps: GetServerSideProps<NotesPageProps> = async (
   return {
     props: {
       session: session,
-      medicoNotes: medicoNotes,
+      doctorNotes: doctorNotes,
     },
   };
 };

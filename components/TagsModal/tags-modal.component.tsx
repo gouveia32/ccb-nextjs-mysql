@@ -9,66 +9,66 @@ import {
 } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
-import { cPacienteModel, PacienteType } from "../../models/Paciente";
+import { cTagModel, TagType } from "../../models/Tag";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
 import { Loading } from "../Loading/loading.component";
-import PacienteModalItem from "./PacienteModalItem/paciente-modal-item.component";
+import TagModalItem from "./TagModalItem/tag-modal-item.component";
 
-export interface PacientesModalProps {
-  newPaciente: PacienteType;
-  pacientes: PacienteType[];
-  pacientesLoading: boolean;
+export interface TagsModalProps {
+  newTag: TagType;
+  tags: TagType[];
+  tagsLoading: boolean;
   onChange: (value: ChangeActionType) => void;
-  onAddPaciente: () => void;
-  onUpdatePaciente: (paciente: PacienteType) => void;
-  onDeletePaciente: (paciente: PacienteType) => void;
+  onAddTag: () => void;
+  onUpdateTag: (tag: TagType) => void;
+  onDeleteTag: (tag: TagType) => void;
 }
 
-const PacientesModal: React.FC<PacientesModalProps> = ({
-  newPaciente,
-  pacientes,
-  pacientesLoading,
+const TagsModal: React.FC<TagsModalProps> = ({
+  newTag,
+  tags,
+  tagsLoading,
   onChange,
-  onAddPaciente,
-  onUpdatePaciente,
-  onDeletePaciente,
-}: PacientesModalProps) => {
+  onAddTag,
+  onUpdateTag,
+  onDeleteTag,
+}: TagsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const renderModal = (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Edit pacientes</DialogTitle>
+      <DialogTitle>Edit tags</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-2">
           <Grid item={true}>
             <TextField
-              value={newPaciente.name}
+              value={newTag.name}
               fullWidth={true}
               size={"small"}
               variant={"standard"}
               onChange={(event) =>
-                onChange({ attr: cPacienteModel.name, value: event.target.value })
+                onChange({ attr: cTagModel.name, value: event.target.value })
               }
-              onKeyDown={(event) => event.code === "Enter" && onAddPaciente()}
+              onKeyDown={(event) => event.code === "Enter" && onAddTag()}
             />
           </Grid>
           <Grid item={true}>
-            <IconButton size={"small"} onClick={onAddPaciente}>
+            <IconButton size={"small"} onClick={onAddTag}>
               <CheckOutlinedIcon />
             </IconButton>
           </Grid>
         </Grid>
-        {pacientesLoading ? (
+        {tagsLoading ? (
           <Loading size={20} />
         ) : (
-          pacientes &&
-          pacientes.map((paciente: PacienteType, k: number) => (
-            <PacienteModalItem
-              key={paciente.id}
-              paciente={paciente}
-              onDeletePaciente={onDeletePaciente}
-              onUpdatePaciente={onUpdatePaciente}
+          tags &&
+          tags.map((tag: TagType, k: number) => (
+            <TagModalItem
+              key={tag.id}
+              tag={tag}
+              onDeleteTag={onDeleteTag}
+              onUpdateTag={onUpdateTag}
             />
           ))
         )}
@@ -79,7 +79,7 @@ const PacientesModal: React.FC<PacientesModalProps> = ({
     <>
       {renderModal}
       <NavigationItem
-        name={"Altera pacientes"}
+        name={"Altera tags"}
         onClick={() => setOpen((prevState) => !prevState)}
         icon={<EditOutlinedIcon />}
       />
@@ -87,4 +87,4 @@ const PacientesModal: React.FC<PacientesModalProps> = ({
   );
 };
 
-export default React.memo(PacientesModal);
+export default React.memo(TagsModal);

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { device } from "../../../resources/styles/utils/media-query-utils";
 
-export const PacientesPageNotes = styled.section`
+export const TagsPageNotes = styled.section`
   display: flex;
   flex-wrap: wrap;
 
@@ -12,7 +12,7 @@ export const PacientesPageNotes = styled.section`
   }
 `;
 
-export const PacientesPageNoNotes = styled.section`
+export const TagsPageNoNotes = styled.section`
   width: 100%;
   height: 100%;
   justify-content: center;

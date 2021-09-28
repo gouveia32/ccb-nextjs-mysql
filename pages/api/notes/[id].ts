@@ -16,7 +16,7 @@ export default async function handler(
 
   if (session) {
     const {
-      query: { id, query, pacienteId },
+      query: { id, query, tagId },
       method,
     } = req;
 
@@ -25,7 +25,7 @@ export default async function handler(
         const notes: Note[] = await searchNotes(
           query as string,
           session,
-          pacienteId ? (pacienteId as string) : undefined
+          tagId ? (tagId as string) : undefined
         );
         res.status(200).json(notes);
         break;

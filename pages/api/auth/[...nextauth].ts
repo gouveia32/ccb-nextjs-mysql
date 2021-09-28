@@ -16,12 +16,12 @@ export default NextAuth({
       name: "credentials",
 
       authorize: async (credentials: any) => {
-        const medico = await prisma.medico.findFirst({
-          where: { name: credentials.medicoName },
+        const doctor = await prisma.doctor.findFirst({
+          where: { name: credentials.doctorName },
         });
 
-        if (medico) {
-          return Promise.resolve(medico);
+        if (doctor) {
+          return Promise.resolve(doctor);
         } else {
           return Promise.resolve(null);
         }
@@ -37,7 +37,7 @@ export default NextAuth({
 
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
-    // This option can be used with or without a database for medicos/accounts.
+    // This option can be used with or without a database for doctors/accounts.
     // Note: `jwt` is automatically set to `true` if no database is specified.
     jwt: true,
 
@@ -74,17 +74,17 @@ export default NextAuth({
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
-    // newMedico: null // If set, new medicos will be directed here on first sign in
+    // newDoctor: null // If set, new doctors will be directed here on first sign in
   },
 
   // Callbacks are asynchronous functions you can use to control what happens
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   // callbacks: {
-  // async login(medico, account, profile) { return true },
+  // async login(doctor, account, profile) { return true },
   // async redirect(url, baseUrl) { return baseUrl },
-  // async session(session, medico) { return session },
-  // async jwt(token, medico, account, profile, isNewMedico) { return token }
+  // async session(session, doctor) { return session },
+  // async jwt(token, doctor, account, profile, isNewDoctor) { return token }
   // },
 
   // Events are useful for logging

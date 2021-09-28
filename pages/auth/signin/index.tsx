@@ -23,7 +23,7 @@ export interface SignInProps {
 }
 
 export default function SignInPage({ providers }: SignInProps) {
-  const [medicoName, setMedicoName] = useState("");
+  const [doctorName, setDoctorName] = useState("");
 
   const renderHeader = (
     <>
@@ -39,7 +39,7 @@ export default function SignInPage({ providers }: SignInProps) {
       <TextField
         margin={"normal"}
         label={"Nome do Médico"}
-        placeholder={"Digite o nome do médico mediconame"}
+        placeholder={"Digite o nome do médico doctorname"}
         variant={"standard"}
         fullWidth={true}
         size={"small"}
@@ -50,18 +50,18 @@ export default function SignInPage({ providers }: SignInProps) {
             </InputAdornment>
           ),
         }}
-        onChange={(event) => setMedicoName(event.target.value)}
+        onChange={(event) => setDoctorName(event.target.value)}
         onKeyDown={(event) =>
-          event.keyCode === 13 && signIn("credentials", { medicoName: medicoName })
+          event.keyCode === 13 && signIn("credentials", { doctorName: doctorName })
         }
-        value={medicoName}
+        value={doctorName}
       />
       <Button
         size={"small"}
         className="mt-2"
         variant={"outlined"}
         fullWidth={true}
-        onClick={() => signIn("credentials", { medicoName: medicoName })}
+        onClick={() => signIn("credentials", { doctorName: doctorName })}
       >
         Entrar
       </Button>

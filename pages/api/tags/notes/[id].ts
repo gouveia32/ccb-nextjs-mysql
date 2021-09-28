@@ -1,8 +1,8 @@
-import { Paciente } from "@prisma/client";
+import { Note } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
-import { cRestMethods } from "../../../lib/RestAPI";
-import { deletePaciente } from "../../../repositories/PacienteRepository";
+import { cRestMethods } from "../../../../lib/RestAPI";
+import { getTagNotes } from "../../../../repositories/TagRepository";
 
 type Data = {
   message: string;
@@ -10,7 +10,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | Paciente[]>
+  res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
 
@@ -21,9 +21,9 @@ export default async function handler(
     } = req;
 
     switch (method) {
-      case cRestMethods.DELETE:
-        await deletePaciente(id as string);
-        res.status(200).json({ message: "Paciente deleted." });
+      case cRestMethods.GET:
+        const tagNotes: Note[] = await getTagNotes(id as string);
+        res.status(200).json(tagNotes);
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);

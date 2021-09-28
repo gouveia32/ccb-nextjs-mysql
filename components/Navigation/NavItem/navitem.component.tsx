@@ -9,7 +9,7 @@ export interface NavigationItemProps {
   onClick?: () => void;
   isActive?: boolean;
   isOpen?: boolean;
-  isPaciente?: boolean;
+  isTag?: boolean;
 }
 
 const NavigationItem: React.FC<NavigationItemProps> = ({
@@ -19,7 +19,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   onClick,
   isActive,
   isOpen,
-  isPaciente,
+  isTag,
 }: NavigationItemProps) => {
   const { push } = useRouter();
 
@@ -33,10 +33,10 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
       active={isActive ?? false}
       open={isOpen ?? true}
       onClick={handleOnClick}
-      isPaciente={isPaciente}
+      isTag={isTag}
     >
       <NavItemIcon>{icon}</NavItemIcon>
-      <NavItemContent isPaciente={!!isPaciente}>{name}</NavItemContent>
+      <NavItemContent isTag={!!isTag}>{name}</NavItemContent>
     </NavItem>
   );
 };

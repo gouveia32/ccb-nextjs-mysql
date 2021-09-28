@@ -1,7 +1,7 @@
 import { Session } from "next-auth";
 import React, { useEffect, useState } from "react";
 import { NoteType } from "../../../models/Note";
-import { PacientesPageNoNotes, PacientesPageNotes } from "../../../views/pacientes/[pacienteId]/pacientes-page.styles";
+import { TagsPageNoNotes, TagsPageNotes } from "../../../views/tags/[tagId]/tags-page.styles";
 import { useDispatch, useSelector } from "react-redux";
 import NoteCard from "../../../components/NoteCard/note-card.component";
 import { GetServerSideProps } from "next";
@@ -14,8 +14,8 @@ import {
   selectSearchNotes,
   selectSearchNotesLoading,
 } from "../../../API/NotesPageAPI/NotesAPI";
-import { PacienteType } from "../../../models/Paciente";
-import { selectPacientes } from "../../../API/PacientesAPI/PacientesAPI";
+import { TagType } from "../../../models/Tag";
+import { selectTags } from "../../../API/TagsAPI/TagsAPI";
 import { ApiLinks, PageLinks } from "../../../lib/Links";
 import { ChangeActionType } from "../../../lib/helpers";
 import { CheckPointType } from "../../../models/CheckPointObject";
@@ -23,21 +23,21 @@ import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 import Head from "next/head";
 
-export interface PacientesPageProps {
+export interface TagsPageProps {
   session: Session | null;
-  pacienteNotes: NoteType[];
+  tagNotes: NoteType[];
 }
 
-export default function PacientesPage({ session, pacienteNotes }: PacientesPageProps) {
+export default function TagsPage({ session, tagNotes }: TagsPageProps) {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const [notesToRender, setNotesToRender] = useState(pacienteNotes);
+  const [notesToRender, setNotesToRender] = useState(tagNotes);
 
   const editNote = useSelector(selectEditNote);
   const currentRoute = useSelector(selectCurrentRoute);
-  const pacientes: PacienteType[] = useSelector(selectPacientes);
+  const tags: TagType[] = useSelector(selectTags);
   const searchNotes = useSelector(selectSearchNotes);
   const searchNotesLoading = useSelector(selectSearchNotesLoading);
 
@@ -49,9 +49,9 @@ export default function PacientesPage({ session, pacienteNotes }: PacientesPageP
     if (searchNotes.length > 0) {
       setNotesToRender(searchNotes);
     } else {
-      setNotesToRender(pacienteNotes);
+      setNotesToRender(tagNotes);
     }
-  }, [pacienteNotes, searchNotes]);
+  }, [tagNotes, searchNotes]);
 
   const handleOnAddNote = (update: boolean) => {
     dispatch(NotesAPI.addNote(update));
@@ -75,17 +75,17 @@ export default function PacientesPage({ session, pacienteNotes }: PacientesPageP
   return (
     <>
       <Head>
-        <title>Paciente notes</title>
+        <title>Tag notes</title>
       </Head>
       {searchNotesLoading ? (
         <Loading size={30} classname="mt-4" />
       ) : notesToRender && notesToRender.length > 0 ? (
-        <PacientesPageNotes>
+        <TagsPageNotes>
           {notesToRender.map((note: NoteType, k: number) => (
             <NoteCard
               key={note.id}
               note={note}
-              pacientes={pacientes}
+              tags={tags}
               editNote={editNote}
               onHandleChange={(action) =>
                 handleChangeNote({ ...action, edit: true })
@@ -100,17 +100,17 @@ export default function PacientesPage({ session, pacienteNotes }: PacientesPageP
               }
             />
           ))}
-        </PacientesPageNotes>
+        </TagsPageNotes>
       ) : (
-        <PacientesPageNoNotes>
-          <h1>Desculpe, Não tem nota para esta paciente...</h1>
-        </PacientesPageNoNotes>
+        <TagsPageNoNotes>
+          <h1>Desculpe, Não tem nota para esta tag...</h1>
+        </TagsPageNoNotes>
       )}
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PacientesPageProps> = async (
+export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
   context
 ) => {
   const session = await getSession(context);
@@ -124,17 +124,17 @@ export const getServerSideProps: GetServerSideProps<PacientesPageProps> = async 
     };
   }
 
-  const { pacienteId } = context.query;
+  const { tagId } = context.query;
 
-  const medicoNotes: NoteType[] = await get(
-    `${process.env.HOST}${ApiLinks.pacientesNotes}/${pacienteId}`,
+  const doctorNotes: NoteType[] = await get(
+    `${process.env.HOST}${ApiLinks.tagsNotes}/${tagId}`,
     context.req.headers.cookie!
   );
 
   return {
     props: {
       session: session,
-      pacienteNotes: medicoNotes,
+      tagNotes: doctorNotes,
     },
   };
 };

@@ -20,7 +20,7 @@ describe("NavItem component", () => {
       icon: null,
       isActive: false,
       isOpen: false,
-      isPaciente: false,
+      isTag: false,
       name: "",
       onClick: mockOnClick,
       url: "",

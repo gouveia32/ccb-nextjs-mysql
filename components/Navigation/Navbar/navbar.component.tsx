@@ -5,8 +5,8 @@ import {
   NavLogo,
   NavRight,
   NavTop,
-  NavMedico,
-  NavMedicoImage,
+  NavDoctor,
+  NavDoctorImage,
 } from "./navbar.styles";
 import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -18,14 +18,14 @@ import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined"
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/client";
 import {
-  selectNewPaciente,
-  selectPacientes,
-  selectPacientesLoading,
-  PacientesAPI,
-} from "../../../API/PacientesAPI/PacientesAPI";
+  selectNewTag,
+  selectTags,
+  selectTagsLoading,
+  TagsAPI,
+} from "../../../API/TagsAPI/TagsAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { PacienteType } from "../../../models/Paciente";
-import PacientesModal from "../../PacientesModal/pacientes-modal.component";
+import { TagType } from "../../../models/Tag";
+import TagsModal from "../../TagsModal/tags-modal.component";
 import Link from "next/link";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import { ChangeActionType } from "../../../lib/helpers";
@@ -56,9 +56,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const router = useRouter();
 
-  const pacientesLoading: boolean = useSelector(selectPacientesLoading);
-  const pacientes: PacienteType[] = useSelector(selectPacientes);
-  const newPaciente: PacienteType = useSelector(selectNewPaciente);
+  const tagsLoading: boolean = useSelector(selectTagsLoading);
+  const tags: TagType[] = useSelector(selectTags);
+  const newTag: TagType = useSelector(selectNewTag);
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
   const handleOnNavClick = () => {
@@ -66,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   };
 
   useEffect(() => {
-    dispatch(PacientesAPI.fetchPacientes());
+    dispatch(TagsAPI.fetchTags());
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -81,18 +81,18 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </IconButton>
   );
 
-  const renderPacienteLinks = pacientesLoading ? (
+  const renderTagLinks = tagsLoading ? (
     <Loading size={25} />
   ) : (
-    pacientes &&
-    pacientes.map((paciente: PacienteType, index: number) => (
+    tags &&
+    tags.map((tag: TagType, index: number) => (
       <NavigationItem
-        key={paciente.id}
-        name={paciente.name}
+        key={tag.id}
+        name={tag.name}
         icon={<LabelOutlinedIcon />}
-        url={`${PageLinks.pacientesPage}/${paciente.id}`}
-        isPaciente={true}
-        isActive={router.query.pacienteId === paciente.id}
+        url={`${PageLinks.tagsPage}/${tag.id}`}
+        isTag={true}
+        isActive={router.query.tagId === tag.id}
         onClick={handleOnNavClick}
       />
     ))
@@ -100,10 +100,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||
-      router.pathname.includes("/pacientes")) && (
+      router.pathname.includes("/tags")) && (
       <NavLeft open={openNav}>
         <NavigationItem
-          name={"Notas"}
+          name={"Tags"}
           url={PageLinks.notesPage}
           icon={<EmojiObjectsOutlinedIcon />}
           isActive={
@@ -113,27 +113,27 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           isOpen={openNav}
           onClick={handleOnNavClick}
         />
-        {renderPacienteLinks}
-        <PacientesModal
-          newPaciente={newPaciente}
-          pacientes={pacientes}
-          pacientesLoading={pacientesLoading}
+        {renderTagLinks}
+        <TagsModal
+          newTag={newTag}
+          tags={tags}
+          tagsLoading={tagsLoading}
           onChange={(value: ChangeActionType) =>
-            dispatch(PacientesAPI.handleChange(value))
+            dispatch(TagsAPI.handleChange(value))
           }
-          onAddPaciente={() => dispatch(PacientesAPI.addPaciente())}
-          onUpdatePaciente={(paciente: PacienteType) => dispatch(PacientesAPI.updatePaciente(paciente))}
-          onDeletePaciente={(paciente: PacienteType) => {
-            dispatch(PacientesAPI.deletePaciente(paciente));
+          onAddTag={() => dispatch(TagsAPI.addTag())}
+          onUpdateTag={(tag: TagType) => dispatch(TagsAPI.updateTag(tag))}
+          onDeleteTag={(tag: TagType) => {
+            dispatch(TagsAPI.deleteTag(tag));
             refresh();
           }}
         />
       </NavLeft>
     );
 
-  const renderMedicoBar = session && (
-    <NavMedico>
-      <NavMedicoImage imageUrl={session?.user?.image}></NavMedicoImage>
+  const renderDoctorBar = session && (
+    <NavDoctor>
+      <NavDoctorImage imageUrl={session?.user?.image}></NavDoctorImage>
       <h6 className="m-0 ms-2 me-3">
         <strong>{session?.user?.name}</strong>
       </h6>
@@ -151,20 +151,20 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           Sair
         </Button>
       )}
-    </NavMedico>
+    </NavDoctor>
   );
 
   const renderLogo = (
     <Link href={PageLinks.landingPage}>
       <NavLogo>
         <KeepLogo className="ms-2" />
-        <h2 className="m-0 ms-2">Notas</h2>
+        <h2 className="m-0 ms-2">Consultas</h2>
       </NavLogo>
     </Link>
   );
 
   const renderSignIn = !session && (
-    <NavMedico>
+    <NavDoctor>
       <Button
         size={"small"}
         variant={"outlined"}
@@ -173,7 +173,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       >
         Entrar
       </Button>
-    </NavMedico>
+    </NavDoctor>
   );
 
   const renderSearchField = session && (
@@ -182,8 +182,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         dispatch(
           NotesAPI.searchNotes({
             query: query,
-            pacienteId: router.query.pacienteId
-              ? (router.query.pacienteId as string)
+            tagId: router.query.tagId
+              ? (router.query.tagId as string)
               : undefined,
           })
         )
@@ -198,7 +198,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
-        {renderMedicoBar}
+        {renderDoctorBar}
         {renderSignIn}
       </NavTop>
       <NavContent>

@@ -80,7 +80,7 @@ export const AddNoteInputContent = styled.textarea`
   }
 `;
 
-export const AddNoteInputPacientes = styled.div`
+export const AddNoteInputTags = styled.div`
   flex: 1;
   display: flex;
   overflow-x: auto;
@@ -143,11 +143,11 @@ export const AddNoteInputAddCheckPoint = styled.div`
   }
 `;
 
-interface AddNoteInputPacienteInterface {
+interface AddNoteInputTagInterface {
   chosen?: boolean;
 }
 
-export const AddNoteInputPaciente = styled.div<AddNoteInputPacienteInterface>`
+export const AddNoteInputTag = styled.div<AddNoteInputTagInterface>`
   margin: 0 0.1rem;
   cursor: pointer;
   border-radius: 1rem;

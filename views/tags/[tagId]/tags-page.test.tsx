@@ -2,27 +2,27 @@ import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import { Provider } from "react-redux";
 import { initializeStore } from "../../../store/configureStore";
-import PacientesPage, { PacientesPageProps } from "../../../pages/pacientes/[pacienteId]";
+import TagsPage, { TagsPageProps } from "../../../pages/tags/[tagId]";
 import { NoteObject } from "../../../models/Note";
 
-describe("Pacientes page", () => {
+describe("Tags page", () => {
   let wrapper: ShallowWrapper;
   const store = initializeStore();
 
   beforeEach(() => {
-    const mockProps: PacientesPageProps = {
+    const mockProps: TagsPageProps = {
       session: null,
-      pacienteNotes: [NoteObject],
+      tagNotes: [NoteObject],
     };
 
     wrapper = shallow(
       <Provider store={store}>
-        <PacientesPage {...mockProps} />
+        <TagsPage {...mockProps} />
       </Provider>
     );
   });
 
-  it("should render Pacientes page", () => {
+  it("should render Tags page", () => {
     expect(wrapper).toMatchSnapshot();
   });
 });

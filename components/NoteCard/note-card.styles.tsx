@@ -53,7 +53,7 @@ export const NoteCardContent = styled.div`
   overflow-y: auto;
 `;
 
-export const NoteCardPacientes = styled.div`
+export const NoteCardTags = styled.div`
   flex: 1;
   display: flex;
   overflow-x: auto;
@@ -62,7 +62,7 @@ export const NoteCardPacientes = styled.div`
   }
 `;
 
-export const NoteCardPaciente = styled.div`
+export const NoteCardTag = styled.div`
   border-radius: 0.5rem;
   padding: 0 0.2rem;
   white-space: nowrap;

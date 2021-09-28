@@ -2,12 +2,12 @@ import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import AddNote, { AddNoteProps } from "./add-note.component";
 import { NoteObject, NoteTypeEnum } from "../../models/Note";
-import { PacienteObject } from "../../models/Paciente";
+import { TagObject } from "../../models/Tag";
 import {
   AddNoteInputCheckPoints,
   AddNoteInputContent,
   AddNoteInputNameInput,
-  AddNoteInputPaciente,
+  AddNoteInputTag,
 } from "./add-note.styles";
 import { CheckPointObject } from "../../models/CheckPointObject";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
@@ -27,7 +27,7 @@ describe("AddNote component", () => {
     const mockProps: AddNoteProps = {
       edit: false,
       noteModel: NoteObject,
-      pacientes: [PacienteObject, PacienteObject],
+      tags: [TagObject, TagObject],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
@@ -53,7 +53,7 @@ describe("AddNote component", () => {
     const mockProps: AddNoteProps = {
       edit: true,
       noteModel: noteModel,
-      pacientes: [],
+      tags: [],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
@@ -80,7 +80,7 @@ describe("AddNote component", () => {
     const mockProps: AddNoteProps = {
       edit: true,
       noteModel: noteModel,
-      pacientes: [],
+      tags: [],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
@@ -101,21 +101,21 @@ describe("AddNote component", () => {
     expect(divider).toHaveLength(1);
   });
 
-  it("should render AddNoteInputPaciente components when pacientes array is not empty", () => {
+  it("should render AddNoteInputTag components when tags array is not empty", () => {
     const noteModel = NoteObject;
     noteModel.noteType = NoteTypeEnum.TEXT;
     const mockProps: AddNoteProps = {
       edit: true,
       noteModel: noteModel,
-      pacientes: [PacienteObject, PacienteObject],
+      tags: [TagObject, TagObject],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
     };
 
     wrapper = shallow(<AddNote {...mockProps} />);
-    const addNoteInputPaciente = wrapper.find(AddNoteInputPaciente);
+    const addNoteInputTag = wrapper.find(AddNoteInputTag);
 
-    expect(addNoteInputPaciente).toHaveLength(2);
+    expect(addNoteInputTag).toHaveLength(2);
   });
 });

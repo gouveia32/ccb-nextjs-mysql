@@ -40,7 +40,7 @@ const NavLogo = styled.div`
   }
 `;
 
-const NavMedico = styled.div`
+const NavDoctor = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
@@ -56,11 +56,11 @@ const NavMedico = styled.div`
   }
 `;
 
-interface NavMedicoImageInterface {
+interface NavDoctorImageInterface {
   imageUrl?: any;
 }
 
-const NavMedicoImage = styled.div<NavMedicoImageInterface>`
+const NavDoctorImage = styled.div<NavDoctorImageInterface>`
   height: 30px;
   width: 30px;
   background-size: cover;
@@ -126,9 +126,9 @@ const NavRight = styled.div`
 export {
   NavTop,
   NavLogo,
-  NavMedico,
+  NavDoctor,
   NavLeft,
   NavContent,
   NavRight,
-  NavMedicoImage,
+  NavDoctorImage,
 };

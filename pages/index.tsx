@@ -53,7 +53,7 @@ export default function LandingPage() {
 
   const renderHeader = (
     <>
-      <LandingPageHeading>Notas</LandingPageHeading>
+      <LandingPageHeading>Prontuário</LandingPageHeading>
       <Button
         variant={"outlined"}
         size={"large"}
@@ -162,10 +162,10 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>Notas</title>
+        <title>Prontuário</title>
         <meta
           name="description"
-          content="Aplicativo de Notas para guardar suas propostas"
+          content="Aplicativo para genrencia Prontuários"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
