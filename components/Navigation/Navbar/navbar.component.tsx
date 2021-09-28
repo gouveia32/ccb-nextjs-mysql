@@ -133,9 +133,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const renderMedicoBar = session && (
     <NavMedico>
-      <NavMedicoImage imageUrl={session?.medico?.image}></NavMedicoImage>
+      <NavMedicoImage imageUrl={session?.user?.image}></NavMedicoImage>
       <h6 className="m-0 ms-2 me-3">
-        <strong>{session?.medico?.name}</strong>
+        <strong>{session?.user?.name}</strong>
       </h6>
       {matchesMobileL ? (
         <IconButton size={"small"} onClick={() => signOut()}>
