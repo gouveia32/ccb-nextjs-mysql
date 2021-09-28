@@ -1,8 +1,8 @@
-import { Nota } from "@prisma/client";
+import { Note } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import { cRestMethods } from "../../../../lib/RestAPI";
-import { getPacienteNotas } from "../../../../repositories/PacienteRepository";
+import { getPacienteNotes } from "../../../../repositories/PacienteRepository";
 
 type Data = {
   message: string;
@@ -10,7 +10,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | Nota[]>
+  res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
 
@@ -22,8 +22,8 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const pacienteNotas: Nota[] = await getPacienteNotas(id as string);
-        res.status(200).json(pacienteNotas);
+        const pacienteNotes: Note[] = await getPacienteNotes(id as string);
+        res.status(200).json(pacienteNotes);
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);

@@ -4,7 +4,7 @@ import {Dialog, Divider, IconButton} from "@material-ui/core";
 import NoteCard, {NoteCardProps} from "./note-card.component";
 import {NoteObject, NoteTypeEnum} from "../../models/Note";
 import {NoteCardComponent} from "./note-card.styles";
-import {CheckPointObject} from "../../models/ControleObject";
+import {CheckPointObject} from "../../models/CheckPointObject";
 import NoteCardCheckItem from "./NoteCardCheckItem/note-card-checkitem.component";
 
 describe("NoteCard component", () => {
@@ -26,7 +26,7 @@ describe("NoteCard component", () => {
 
     const mockProps: NoteCardProps = {
       note: NoteObject,
-      tags: [],
+      pacientes: [],
       editNote: NoteObject,
       onHandleChange: mockOnHandleChange,
       onAddNote: mockOnAddNote,
@@ -70,7 +70,7 @@ describe("NoteCard component", () => {
 
         const mockProps: NoteCardProps = {
             note: NoteObject,
-            tags: [],
+            pacientes: [],
             editNote: NoteObject,
             onHandleChange: mockOnHandleChange,
             onAddNote: mockOnAddNote,

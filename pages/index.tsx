@@ -53,7 +53,7 @@ export default function LandingPage() {
 
   const renderHeader = (
     <>
-      <LandingPageHeading>Notas++</LandingPageHeading>
+      <LandingPageHeading>Notas</LandingPageHeading>
       <Button
         variant={"outlined"}
         size={"large"}
@@ -124,9 +124,9 @@ export default function LandingPage() {
           style={{ originX: 0.5 }}
         >
           <h5 className="fw-bold">Shopping list</h5>
-          <FormControlLabel control={<Checkbox />} label="Pão" />
-          <FormControlLabel control={<Checkbox />} label="Ovos" />
-          <FormControlLabel control={<Checkbox />} label="Leite" />
+          <FormControlLabel control={<Checkbox />} label="Bread" />
+          <FormControlLabel control={<Checkbox />} label="Eggs" />
+          <FormControlLabel control={<Checkbox />} label="Ham" />
           <Divider className="bg-dark" />
           <FormControlLabel
             control={<Checkbox color={"default"} checked={true} />}
@@ -162,7 +162,7 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>Notas (não logado)</title>
+        <title>Notas</title>
         <meta
           name="description"
           content="Aplicativo de Notas para guardar suas propostas"

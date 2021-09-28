@@ -2,14 +2,14 @@ import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import AddNote, { AddNoteProps } from "./add-note.component";
 import { NoteObject, NoteTypeEnum } from "../../models/Note";
-import { TagObject } from "../../models/Tag";
+import { PacienteObject } from "../../models/Paciente";
 import {
   AddNoteInputCheckPoints,
   AddNoteInputContent,
   AddNoteInputNameInput,
-  AddNoteInputTag,
+  AddNoteInputPaciente,
 } from "./add-note.styles";
-import { CheckPointObject } from "../../models/ControleObject";
+import { CheckPointObject } from "../../models/CheckPointObject";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
 import { Divider } from "@material-ui/core";
 
@@ -27,7 +27,7 @@ describe("AddNote component", () => {
     const mockProps: AddNoteProps = {
       edit: false,
       noteModel: NoteObject,
-      tags: [TagObject, TagObject],
+      pacientes: [PacienteObject, PacienteObject],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
@@ -53,7 +53,7 @@ describe("AddNote component", () => {
     const mockProps: AddNoteProps = {
       edit: true,
       noteModel: noteModel,
-      tags: [],
+      pacientes: [],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
@@ -80,7 +80,7 @@ describe("AddNote component", () => {
     const mockProps: AddNoteProps = {
       edit: true,
       noteModel: noteModel,
-      tags: [],
+      pacientes: [],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
@@ -101,21 +101,21 @@ describe("AddNote component", () => {
     expect(divider).toHaveLength(1);
   });
 
-  it("should render AddNoteInputTag components when tags array is not empty", () => {
+  it("should render AddNoteInputPaciente components when pacientes array is not empty", () => {
     const noteModel = NoteObject;
     noteModel.noteType = NoteTypeEnum.TEXT;
     const mockProps: AddNoteProps = {
       edit: true,
       noteModel: noteModel,
-      tags: [TagObject, TagObject],
+      pacientes: [PacienteObject, PacienteObject],
       onAddNote: mockOnAddNote,
       onClick: mockOnClick,
       onHandleChange: mockOnHandleChange,
     };
 
     wrapper = shallow(<AddNote {...mockProps} />);
-    const addNoteInputTag = wrapper.find(AddNoteInputTag);
+    const addNoteInputPaciente = wrapper.find(AddNoteInputPaciente);
 
-    expect(addNoteInputTag).toHaveLength(2);
+    expect(addNoteInputPaciente).toHaveLength(2);
   });
 });

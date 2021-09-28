@@ -10,8 +10,8 @@ import {
   AddNoteInputErrorMessage,
   AddNoteInputMenu,
   AddNoteInputNameInput,
-  AddNoteInputTag,
-  AddNoteInputTags,
+  AddNoteInputPaciente,
+  AddNoteInputPacientes,
 } from "./add-note.styles";
 import { Button, Divider, IconButton } from "@material-ui/core";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
@@ -26,12 +26,12 @@ import {
   CheckPointObject,
   CheckPointType,
 } from "../../models/CheckPointObject";
-import { TagType } from "../../models/Tag";
+import { PacienteType } from "../../models/Paciente";
 
 export interface AddNoteProps {
   onHandleChange: (action: ChangeActionType) => void;
   noteModel: NoteType;
-  tags: TagType[];
+  pacientes: PacienteType[];
   onAddNote: () => void;
   onClick?: () => void;
   edit?: boolean;
@@ -41,7 +41,7 @@ const AddNote: React.FC<AddNoteProps> = ({
   onHandleChange,
   noteModel,
   onAddNote,
-  tags,
+  pacientes,
   edit,
   onClick,
 }: AddNoteProps) => {
@@ -80,21 +80,21 @@ const AddNote: React.FC<AddNoteProps> = ({
 
   const renderBottomMenu = (
     <AddNoteInputMenu>
-      <AddNoteInputTags>
-        {tags &&
-          tags.map((tag: TagType, k: number) => (
-            <AddNoteInputTag
-              key={tag.id}
-              chosen={!!noteModel.tags.find((t) => t.id === tag.id)}
+      <AddNoteInputPacientes>
+        {pacientes &&
+          pacientes.map((paciente: PacienteType, k: number) => (
+            <AddNoteInputPaciente
+              key={paciente.id}
+              chosen={!!noteModel.pacientes.find((t) => t.id === paciente.id)}
               onClick={() =>
-                onHandleChange({ attr: cNoteModel.tags, value: tag })
+                onHandleChange({ attr: cNoteModel.pacientes, value: paciente })
               }
             >
               <LabelOutlinedIcon fontSize={"small"} className="me-1" />
-              <span>{tag.name}</span>
-            </AddNoteInputTag>
+              <span>{paciente.name}</span>
+            </AddNoteInputPaciente>
           ))}
-      </AddNoteInputTags>
+      </AddNoteInputPacientes>
       <AddNoteInputContentSwitch>
         <ColorPicker
           onChooseColor={(color) =>

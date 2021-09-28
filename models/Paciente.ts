@@ -1,20 +1,20 @@
 export interface PacienteModel {
   id: string;
-  nome: string;
+  name: string;
 }
 
-export type TipoPaciente = PacienteModel;
+export type PacienteType = PacienteModel;
 
 export const cPacienteModel = {
   id: "id",
-  nome: "nome"
+  name: "name"
 };
 
-export const PacienteObject: TipoPaciente = {
+export const PacienteObject: PacienteType = {
   id: "",
-  nome: "",
+  name: "",
 };
 
-export function isPacienteType(object: any): object is TipoPaciente {
-  return "nome" in object;
+export function isPacienteType(object: any): object is PacienteType {
+  return "name" in object;
 }

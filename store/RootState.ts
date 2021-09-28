@@ -5,21 +5,12 @@ import {
   NotesApiReducer,
   NotesApiSaga,
 } from "../API/NotesPageAPI/NotesAPI";
-import {
-  NotasApiInterface,
-  NotasApiReducer,
-  NotasApiSaga,
-} from "../API/NotasPageAPI/NotasAPI";
-import { PacientesApiInterface, PacientesApiReducer } from "../API/PacientesAPI/PacientesAPI";
-import { TagsAPIInterface, TagsApiReducer, TagsApiSaga } from "../API/TagsAPI/TagsAPI";
+import { PacientesAPIInterface, PacientesApiReducer, PacientesApiSaga } from "../API/PacientesAPI/PacientesAPI";
 
 export interface RootState {
   // API
   notesPageApiSlice?: NotesApiInterface;
-  notasPageApiSlice?: NotasApiInterface;
-  tagsApiSlice?: TagsAPIInterface;
-  pacientesPageApiSlice?: PacientesApiInterface;
-
+  pacientesApiSlice?: PacientesAPIInterface;
 }
 
 export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
@@ -27,8 +18,6 @@ export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 export const mainReducers = {
   // API
   notesPageApiSlice: NotesApiReducer,
-  notasPageApiSlice: NotasApiReducer,
-  tagsApiSlice: TagsApiReducer,
   pacientesApiSlice: PacientesApiReducer,
 };
 
@@ -36,5 +25,5 @@ export const mainReducers = {
  * IMPORT EVERY OTHER NOT SOMEWHERE ELSE INJECTED SAGA
  */
 export default function* rootSaga() {
-  yield all([NotesApiSaga(), TagsApiSaga()]);
+  yield all([NotesApiSaga(), PacientesApiSaga()]);
 }

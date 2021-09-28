@@ -1,12 +1,12 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import NotaCheckItem, {
-  NotaCheckItemProps,
-} from "./add-nota-checkitem.component";
-import { CheckPointObject } from "../../../models/ControleObject";
+import NoteCheckItem, {
+  NoteCheckItemProps,
+} from "./add-note-checkitem.component";
+import { CheckPointObject } from "../../../models/CheckPointObject";
 import { Checkbox, IconButton, TextField } from "@material-ui/core";
 
-describe("AddNotaCheckItem component", () => {
+describe("AddNoteCheckItem component", () => {
   let wrapper: ShallowWrapper;
   let mockOnDelete: any;
   let mockOnHandleChange: any;
@@ -15,16 +15,16 @@ describe("AddNotaCheckItem component", () => {
     mockOnDelete = jest.fn();
     mockOnHandleChange = jest.fn();
 
-    const mockProps: NotaCheckItemProps = {
+    const mockProps: NoteCheckItemProps = {
       checkItem: CheckPointObject,
       onDelete: mockOnDelete,
       onHandleChange: mockOnHandleChange,
     };
 
-    wrapper = shallow(<NotaCheckItem {...mockProps} />);
+    wrapper = shallow(<NoteCheckItem {...mockProps} />);
   });
 
-  it("should render AddNotaCheckItem component", () => {
+  it("should render AddNoteCheckItem component", () => {
     expect(wrapper).toMatchSnapshot();
   });
 

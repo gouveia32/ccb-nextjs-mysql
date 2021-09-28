@@ -1,4 +1,4 @@
-import { TagType } from "./Tag";
+import { PacienteType } from "./Paciente";
 import { CheckPointType } from "./CheckPointObject";
 import { Note } from "@prisma/client";
 
@@ -15,7 +15,7 @@ export interface NoteModel {
   color: string;
   pinned: boolean;
   createdAt: string;
-  tags: TagType[];
+  pacientes: PacienteType[];
   checkPoints?: CheckPointType[];
 }
 
@@ -29,7 +29,7 @@ export const NoteObject: NoteType = {
   color: "#fff",
   pinned: false,
   createdAt: new Date(Date.now()).toString(),
-  tags: [],
+  pacientes: [],
   checkPoints: [],
 };
 
@@ -41,7 +41,7 @@ export const NoteDBObject: Note = {
   content: "",
   pinned: false,
   createdAt: new Date(Date.now()),
-  userId: "",
+  medicoId: "",
 };
 
 export enum cNoteModel {
@@ -52,6 +52,6 @@ export enum cNoteModel {
   content = "content",
   pinned = "pinned",
   createdAt = "createdAt",
-  tags = "tags",
+  pacientes = "pacientes",
   checkPoints = "checkPoints",
 }

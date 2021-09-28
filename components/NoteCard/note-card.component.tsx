@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { NoteObject, NoteType, NoteTypeEnum } from "../../models/Note";
 import { CheckPointType } from "../../models/CheckPointObject";
 import NoteCardCheckItem from "./NoteCardCheckItem/note-card-checkitem.component";
-import { TagType } from "../../models/Tag";
+import { PacienteType } from "../../models/Paciente";
 import { ChangeActionType } from "../../lib/helpers";
 import { Dialog, Divider, IconButton } from "@material-ui/core";
 import {
   NoteCardComponent,
   NoteCardContent,
   NoteCardHeader,
-  NoteCardTag,
-  NoteCardTags,
+  NoteCardPaciente,
+  NoteCardPacientes,
 } from "./note-card.styles";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
@@ -32,7 +32,7 @@ const noteVariants = {
 
 export interface NoteCardProps {
   note: NoteType;
-  tags: TagType[];
+  pacientes: PacienteType[];
   editNote: NoteType | null;
   onHandleChange: (action: ChangeActionType) => void;
   onAddNote: () => void;
@@ -44,7 +44,7 @@ export interface NoteCardProps {
 
 const NoteCard: React.FC<NoteCardProps> = ({
   note,
-  tags,
+  pacientes,
   editNote,
   onAddNote,
   onHandleChange,
@@ -98,17 +98,17 @@ const NoteCard: React.FC<NoteCardProps> = ({
       </NoteCardContent>
     );
 
-  const renderTags = note.tags.length > 0 && (
+  const renderPacientes = note.pacientes.length > 0 && (
     <>
       <Divider className="my-2 bg-dark" />
-      <NoteCardTags>
-        {note.tags.map((tag: TagType, k: number) => (
-          <NoteCardTag key={k}>
+      <NoteCardPacientes>
+        {note.pacientes.map((paciente: PacienteType, k: number) => (
+          <NoteCardPaciente key={k}>
             <LabelOutlinedIcon className="me-1" />
-            <span>{tag.name}</span>
-          </NoteCardTag>
+            <span>{paciente.name}</span>
+          </NoteCardPaciente>
         ))}
-      </NoteCardTags>
+      </NoteCardPacientes>
     </>
   );
 
@@ -127,7 +127,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
       <AddNote
         onHandleChange={onHandleChange}
         noteModel={editNote ? editNote : NoteObject}
-        tags={tags}
+        pacientes={pacientes}
         onAddNote={onAddNote}
         edit={true}
       />
@@ -151,7 +151,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
       >
         {renderHeader}
         {renderContent}
-        {renderTags}
+        {renderPacientes}
       </NoteCardComponent>
       {renderEditModal}
     </>

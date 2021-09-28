@@ -1,102 +1,102 @@
 import { Session } from "next-auth";
 import React, { useEffect, useState } from "react";
-import { TipoNota } from "../../../models/Nota";
+import { NoteType } from "../../../models/Note";
 import { PacientesPageNoNotes, PacientesPageNotes } from "../../../views/pacientes/[pacienteId]/pacientes-page.styles";
 import { useDispatch, useSelector } from "react-redux";
-import NotaCard from "../../../components/NotaCard/nota-card.component";
+import NoteCard from "../../../components/NoteCard/note-card.component";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { get } from "../../../lib/RestAPI";
 import {
-  NotasAPI,
+  NotesAPI,
   selectCurrentRoute,
-  selectEditNota,
-  selectSearchNotas,
-  selectSearchNotasLoading,
-} from "../../../API/NotasPageAPI/NotasAPI";
-import { TipoPaciente } from "../../../models/Paciente";
+  selectEditNote,
+  selectSearchNotes,
+  selectSearchNotesLoading,
+} from "../../../API/NotesPageAPI/NotesAPI";
+import { PacienteType } from "../../../models/Paciente";
 import { selectPacientes } from "../../../API/PacientesAPI/PacientesAPI";
 import { ApiLinks, PageLinks } from "../../../lib/Links";
 import { ChangeActionType } from "../../../lib/helpers";
-import { TipoControle } from "../../../models/ControleObject";
+import { CheckPointType } from "../../../models/CheckPointObject";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 import Head from "next/head";
 
 export interface PacientesPageProps {
   session: Session | null;
-  pacienteNotas: TipoNota[];
+  pacienteNotes: NoteType[];
 }
 
-export default function PacientesPage({ session, pacienteNotas }: PacientesPageProps) {
+export default function PacientesPage({ session, pacienteNotes }: PacientesPageProps) {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const [notasToRender, setNotasToRender] = useState(pacienteNotas);
+  const [notesToRender, setNotesToRender] = useState(pacienteNotes);
 
-  const editNota = useSelector(selectEditNota);
+  const editNote = useSelector(selectEditNote);
   const currentRoute = useSelector(selectCurrentRoute);
-  const pacientes: TipoPaciente[] = useSelector(selectPacientes);
-  const searchNotas = useSelector(selectSearchNotas);
-  const searchNotasLoading = useSelector(selectSearchNotasLoading);
+  const pacientes: PacienteType[] = useSelector(selectPacientes);
+  const searchNotes = useSelector(selectSearchNotes);
+  const searchNotesLoading = useSelector(selectSearchNotesLoading);
 
   useEffect(() => {
     router.replace(router.asPath);
   }, [currentRoute]);
 
   useEffect(() => {
-    if (searchNotas.length > 0) {
-      setNotasToRender(searchNotas);
+    if (searchNotes.length > 0) {
+      setNotesToRender(searchNotes);
     } else {
-      setNotasToRender(pacienteNotas);
+      setNotesToRender(pacienteNotes);
     }
-  }, [pacienteNotas, searchNotas]);
+  }, [pacienteNotes, searchNotes]);
 
-  const handleOnAddNota = (update: boolean) => {
-    dispatch(NotasAPI.addNota(update));
+  const handleOnAddNote = (update: boolean) => {
+    dispatch(NotesAPI.addNote(update));
   };
 
-  const handleChangeNota = (action: ChangeActionType) => {
-    dispatch(NotasAPI.handleChange(action));
+  const handleChangeNote = (action: ChangeActionType) => {
+    dispatch(NotesAPI.handleChange(action));
   };
 
-  const handleOnDeleteNota = (nota: TipoNota) => {
-    dispatch(NotasAPI.deleteNota(nota));
+  const handleOnDeleteNote = (note: NoteType) => {
+    dispatch(NotesAPI.deleteNote(note));
   };
 
-  const handleClickNotaCheckItem = (
-    nota: TipoNota,
-    checkitem: TipoControle
+  const handleClickNoteCheckItem = (
+    note: NoteType,
+    checkitem: CheckPointType
   ) => {
-    dispatch(NotasAPI.checkNotaAndSubmit({ nota: nota, checkitem: checkitem }));
+    dispatch(NotesAPI.checkNoteAndSubmit({ note: note, checkitem: checkitem }));
   };
 
   return (
     <>
       <Head>
-        <title>Paciente notas</title>
+        <title>Paciente notes</title>
       </Head>
-      {searchNotasLoading ? (
+      {searchNotesLoading ? (
         <Loading size={30} classname="mt-4" />
-      ) : notasToRender && notasToRender.length > 0 ? (
+      ) : notesToRender && notesToRender.length > 0 ? (
         <PacientesPageNotes>
-          {notasToRender.map((nota: TipoNota, k: number) => (
-            <NotaCard
-              key={nota.id}
-              nota={nota}
+          {notesToRender.map((note: NoteType, k: number) => (
+            <NoteCard
+              key={note.id}
+              note={note}
               pacientes={pacientes}
-              editNota={editNota}
+              editNote={editNote}
               onHandleChange={(action) =>
-                handleChangeNota({ ...action, edit: true })
+                handleChangeNote({ ...action, edit: true })
               }
-              onAddNota={() => handleOnAddNota(true)}
+              onAddNote={() => handleOnAddNote(true)}
               onClick={() =>
-                dispatch(NotasAPI.setNota({ nota: nota, edit: true }))
+                dispatch(NotesAPI.setNote({ note: note, edit: true }))
               }
-              onDeleteNota={() => handleOnDeleteNota(nota)}
+              onDeleteNote={() => handleOnDeleteNote(note)}
               onCheckItemClick={(checkitem) =>
-                handleClickNotaCheckItem(nota, checkitem)
+                handleClickNoteCheckItem(note, checkitem)
               }
             />
           ))}
@@ -126,15 +126,15 @@ export const getServerSideProps: GetServerSideProps<PacientesPageProps> = async 
 
   const { pacienteId } = context.query;
 
-  const userNotas: TipoNota[] = await get(
-    `${process.env.HOST}${ApiLinks.pacientesNotas}/${pacienteId}`,
+  const medicoNotes: NoteType[] = await get(
+    `${process.env.HOST}${ApiLinks.pacientesNotes}/${pacienteId}`,
     context.req.headers.cookie!
   );
 
   return {
     props: {
       session: session,
-      pacienteNotas: userNotas,
+      pacienteNotes: medicoNotes,
     },
   };
 };

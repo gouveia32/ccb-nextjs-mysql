@@ -5,7 +5,7 @@ import { ChangeActionType } from "../../lib/helpers";
 import { cNoteModel, NoteObject, NoteType } from "../../models/Note";
 import { del, get, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
-import { TagType } from "../../models/Tag";
+import { PacienteType } from "../../models/Paciente";
 import {
   CheckPointObject,
   CheckPointType,
@@ -31,7 +31,7 @@ export type SetNoteType = {
 
 export type SearchNoteQuery = {
   query: string;
-  tagId?: string;
+  pacienteId?: string;
 };
 
 const NoteInit: NoteType = { ...NoteObject };
@@ -131,11 +131,11 @@ class NotesApi {
       edit ? yield select(this.selectEditNote) : yield select(this.selectNote)
     );
 
-    if (attr === cNoteModel.tags) {
-      if (note.tags.find((f: TagType) => f.id === value.id)) {
-        note.tags = note.tags.filter((t: TagType) => t.id !== value.id);
+    if (attr === cNoteModel.pacientes) {
+      if (note.pacientes.find((f: PacienteType) => f.id === value.id)) {
+        note.pacientes = note.pacientes.filter((t: PacienteType) => t.id !== value.id);
       } else {
-        note.tags = [...note.tags, value];
+        note.pacientes = [...note.pacientes, value];
       }
       return yield put(this.slice.actions.setNote({ note: note, edit: edit }));
     }
@@ -271,7 +271,7 @@ class NotesApi {
   public *handleOnSearchNotes(
     action: PayloadAction<SearchNoteQuery>
   ): Generator<any> {
-    const { query, tagId } = action.payload;
+    const { query, pacienteId } = action.payload;
 
     yield delay(500);
 
@@ -284,7 +284,7 @@ class NotesApi {
       const response: NoteType[] | any = yield call(
         get,
         `${ApiLinks.notes}/search?query=${query}${
-          tagId ? `&tagId=${tagId}` : ""
+          pacienteId ? `&pacienteId=${pacienteId}` : ""
         }`
       );
 

@@ -1,6 +1,6 @@
-import { Nota, PrismaClient, Paciente } from "@prisma/client";
+import { Note, PrismaClient, Paciente } from "@prisma/client";
 import { Session } from "next-auth";
-import { TipoPaciente } from "../models/Paciente";
+import { PacienteType } from "../models/Paciente";
 import prisma from "../lib/prisma";
 
 /**
@@ -9,7 +9,7 @@ import prisma from "../lib/prisma";
  */
 export const getAllMedicoPacientes = async (medicoSession: Session): Promise<Paciente[]> => {
   const medico = await prisma.medico.findFirst({
-    where: { nome: medicoSession?.user?.name },
+    where: { name: medicoSession?.medico?.name },
     include: {
       pacientes: {
         orderBy: {
@@ -35,13 +35,13 @@ export const addNewPaciente = async (
   medicoSession: Session
 ): Promise<Paciente | undefined> => {
   const medico = await prisma.medico.findFirst({
-    where: { nome: medicoSession?.user?.name },
+    where: { name: medicoSession?.medico?.name },
   });
 
   if (medico) {
     const newPaciente = await prisma.paciente.create({
       data: {
-        name: paciente.nome,
+        name: paciente.name,
         medico: {
           connect: {
             id: medico.id,
@@ -58,23 +58,23 @@ export const addNewPaciente = async (
  * Update given Paciente
  * @param paciente
  */
-export const updatePaciente = async (paciente: TipoPaciente): Promise<Paciente | undefined> => {
+export const updatePaciente = async (paciente: PacienteType): Promise<Paciente | undefined> => {
   return await prisma.paciente.update({
     where: {
       id: paciente.id,
     },
     data: {
-      name: paciente.nome,
+      name: paciente.name,
     },
   });
 };
 
 /**
- * Get all searchNotas of given paciente by its ID
+ * Get all searchNotes of given paciente by its ID
  * @param pacienteId
  */
-export const getPacienteNotas = async (pacienteId: string): Promise<Nota[]> => {
-  return await prisma.Nota.findMany({
+export const getPacienteNotes = async (pacienteId: string): Promise<Note[]> => {
+  return await prisma.note.findMany({
     where: {
       pacientes: {
         some: { id: pacienteId },
@@ -82,7 +82,7 @@ export const getPacienteNotas = async (pacienteId: string): Promise<Nota[]> => {
     },
     include: {
       pacientes: true,
-      controles: true,
+      checkPoints: true,
     },
   });
 };

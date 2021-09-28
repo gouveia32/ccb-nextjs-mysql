@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { all, call, put, select, takeLatest } from "redux-saga/effects";
-import { PacienteObject, TipoPaciente } from "../../models/Paciente";
+import { PacienteObject, PacienteType } from "../../models/Paciente";
 import { ChangeActionType } from "../../lib/helpers";
 import { del, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
@@ -9,13 +9,13 @@ import { RootState } from "../../store/RootState";
 /**
  * PacientesAPI State interface
  */
-export interface PacientesApiInterface {
-  newPaciente: TipoPaciente;
-  pacientes: TipoPaciente[];
+export interface PacientesAPIInterface {
+  newPaciente: PacienteType;
+  pacientes: PacienteType[];
   pacientesLoading: boolean;
 }
 
-export const getInitialState = (): PacientesApiInterface => {
+export const getInitialState = (): PacientesAPIInterface => {
   return {
     newPaciente: PacienteObject,
     pacientes: [],
@@ -62,13 +62,13 @@ class PacientesApi {
       fetchPacientes(state) {
         state.pacientesLoading = true;
       },
-      setPacientes(state, action: PayloadAction<TipoPaciente[]>) {
+      setPacientes(state, action: PayloadAction<PacienteType[]>) {
         state.pacientes = action.payload;
         state.pacientesLoading = false;
       },
       addPaciente() {},
-      updatePaciente(state, action: PayloadAction<TipoPaciente>) {},
-      deletePaciente(state, action: PayloadAction<TipoPaciente>) {},
+      updatePaciente(state, action: PayloadAction<PacienteType>) {},
+      deletePaciente(state, action: PayloadAction<PacienteType>) {},
     },
   });
 
@@ -91,7 +91,7 @@ class PacientesApi {
   }
 
   public *handleAddPaciente(): Generator<any> {
-    const paciente: TipoPaciente | any = yield select(selectNewPaciente);
+    const paciente: PacienteType | any = yield select(selectNewPaciente);
 
     if (paciente.name.length === 0) {
       toast.warning(`You need to set the paciente name.`);
@@ -112,8 +112,8 @@ class PacientesApi {
     }
   }
 
-  public *handleUpdatePaciente(action: PayloadAction<TipoPaciente>): Generator<any> {
-    if (action.payload.nome.length === 0) {
+  public *handleUpdatePaciente(action: PayloadAction<PacienteType>): Generator<any> {
+    if (action.payload.name.length === 0) {
       toast.warning(`You need to set the paciente name.`);
       return;
     }
@@ -131,7 +131,7 @@ class PacientesApi {
     }
   }
 
-  public *handleDeletePaciente(action: PayloadAction<TipoPaciente>): Generator<any> {
+  public *handleDeletePaciente(action: PayloadAction<PacienteType>): Generator<any> {
     toast.info(`Deleting paciente...`);
 
     try {
@@ -161,7 +161,7 @@ class PacientesApi {
    * SELECTORS
    */
   private selectDomain(state: RootState) {
-    return state.pacientesPageApiSlice || getInitialState();
+    return state.pacientesApiSlice || getInitialState();
   }
 
   public selectNewPaciente = createSelector(

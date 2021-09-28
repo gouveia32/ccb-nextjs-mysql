@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { TipoPaciente } from "../../../models/Paciente";
+import { PacienteType } from "../../../models/Paciente";
 import { Grid, IconButton, TextField } from "@material-ui/core";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 
 export interface PacienteModalItemProps {
-  paciente: TipoPaciente;
-  onDeletePaciente: (paciente: TipoPaciente) => void;
-  onUpdatePaciente: (paciente: TipoPaciente) => void;
+  paciente: PacienteType;
+  onDeletePaciente: (paciente: PacienteType) => void;
+  onUpdatePaciente: (paciente: PacienteType) => void;
 }
 
 const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
@@ -44,7 +44,7 @@ const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
   const handleOnChange = (value: string) => {
     setUpdatePaciente((prevState) => {
       const newPaciente = Object.assign({}, prevState);
-      newPaciente.nome = value;
+      newPaciente.name = value;
       return newPaciente;
     });
   };
@@ -62,7 +62,7 @@ const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
         <LabelOutlinedIcon />
       </Grid>
       <Grid item={true} style={{ flex: 1 }}>
-        <h5 className="m-0 ms-2">{paciente.nome}</h5>
+        <h5 className="m-0 ms-2">{paciente.name}</h5>
       </Grid>
       <Grid item={true}>
         <IconButton
@@ -87,7 +87,7 @@ const PacienteModalItem: React.FC<PacienteModalItemProps> = ({
       </Grid>
       <Grid item={true} style={{ flex: 1 }}>
         <TextField
-          value={updatePaciente.nome}
+          value={updatePaciente.name}
           fullWidth={true}
           size={"small"}
           variant={"standard"}

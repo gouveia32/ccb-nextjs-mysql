@@ -1,26 +1,22 @@
 import {
   getInitialState,
   handleAddPaciente,
-  handleChange,
-  handleCheckPacienteAndSubmit,
   handleDeletePaciente,
-  handleOnSearchPacientes,
+  handleFetchPacientes,
+  handleUpdatePaciente,
   PacientesAPI,
-  PacientesApiInterface,
+  PacientesAPIInterface,
   PacientesApiName,
   PacientesApiReducer,
   PacientesApiSaga,
-  SearchPacienteQuery,
-  SetPacienteType,
 } from "./PacientesAPI";
-import { PacienteObject, PacienteType } from "../../models/Paciente";
 import { ChangeActionType } from "../../lib/helpers";
-import { CheckPointObject } from "../../models/ControleObject";
 import { takeLatest } from "@redux-saga/core/effects";
+import { cPacienteModel, PacienteObject, PacienteType } from "../../models/Paciente";
 
 describe("PacientesAPI", () => {
   describe("Reducer slices tests", () => {
-    const initialState: PacientesApiInterface = getInitialState();
+    const initialState: PacientesAPIInterface = getInitialState();
 
     it("should return initial state", () => {
       expect(PacientesApiReducer(undefined, { type: null })).toEqual(initialState);
@@ -34,74 +30,42 @@ describe("PacientesAPI", () => {
       ).toEqual(getInitialState());
     });
 
-    it("should set Paciente", () => {
-      const paciente: PacienteType = PacienteObject;
-      paciente.nome = "test";
+    it("should handle change", () => {
+      const paciente: PacienteType = { ...PacienteObject };
+      paciente.name = "test";
 
       expect(
         PacientesApiReducer(initialState, {
-          type: PacientesAPI.setPaciente.type,
+          type: PacientesAPI.handleChange.type,
           payload: {
-            paciente: paciente,
-            edit: false,
+            attr: cPacienteModel.name,
+            value: paciente.name,
           },
         }).newPaciente
       ).toEqual(paciente);
-
-      expect(
-        PacientesApiReducer(initialState, {
-          type: PacientesAPI.setPaciente.type,
-          payload: {
-            paciente: paciente,
-            edit: true,
-          },
-        }).editPaciente
-      ).toEqual(paciente);
     });
 
-    it("should set search Pacientes", () => {
+    it("should fetch Pacientes", () => {
       expect(
         PacientesApiReducer(initialState, {
-          type: PacientesAPI.setSearchPacientes.type,
-          payload: [PacienteObject, PacienteObject],
-        }).searchPacientes
-      ).toHaveLength(2);
-
-      expect(
-        PacientesApiReducer(initialState, {
-          type: PacientesAPI.setSearchPacientes.type,
-          payload: [PacienteObject, PacienteObject],
-        }).searchPacientesLoading
-      ).toEqual(false);
-    });
-
-    it("should change current route", () => {
-      expect(
-        PacientesApiReducer(initialState, {
-          type: PacientesAPI.changeCurrentRoute.type,
-          payload: "route",
-        }).currentRoute
-      ).toEqual("route");
-    });
-
-    it("should search pacientes", () => {
-      expect(
-        PacientesApiReducer(initialState, {
-          type: PacientesAPI.searchPacientes.type,
-          payload: {
-            query: "paciente",
-          },
-        }).searchPacienteQuery
-      ).toEqual("paciente");
-
-      expect(
-        PacientesApiReducer(initialState, {
-          type: PacientesAPI.searchPacientes.type,
-          payload: {
-            query: "paciente",
-          },
-        }).searchPacientesLoading
+          type: PacientesAPI.fetchPacientes.type,
+        }).pacientesLoading
       ).toEqual(true);
+    });
+
+    it("should set Pacientes", () => {
+      expect(
+        PacientesApiReducer(initialState, {
+          type: PacientesAPI.setPacientes.type,
+          payload: [PacienteObject],
+        }).pacientesLoading
+      ).toEqual(false);
+      expect(
+        PacientesApiReducer(initialState, {
+          type: PacientesAPI.setPacientes.type,
+          payload: [PacienteObject],
+        }).pacientes
+      ).toEqual([PacienteObject]);
     });
   });
 
@@ -124,39 +88,34 @@ describe("PacientesAPI", () => {
       expect(PacientesAPI.handleChange(actionType)).toEqual(expectedAction);
     });
 
-    it("should create an action to set Paciente", () => {
-      const setPacienteType: SetPacienteType = { paciente: PacienteObject, edit: false };
+    it("should create an action to fetch Pacientes", () => {
       const expectedAction = {
-        type: `${PacientesApiName}/setPaciente`,
-        payload: {
-          ...setPacienteType,
-        },
+        type: `${PacientesApiName}/fetchPacientes`,
       };
-      expect(PacientesAPI.setPaciente(setPacienteType)).toEqual(expectedAction);
+      expect(PacientesAPI.fetchPacientes()).toEqual(expectedAction);
     });
 
-    it("should create an action to set search Pacientes", () => {
+    it("should create an action to set Pacientes", () => {
       const expectedAction = {
-        type: `${PacientesApiName}/setSearchPacientes`,
+        type: `${PacientesApiName}/setPacientes`,
         payload: [PacienteObject],
       };
-      expect(PacientesAPI.setSearchPacientes([PacienteObject])).toEqual(expectedAction);
-    });
-
-    it("should create an action to change current route", () => {
-      const expectedAction = {
-        type: `${PacientesApiName}/changeCurrentRoute`,
-        payload: "route",
-      };
-      expect(PacientesAPI.changeCurrentRoute("route")).toEqual(expectedAction);
+      expect(PacientesAPI.setPacientes([PacienteObject])).toEqual(expectedAction);
     });
 
     it("should create an action to add paciente", () => {
       const expectedAction = {
         type: `${PacientesApiName}/addPaciente`,
-        payload: true,
       };
-      expect(PacientesAPI.addPaciente(true)).toEqual(expectedAction);
+      expect(PacientesAPI.addPaciente()).toEqual(expectedAction);
+    });
+
+    it("should create an action to update paciente", () => {
+      const expectedAction = {
+        type: `${PacientesApiName}/updatePaciente`,
+        payload: PacienteObject,
+      };
+      expect(PacientesAPI.updatePaciente(PacienteObject)).toEqual(expectedAction);
     });
 
     it("should create an action to delete paciente", () => {
@@ -166,35 +125,13 @@ describe("PacientesAPI", () => {
       };
       expect(PacientesAPI.deletePaciente(PacienteObject)).toEqual(expectedAction);
     });
-
-    it("should create an action to check paciente and submit", () => {
-      const checkType = { paciente: PacienteObject, checkitem: CheckPointObject };
-      const expectedAction = {
-        type: `${PacientesApiName}/checkPacienteAndSubmit`,
-        payload: {
-          ...checkType,
-        },
-      };
-      expect(PacientesAPI.checkPacienteAndSubmit(checkType)).toEqual(expectedAction);
-    });
-
-    it("should create an action to search pacientes", () => {
-      const pacienteQuery: SearchPacienteQuery = { query: "test", tagId: "test" };
-      const expectedAction = {
-        type: `${PacientesApiName}/searchPacientes`,
-        payload: {
-          ...pacienteQuery,
-        },
-      };
-      expect(PacientesAPI.searchPacientes(pacienteQuery)).toEqual(expectedAction);
-    });
   });
 
   describe("Saga tests", () => {
     const generator = PacientesApiSaga();
-    it("should trigger on handle change", async () => {
+    it("should trigger on fetch pacientes", async () => {
       expect(generator.next().value).toEqual(
-        takeLatest([PacientesAPI.handleChange.type], handleChange)
+        takeLatest([PacientesAPI.fetchPacientes.type], handleFetchPacientes)
       );
     });
 
@@ -204,21 +141,15 @@ describe("PacientesAPI", () => {
       );
     });
 
+    it("should trigger on update paciente", async () => {
+      expect(generator.next().value).toEqual(
+        takeLatest([PacientesAPI.updatePaciente.type], handleUpdatePaciente)
+      );
+    });
+
     it("should trigger on delete paciente", async () => {
       expect(generator.next().value).toEqual(
         takeLatest([PacientesAPI.deletePaciente.type], handleDeletePaciente)
-      );
-    });
-
-    it("should trigger on check paciente and submit", async () => {
-      expect(generator.next().value).toEqual(
-        takeLatest([PacientesAPI.checkPacienteAndSubmit.type], handleCheckPacienteAndSubmit)
-      );
-    });
-
-    it("should trigger on search pacientes", async () => {
-      expect(generator.next().value).toEqual(
-        takeLatest([PacientesAPI.searchPacientes.type], handleOnSearchPacientes)
       );
     });
   });

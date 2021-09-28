@@ -1,23 +1,23 @@
 import { Note, PrismaClient } from "@prisma/client";
 import { Session } from "next-auth";
 import { NoteType } from "../models/Note";
-import { TagType } from "../models/Tag";
+import { PacienteType } from "../models/Paciente";
 import { CheckPointType } from "../models/CheckPointObject";
 import prisma from "../lib/prisma";
 
 /**
- * Get all searchNotes of current signed user
- * @param userSession - session object of current user
+ * Get all searchNotes of current signed medico
+ * @param medicoSession - session object of current medico
  */
-export const getAllUserNotes = async (
-  userSession: Session
+export const getAllMedicoNotes = async (
+  medicoSession: Session
 ): Promise<Note[]> => {
-  const user = await prisma.user.findFirst({
-    where: { name: userSession?.user?.name },
+  const medico = await prisma.medico.findFirst({
+    where: { name: medicoSession?.medico?.name },
     include: {
       notes: {
         include: {
-          tags: true,
+          pacientes: true,
           checkPoints: true,
         },
         orderBy: {
@@ -26,41 +26,41 @@ export const getAllUserNotes = async (
       },
     },
   });
-  if (user) {
-    return user.notes;
+  if (medico) {
+    return medico.notes;
   } else {
     return [];
   }
 };
 
 /**
- * Search searchNotes of current signed user
+ * Search searchNotes of current signed medico
  * @param query
- * @param userSession - session object of current user
- * @param tagId - ID of tag to search for tags notes
+ * @param medicoSession - session object of current medico
+ * @param pacienteId - ID of paciente to search for pacientes notes
  */
 export const searchNotes = async (
   query: string,
-  userSession: Session,
-  tagId?: string
+  medicoSession: Session,
+  pacienteId?: string
 ): Promise<Note[]> => {
-  const user = tagId
-    ? await prisma.user.findFirst({
-        where: { name: userSession?.user?.name },
+  const medico = pacienteId
+    ? await prisma.medico.findFirst({
+        where: { name: medicoSession?.medico?.name },
         include: {
           notes: {
             where: {
               name: {
                 contains: query,
               },
-              tags: {
+              pacientes: {
                 some: {
-                  id: tagId,
+                  id: pacienteId,
                 },
               },
             },
             include: {
-              tags: true,
+              pacientes: true,
               checkPoints: true,
             },
             orderBy: {
@@ -69,8 +69,8 @@ export const searchNotes = async (
           },
         },
       })
-    : await prisma.user.findFirst({
-        where: { name: userSession?.user?.name },
+    : await prisma.medico.findFirst({
+        where: { name: medicoSession?.medico?.name },
         include: {
           notes: {
             where: {
@@ -79,7 +79,7 @@ export const searchNotes = async (
               },
             },
             include: {
-              tags: true,
+              pacientes: true,
               checkPoints: true,
             },
             orderBy: {
@@ -88,29 +88,29 @@ export const searchNotes = async (
           },
         },
       });
-  if (user) {
-    return user.notes;
+  if (medico) {
+    return medico.notes;
   } else {
     return [];
   }
 };
 
 /**
- * Add new note for currently signed user
+ * Add new note for currently signed medico
  * @param note - note object to add
- * @param userSession - session object of current user
+ * @param medicoSession - session object of current medico
  */
 export const addNewNote = async (
   note: NoteType,
-  userSession: Session
+  medicoSession: Session
 ): Promise<Note | undefined> => {
-  const user = await prisma.user.findFirst({
-    where: { name: userSession?.user?.name },
+  const medico = await prisma.medico.findFirst({
+    where: { name: medicoSession?.medico?.name },
   });
 
-  if (user) {
-    const tags: any[] = note.tags.map((tag: TagType) => ({
-      id: tag.id,
+  if (medico) {
+    const pacientes: any[] = note.pacientes.map((paciente: PacienteType) => ({
+      id: paciente.id,
     }));
 
     const checkPoints: any = note.checkPoints?.map((ch: CheckPointType) => ({
@@ -125,15 +125,15 @@ export const addNewNote = async (
         noteType: note.noteType,
         color: note.color,
         pinned: note.pinned,
-        tags: {
-          connect: [...tags],
+        pacientes: {
+          connect: [...pacientes],
         },
         checkPoints: {
           create: [...checkPoints],
         },
-        user: {
+        medico: {
           connect: {
-            id: user.id,
+            id: medico.id,
           },
         },
       },
@@ -148,8 +148,8 @@ export const addNewNote = async (
  * @param note
  */
 export const updateNote = async (note: NoteType) => {
-  const tags: any[] = note.tags.map((tag: TagType) => ({
-    id: tag.id,
+  const pacientes: any[] = note.pacientes.map((paciente: PacienteType) => ({
+    id: paciente.id,
   }));
 
   const checkPoints: any = note.checkPoints?.map((ch: CheckPointType) => ({
@@ -163,11 +163,11 @@ export const updateNote = async (note: NoteType) => {
 
   const oldNote: any = await prisma.note.findFirst({
     where: { id: note.id },
-    include: { tags: true },
+    include: { pacientes: true },
   });
 
-  const oldTags: any[] = oldNote.tags.map((tag: TagType) => ({
-    id: tag.id,
+  const oldPacientes: any[] = oldNote.pacientes.map((paciente: PacienteType) => ({
+    id: paciente.id,
   }));
 
   return await prisma.note.update({
@@ -178,9 +178,9 @@ export const updateNote = async (note: NoteType) => {
       noteType: note.noteType,
       color: note.color,
       pinned: note.pinned,
-      tags: {
-        disconnect: [...oldTags],
-        connect: [...tags],
+      pacientes: {
+        disconnect: [...oldPacientes],
+        connect: [...pacientes],
       },
       checkPoints: {
         create: [...checkPoints],
