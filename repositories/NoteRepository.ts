@@ -13,7 +13,7 @@ export const getAllDoctorNotes = async (
   doctorSession: Session
 ): Promise<Note[]> => {
   const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession.doctor?.user?.name },
+    where: { name: doctorSession.user?.user?.name },
     include: {
       notes: {
         include: {
