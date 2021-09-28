@@ -10,10 +10,12 @@ import prisma from "../lib/prisma";
  * @param doctorSession - session object of current doctor
  */
 export const getAllDoctorNotes = async (
-  doctorSession: Session
+  doctorSession: Session  
 ): Promise<Note[]> => {
+    console.log("doctorSession:",doctorSession);
+
   const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession.user?.user?.name },
+    where: { name: doctorSession.user?.name },
     include: {
       notes: {
         include: {
