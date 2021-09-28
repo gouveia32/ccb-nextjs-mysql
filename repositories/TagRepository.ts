@@ -9,7 +9,7 @@ import prisma from "../lib/prisma";
  */
 export const getAllDoctorTags = async (doctorSession: Session): Promise<Tag[]> => {
   const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession?.doctor?.name },
+    where: { name: doctorSession?.user?.name },
     include: {
       tags: {
         orderBy: {
@@ -35,7 +35,7 @@ export const addNewTag = async (
   doctorSession: Session
 ): Promise<Tag | undefined> => {
   const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession?.doctor?.name },
+    where: { name: doctorSession?.user?.name },
   });
 
   if (doctor) {

@@ -46,7 +46,7 @@ export const searchNotes = async (
 ): Promise<Note[]> => {
   const doctor = tagId
     ? await prisma.doctor.findFirst({
-        where: { name: doctorSession?.doctor?.name },
+        where: { name: doctorSession?.user?.name },
         include: {
           notes: {
             where: {
@@ -70,7 +70,7 @@ export const searchNotes = async (
         },
       })
     : await prisma.doctor.findFirst({
-        where: { name: doctorSession?.doctor?.name },
+        where: { name: doctorSession?.user?.name },
         include: {
           notes: {
             where: {
@@ -105,7 +105,7 @@ export const addNewNote = async (
   doctorSession: Session
 ): Promise<Note | undefined> => {
   const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession?.doctor?.name },
+    where: { name: doctorSession?.user?.name },
   });
 
   if (doctor) {
