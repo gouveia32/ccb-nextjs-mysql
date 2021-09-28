@@ -133,7 +133,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const renderDoctorBar = session && (
     <NavDoctor>
+      <NavDoctorImage imageUrl={session?.doctor?.image}></NavDoctorImage>
       <h6 className="m-0 ms-2 me-3">
+        <strong>{session?.doctor?.name}</strong>
       </h6>
       {matchesMobileL ? (
         <IconButton size={"small"} onClick={() => signOut()}>
