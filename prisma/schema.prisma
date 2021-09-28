@@ -52,6 +52,20 @@ model Doctor  {
   tags          Tag[]
 }
 
+model Patient  {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  telephone     String?
+  height        Int?
+  weight        Int?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  notes         Note[]
+}
+
+
 model VerificationRequest {
   id         String   @id @default(cuid())
   identifier String
@@ -75,7 +89,9 @@ model Note {
   checkPoints CheckPoint[]
   doctor       Doctor     @relation(fields: [doctorId], references: [id])
   doctorId    String
-}
+  patient     Patient     @relation(fields: [patientId], references: [id])
+  patientId   String
+  }
 
 model Tag {
   id        String @default(cuid()) @id

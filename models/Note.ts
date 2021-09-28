@@ -33,16 +33,6 @@ export const NoteObject: NoteType = {
   checkPoints: [],
 };
 
-export const NoteDBObject: Note = {
-  id: "",
-  name: "",
-  noteType: "TEXT",
-  color: "",
-  content: "",
-  pinned: false,
-  createdAt: new Date(Date.now()),
-  doctorId: "",
-};
 
 export enum cNoteModel {
   id = "id",

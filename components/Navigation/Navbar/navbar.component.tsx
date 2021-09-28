@@ -198,6 +198,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
+        PACIENTE
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>

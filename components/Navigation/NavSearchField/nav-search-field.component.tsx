@@ -7,6 +7,9 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";
 
+import Link from "next/link";
+import { PageLinks } from "../../../lib/Links";
+
 export interface NavSearchFieldProps {
   onSearch: (query: string) => void;
   value: string;
@@ -34,7 +37,7 @@ const NavSearchField: React.FC<NavSearchFieldProps> = ({
           size={"small"}
           fullWidth={true}
           className="w-100 search-input"
-          placeholder={"Procure suas consultas"}
+          placeholder={"Procure um paciente"}
           value={value}
           InputProps={{
             startAdornment: <SearchIcon fontSize={"small"} className="me-2" />,
@@ -47,6 +50,7 @@ const NavSearchField: React.FC<NavSearchFieldProps> = ({
           }}
         />
       </NavSearchFieldComponent>
+      
     </>
   );
 };
