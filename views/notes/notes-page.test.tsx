@@ -12,7 +12,7 @@ describe("Notes page", () => {
   beforeEach(() => {
     const mockProps: NotesPageProps = {
       session: null,
-      userNotes: [NoteObject, NoteObject],
+      doctorNotes: [NoteObject, NoteObject],
     };
 
     wrapper = shallow(
