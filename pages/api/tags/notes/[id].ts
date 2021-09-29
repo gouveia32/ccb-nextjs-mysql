@@ -20,14 +20,16 @@ export default async function handler(
       method,
     } = req;
 
+    //console.log("query:",query)
     switch (method) {
       case cRestMethods.GET:
         const tagNotes: Note[] = await getTagNotes(id as string);
+        //console.log("tagNotes:",tagNotes)
         res.status(200).json(tagNotes);
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);
-        res.status(405).end(`Method ${method} Not Allowed`);
+        res.status(405).end(`Método ${method} Não Permitido`);
     }
   } else {
     // Not Signed in

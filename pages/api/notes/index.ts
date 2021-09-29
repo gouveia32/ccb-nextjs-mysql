@@ -29,7 +29,7 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const doctorNotes = await getAllDoctorNotes(patientId,session);
+        const doctorNotes = await getAllDoctorNotes(session,patientId);
         //console.log("Notas:",doctorNotes)
         res.status(200).json(doctorNotes);
         break;

@@ -18,6 +18,7 @@ export const getAllDoctorTags = async (doctorSession: Session): Promise<Tag[]> =
       },
     },
   });
+  //console.log("doctor:",doctor);
   if (doctor) {
     return doctor.tags;
   } else {

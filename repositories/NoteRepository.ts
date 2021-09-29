@@ -5,48 +5,15 @@ import { TagType } from "../models/Tag";
 import { CheckPointType } from "../models/CheckPointObject";
 import prisma from "../lib/prisma";
 
-/**
- * Get all searchNotes of current signed doctor
- * @param doctorSession - session object of current doctor
- */
-export const getAllDoctorPatientNotes = async (
-  patientId: string,
-  doctorSession: Session  
-): Promise<Note[]> => {
-    //console.log("doctorSession:",doctorSession);
-
-   const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession.user?.name },
-    include: {
-      notes: {
-        where: {
-              patientId: patientId,
-            },
-        include: {
-          tags: true,
-          checkPoints: true,
-        },
-        orderBy: {
-          createdAt: "asc",
-        },
-      },
-    },
-  });
-  if (doctor) {
-    return doctor.notes;
-  } else {
-    return [];
-  }
-};
-
 
 /**
  * Get all searchNotes of current signed doctor
  * @param doctorSession - session object of current doctor
+ * @param patientId - ID of tag to search for tags notes
  */
 export const getAllDoctorNotes = async (
-  patientId: string,
-  doctorSession: Session  
+  doctorSession: Session ,
+  patientId: string
 ): Promise<Note[]> => {
     //console.log("doctorSession:",doctorSession);
 
@@ -54,6 +21,9 @@ export const getAllDoctorNotes = async (
     where: { name: doctorSession.user?.name },
     include: {
       notes: {
+        where: { 
+          patientId: patientId 
+        },
         include: {
           tags: true,
           checkPoints: true,

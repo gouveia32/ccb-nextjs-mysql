@@ -32,15 +32,15 @@ export default async function handler(
         break;
       case cRestMethods.POST:
         await addNewTag(body, session);
-        res.status(201).json({ message: "Tag created." });
+        res.status(201).json({ message: "Tag Criada." });
         break;
       case cRestMethods.PUT:
         await updateTag(JSON.parse(body));
-        res.status(200).json({ message: "Tag updated." });
+        res.status(200).json({ message: "Tag alterada." });
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);
-        res.status(405).end(`Method ${method} Not Allowed`);
+        res.status(405).end(`Método ${method} Não Permitido`);
     }
   } else {
     // Not Signed in
