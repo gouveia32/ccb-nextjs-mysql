@@ -120,6 +120,7 @@ export default function NotesPage({ session, doctorNotes }: NotesPageProps) {
     </NotesPageNoNotes>
   );
 
+  //console.log("note:",notesToRender)
   return (
     <>
       <Head>

@@ -17,6 +17,7 @@ export default async function handler(
   res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
+  const patientId = "cku4djcsk0090jc81f391fv0z";
 
   if (session) {
     const {
@@ -24,10 +25,12 @@ export default async function handler(
       method,
       body,
     } = req;
+      //console.log("query:",session)
 
     switch (method) {
       case cRestMethods.GET:
-        const doctorNotes = await getAllDoctorNotes(session);
+        const doctorNotes = await getAllDoctorNotes(patientId,session);
+        //console.log("Notas:",doctorNotes)
         res.status(200).json(doctorNotes);
         break;
       case cRestMethods.POST:

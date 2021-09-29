@@ -9,10 +9,46 @@ import prisma from "../lib/prisma";
  * Get all searchNotes of current signed doctor
  * @param doctorSession - session object of current doctor
  */
-export const getAllDoctorNotes = async (
+export const getAllDoctorPatientNotes = async (
+  patientId: string,
   doctorSession: Session  
 ): Promise<Note[]> => {
-    console.log("doctorSession:",doctorSession);
+    //console.log("doctorSession:",doctorSession);
+
+   const doctor = await prisma.doctor.findFirst({
+    where: { name: doctorSession.user?.name },
+    include: {
+      notes: {
+        where: {
+              patientId: patientId,
+            },
+        include: {
+          tags: true,
+          checkPoints: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+  });
+  if (doctor) {
+    return doctor.notes;
+  } else {
+    return [];
+  }
+};
+
+
+/**
+ * Get all searchNotes of current signed doctor
+ * @param doctorSession - session object of current doctor
+ */
+export const getAllDoctorNotes = async (
+  patientId: string,
+  doctorSession: Session  
+): Promise<Note[]> => {
+    //console.log("doctorSession:",doctorSession);
 
   const doctor = await prisma.doctor.findFirst({
     where: { name: doctorSession.user?.name },
@@ -44,8 +80,12 @@ export const getAllDoctorNotes = async (
 export const searchNotes = async (
   query: string,
   doctorSession: Session,
-  tagId?: string
+  tagId?: string,
+  patientId?: string
 ): Promise<Note[]> => {
+  console.log("query-search-query:",query)
+  console.log("query-search-tagId:",tagId)
+  console.log("query-search-patientId:",patientId)
   const doctor = tagId
     ? await prisma.doctor.findFirst({
         where: { name: doctorSession?.user?.name },

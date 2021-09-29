@@ -131,7 +131,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </NavLeft>
     );
 
-  console.log("session:",session)
+  //console.log("session:",session)
   const renderDoctorBar = session && (
     <NavDoctor>
       <NavDoctorImage imageUrl={session?.user?.image}></NavDoctorImage>

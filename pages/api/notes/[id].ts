@@ -16,7 +16,7 @@ export default async function handler(
 
   if (session) {
     const {
-      query: { id, query, tagId },
+      query: { id, query, tagId, patientId },
       method,
     } = req;
 
@@ -25,17 +25,19 @@ export default async function handler(
         const notes: Note[] = await searchNotes(
           query as string,
           session,
-          tagId ? (tagId as string) : undefined
+          tagId ? (tagId as string) : undefined,
+          patientId ? (patientId as string) : undefined,
         );
+        console.log("Aqui",tagId)
         res.status(200).json(notes);
         break;
       case cRestMethods.DELETE:
         await deleteNote(id as string);
-        res.status(200).json({ message: "Note deleted." });
+        res.status(200).json({ message: "Nota apagada." });
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);
-        res.status(405).end(`Method ${method} Not Allowed`);
+        res.status(405).end(`Metodo ${method} Não Permitido`);
     }
   } else {
     // Not Signed in
