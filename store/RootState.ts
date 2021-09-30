@@ -6,11 +6,13 @@ import {
   NotesApiSaga,
 } from "../API/NotesPageAPI/NotesAPI";
 import { TagsAPIInterface, TagsApiReducer, TagsApiSaga } from "../API/TagsAPI/TagsAPI";
+import { PatientsAPIInterface, PatientsApiReducer, PatientsApiSaga } from "../API/PatientsAPI/PatientsAPI";
 
 export interface RootState {
   // API
   notesPageApiSlice?: NotesApiInterface;
   tagsApiSlice?: TagsAPIInterface;
+  patientsApiSlice?: PatientsAPIInterface;
 }
 
 export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
@@ -19,6 +21,7 @@ export const mainReducers = {
   // API
   notesPageApiSlice: NotesApiReducer,
   tagsApiSlice: TagsApiReducer,
+  patientsApiSlice: PatientsApiReducer,
 };
 
 /**

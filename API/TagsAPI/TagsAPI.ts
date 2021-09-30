@@ -94,7 +94,7 @@ class TagsApi {
     const tag: TagType | any = yield select(selectNewTag);
 
     if (tag.name.length === 0) {
-      toast.warning(`You need to set the tag name.`);
+      toast.warning(`Você precisa dar um nome para a tag.`);
       return;
     }
 

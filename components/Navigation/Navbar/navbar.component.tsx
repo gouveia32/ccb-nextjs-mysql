@@ -23,6 +23,12 @@ import {
   selectTagsLoading,
   TagsAPI,
 } from "../../../API/TagsAPI/TagsAPI";
+
+import {
+  selectPatient,
+  PatientsAPI,
+} from "../../../API/PatientsAPI/PatientsAPI";
+
 import { useDispatch, useSelector } from "react-redux";
 import { TagType } from "../../../models/Tag";
 import TagsModal from "../../TagsModal/tags-modal.component";
@@ -57,6 +63,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const router = useRouter();
 
   const tagsLoading: boolean = useSelector(selectTagsLoading);
+  //inclui patient
+  //
+  const patient = useSelector(selectPatient);
+
   const tags: TagType[] = useSelector(selectTags);
   const newTag: TagType = useSelector(selectNewTag);
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
@@ -178,7 +188,16 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
   const renderPatient = (
-        <h2 className="m-0 ms-2">Pciente</h2>
+    <Button
+      size={"small"}
+      variant={"outlined"}
+      onClick={() => {
+        console.log("patient:",searchNotesQuery)
+      }}
+      startIcon={<PersonOutlineOutlinedIcon />}
+    >
+      MUDAR
+    </Button>
   );
 
   const renderSearchField = session && (
@@ -204,6 +223,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {renderLogo}
         {renderSearchField}
         {renderPatient}
+        Paciente: {patient}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
