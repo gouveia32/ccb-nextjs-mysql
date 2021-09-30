@@ -8,6 +8,8 @@ import {
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
 
+import { useEffect } from "react";
+
 type Data = {
   message: string;
 };

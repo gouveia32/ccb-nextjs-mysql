@@ -177,6 +177,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </NavDoctor>
   );
 
+  const renderPatient = (
+        <h2 className="m-0 ms-2">Pciente</h2>
+  );
+
   const renderSearchField = session && (
     <NavSearchField
       onSearch={(query: string) =>
@@ -199,7 +203,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
-        PACIENTE
+        {renderPatient}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
