@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState, useContext } from "react";
 import {
   NavContent,
   NavLeft,
@@ -24,10 +24,6 @@ import {
   TagsAPI,
 } from "../../../API/TagsAPI/TagsAPI";
 
-import {
-  selectPatient,
-  PatientsAPI,
-} from "../../../API/PatientsAPI/PatientsAPI";
 
 import { useDispatch, useSelector } from "react-redux";
 import { TagType } from "../../../models/Tag";
@@ -49,6 +45,10 @@ export interface NavbarProps {
   children: ReactNode;
 }
 
+import { SimpleCtx } from "../../../API/PatientsAPI/PatientsAPI";
+import ctxProvider from "../../../API/PatientsAPI/PatientsAPI";
+
+
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const matchesMobileL = useMediaQuery(device.mobileL);
 
@@ -65,7 +65,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const tagsLoading: boolean = useSelector(selectTagsLoading);
   //inclui patient
   //
-  const patient = useSelector(selectPatient);
 
   const tags: TagType[] = useSelector(selectTags);
   const newTag: TagType = useSelector(selectNewTag);
@@ -187,19 +186,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </NavDoctor>
   );
 
-  const renderPatient = (
-    <Button
-      size={"small"}
-      variant={"outlined"}
-      onClick={() => {
-        console.log("patient:",searchNotesQuery)
-      }}
-      startIcon={<PersonOutlineOutlinedIcon />}
-    >
-      MUDAR
-    </Button>
-  );
-
   const renderSearchField = session && (
     <NavSearchField
       onSearch={(query: string) =>
@@ -216,23 +202,38 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-  return (
-    <>
-      <NavTop>
-        {renderMenuIcon}
-        {renderLogo}
-        {renderSearchField}
-        {renderPatient}
-        Paciente: {patient}
-        {renderDoctorBar}
-        {renderSignIn}
-      </NavTop>
-      <NavContent>
-        {renderDrawer}
-        <NavRight>{children}</NavRight>
-      </NavContent>
-    </>
-  );
-};
+  const renderPatient = () => {
+    const { valueA, setValueA } = useContext(SimpleCtx);
+    <Button
+        size={"small"}
+        variant={"outlined"}
+        onClick={() => {
+          console.log("patient:", searchNotesQuery)
+        }}
+        startIcon={<PersonOutlineOutlinedIcon />}
+      >
+        Paciente
+      </Button>
+  }
 
-export default React.memo(Navbar);
+    return (
+      <>
+        <NavTop>
+          {renderMenuIcon}
+          {renderLogo}
+          {renderSearchField}
+          <CtxProvider>
+            {renderPatient}
+          </CtxProvider>
+          {renderDoctorBar}
+          {renderSignIn}
+        </NavTop>
+        <NavContent>
+          {renderDrawer}
+          <NavRight>{children}</NavRight>
+        </NavContent>
+      </>
+    );
+  };
+
+  export default React.memo(Navbar);
