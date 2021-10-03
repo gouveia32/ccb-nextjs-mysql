@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/AppContect/Provider.js", "components/AppContect/Provider.js", "components/AppContect/Provider.js", "components/AppContect/Provider.js", "components/AppContect/Provider.js"  ],
   "exclude": [
     "node_modules"
   ]

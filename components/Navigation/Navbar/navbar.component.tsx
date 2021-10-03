@@ -45,8 +45,8 @@ export interface NavbarProps {
   children: ReactNode;
 }
 
-import { SimpleCtx } from "../../../API/PatientsAPI/PatientsAPI";
-import ctxProvider from "../../../API/PatientsAPI/PatientsAPI";
+import AppProvider from "../../AppContext/Provider"
+import {PatientsContext} from '../../AppContext/Context';
 
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
@@ -202,38 +202,42 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-  const renderPatient = () => {
-    const { valueA, setValueA } = useContext(SimpleCtx);
-    <Button
+  const renderPatient = (
+    <PatientsContext.Consumer>
+      {({ patients }) => (
+        <Button
         size={"small"}
         variant={"outlined"}
         onClick={() => {
-          console.log("patient:", searchNotesQuery)
+          console.log("patient:",patients)
         }}
         startIcon={<PersonOutlineOutlinedIcon />}
       >
-        Paciente
+        {patients}
       </Button>
-  }
+      )}
+    </PatientsContext.Consumer>
+  );
 
-    return (
-      <>
-        <NavTop>
-          {renderMenuIcon}
-          {renderLogo}
-          {renderSearchField}
-          <CtxProvider>
-            {renderPatient}
-          </CtxProvider>
-          {renderDoctorBar}
-          {renderSignIn}
-        </NavTop>
-        <NavContent>
-          {renderDrawer}
-          <NavRight>{children}</NavRight>
-        </NavContent>
-      </>
-    );
-  };
 
-  export default React.memo(Navbar);
+  return (
+    <>
+      <NavTop>
+        {renderMenuIcon}
+        {renderLogo}
+        {renderSearchField}
+        <AppProvider >
+          {renderPatient}
+        </ AppProvider>
+        {renderDoctorBar}
+        {renderSignIn}
+      </NavTop>
+      <NavContent>
+        {renderDrawer}
+        <NavRight>{children}</NavRight>
+      </NavContent>
+    </>
+  );
+};
+
+export default React.memo(Navbar);

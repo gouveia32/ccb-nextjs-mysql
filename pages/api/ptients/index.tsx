@@ -1,14 +1,12 @@
-import { Note } from "@prisma/client";
+import { Patient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import {
-  addNewNote,
-  getAllDoctorNotes,
-  updateNote,
-} from "../../../repositories/NoteRepository";
+  getAllDoctorPatients,
+} from "../../../repositories/PatientRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
-import { useEffect } from "react";
 
+import { useEffect } from "react";
 
 type Data = {
   message: string;
@@ -16,11 +14,10 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | Note[]>
+  res: NextApiResponse<Data | Patient[]>
 ) {
   const session = await getSession({ req });
-
-  const patientId = "ckubmdq0w0085007tyojoqzn1";
+  const patientId = "ckubisvv80125kk7tw7ue8dtw";
 
   if (session) {
     const {
@@ -32,18 +29,11 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const doctorNotes = await getAllDoctorNotes(session,patientId);
-        //console.log("Notas:",doctorNotes)
-        res.status(200).json(doctorNotes);
+        const doctorPatients = await getAllDoctorPatients(session);
+        //console.log("Notas:",doctorPatients)
+        res.status(200).json(doctorPatients);
         break;
       case cRestMethods.POST:
-        await addNewNote(body, session, patientId);
-        res.status(201).json({ message: "Nota criada." });
-        break;
-      case cRestMethods.PUT:
-        await updateNote(JSON.parse(body));
-        res.status(200).json({ message: "Nota alterada." });
-        break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);
         res.status(405).end(`Método ${method} Não éPermitido`);

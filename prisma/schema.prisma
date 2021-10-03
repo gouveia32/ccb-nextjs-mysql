@@ -48,8 +48,9 @@ model Doctor  {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
-  notes         Note[]
+  //notes         Note[]
   tags          Tag[]
+  patients      Patient[]
 }
 
 model Patient  {
@@ -63,6 +64,8 @@ model Patient  {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   notes         Note[]
+  doctors       Doctor     @relation(fields: [doctorId], references: [id])
+  doctorId      String
 }
 
 
@@ -87,8 +90,8 @@ model Note {
   createdAt   DateTime @default(now())
   tags        Tag[]
   checkPoints CheckPoint[]
-  doctor       Doctor     @relation(fields: [doctorId], references: [id])
-  doctorId    String
+  //doctor       Doctor     @relation(fields: [doctorId], references: [id])
+  //doctorId    String
   patient     Patient     @relation(fields: [patientId], references: [id])
   patientId   String
   }
