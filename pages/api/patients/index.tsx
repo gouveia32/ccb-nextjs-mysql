@@ -1,9 +1,7 @@
 import { Patient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
-import {
-  getAllDoctorPatients,
-} from "../../../repositories/PatientRepository";
+import { getAllDoctorPatients } from "../../../repositories/PatientRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
 
 import { useEffect } from "react";
@@ -17,8 +15,7 @@ export default async function handler(
   res: NextApiResponse<Data | Patient[]>
 ) {
   const session = await getSession({ req });
-  const patientId = "ckubisvv80125kk7tw7ue8dtw";
-
+  
   if (session) {
     const {
       query: { id, name },
@@ -30,7 +27,7 @@ export default async function handler(
     switch (method) {
       case cRestMethods.GET:
         const doctorPatients = await getAllDoctorPatients(session);
-        //console.log("Notas:",doctorPatients)
+        //console.log("Pacientes:",doctorPatients)
         res.status(200).json(doctorPatients);
         break;
       case cRestMethods.POST:

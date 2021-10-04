@@ -44,7 +44,7 @@ const NoteCheckItem: React.FC<NoteCheckItemProps> = ({
             handleChange(cCheckPoint.text, event.target.value)
           }
           fullWidth={true}
-          placeholder={"Write something..."}
+          placeholder={"Escreva aqui..."}
           value={checkItem.text}
           classes={{
             root: checkItem.checked ? classes.root : "",

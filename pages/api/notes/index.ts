@@ -7,8 +7,24 @@ import {
   updateNote,
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
-import { useEffect } from "react";
+import React, { useContext } from 'react';
+import { getPatientById, getAllDoctorPatients } from "../../../repositories/PatientRepository";
+import { Session } from "next-auth";
 
+import {PatientContext} from '../../../components/AppContext/Context';
+
+
+async function selectedPatient () {
+  //const { patient } = useContext(PatientContext);
+  //const patient = usePatientContext();
+
+  const patientId = "ckubmdq0w0085007tyojoqzn1";
+
+  const p = await getPatientById(patientId);
+
+
+  return p.id
+}
 
 type Data = {
   message: string;
@@ -20,8 +36,6 @@ export default async function handler(
 ) {
   const session = await getSession({ req });
 
-  const patientId = "ckubmdq0w0085007tyojoqzn1";
-
   if (session) {
     const {
       query: { id, name },
@@ -29,6 +43,7 @@ export default async function handler(
       body,
     } = req;
       //console.log("query:",session)
+    const patientId = await selectedPatient();
 
     switch (method) {
       case cRestMethods.GET:

@@ -11,8 +11,7 @@ import prisma from "../lib/prisma";
  */
  export const getAllDoctorPatients = async (doctorSession: Session): Promise<Patient[]> => {
    
-   return []
-/*   const doctor = await prisma.doctor.findFirst({
+   const doctor = await prisma.doctor.findFirst({
     where: { name: doctorSession?.user?.name },
     include: {
       patients: {
@@ -27,5 +26,23 @@ import prisma from "../lib/prisma";
     return doctor.patients;
   } else {
     return [];
-  } */
+  }
+};
+
+/**
+ * Get patient bt Id
+ * @param id - session object of current doctor
+ */
+ export const getPatientById = async (id: string): Promise<Patient> => {
+  return await prisma.patient.findMany({
+    where: { id: id },
+  });
+};
+
+/**
+ * Get first patient
+ * 
+ */
+ export const getFirstPatient = async (): Promise<Patient> => {
+  return await prisma.patient.findFirst();
 };

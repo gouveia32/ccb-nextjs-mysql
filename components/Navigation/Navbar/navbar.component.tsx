@@ -41,12 +41,14 @@ import {
   selectSearchNotesQuery,
 } from "../../../API/NotesPageAPI/NotesAPI";
 
+
+import {SimpleCtx} from '../../AppContext/Context';
+import A from "./A";
+
+
 export interface NavbarProps {
   children: ReactNode;
 }
-
-import AppProvider from "../../AppContext/Provider"
-import {PatientsContext} from '../../AppContext/Context';
 
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
@@ -202,33 +204,13 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-  const renderPatient = (
-    <PatientsContext.Consumer>
-      {({ patients }) => (
-        <Button
-        size={"small"}
-        variant={"outlined"}
-        onClick={() => {
-          console.log("patient:",patients)
-        }}
-        startIcon={<PersonOutlineOutlinedIcon />}
-      >
-        {patients}
-      </Button>
-      )}
-    </PatientsContext.Consumer>
-  );
-
-
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
-        <AppProvider >
-          {renderPatient}
-        </ AppProvider>
+        <A />
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
