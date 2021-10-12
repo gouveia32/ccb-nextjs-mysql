@@ -34,7 +34,7 @@ import prisma from "../lib/prisma";
  * @param id - session object of current doctor
  */
  export const getPatientById = async (id: string): Promise<Patient> => {
-  return await prisma.patient.findMany({
+  return await prisma.patient.findFirst({
     where: { id: id },
   });
 };

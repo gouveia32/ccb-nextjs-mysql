@@ -11,7 +11,7 @@ import React, { useContext } from 'react';
 import { getPatientById, getAllDoctorPatients } from "../../../repositories/PatientRepository";
 import { Session } from "next-auth";
 
-import {PatientContext} from '../../../components/AppContext/Context';
+import CtxProvider from '../../../components/AppContext/Context';
 
 
 async function selectedPatient () {
@@ -19,7 +19,7 @@ async function selectedPatient () {
   //const patient = usePatientContext();
 
   const patientId = "ckubmdq0w0085007tyojoqzn1";
-
+  
   const p = await getPatientById(patientId);
 
 

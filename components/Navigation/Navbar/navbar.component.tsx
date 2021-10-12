@@ -42,9 +42,10 @@ import {
 } from "../../../API/NotesPageAPI/NotesAPI";
 
 
-import {SimpleCtx} from '../../AppContext/Context';
-import A from "./A";
+import {ChatContext} from '../../AppContext/Context';
+import { getPatientById } from "../../../repositories/PatientRepository";
 
+import A  from '../../Navigation/Navbar/A'
 
 export interface NavbarProps {
   children: ReactNode;
@@ -204,13 +205,17 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
+
+
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
+        <ChatContext.Provider>
         <A />
+        </ ChatContext.Provider>
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
