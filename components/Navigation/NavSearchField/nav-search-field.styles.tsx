@@ -8,7 +8,7 @@ interface NavSearchFieldComponentInterface {
 export const NavSearchFieldComponent = styled.div<
   NavSearchFieldComponentInterface
 >`
-  width: 600px;
+  width: 400px;
   margin-left: 5rem;
   padding: 0.5rem 0.3rem 0.2rem 0.8rem;
   background-color: #ededed;

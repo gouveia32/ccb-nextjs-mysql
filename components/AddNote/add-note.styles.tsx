@@ -20,8 +20,8 @@ export const AddNoteInput = styled.div<AddNoteInputInterface>`
         props.checkpoints <= 3
         ? `${props.checkpoints * 38 + 162}px`
         : props.type === NoteTypeEnum.CHECK
-        ? "276px"
-        : "235px"
+        ? "552px"
+        : "470px"
       : "45px"};
   width: ${(props) => (props.edit ? "100%" : "500px")};
   padding: 0.6rem;
@@ -124,7 +124,7 @@ export const AddNoteInputCheckPoints = styled.div<
   flex-direction: column;
   align-items: center;
 
-  max-height: ${(props) => (props.edit ? "300px" : "114px")};
+  max-height: ${(props) => (props.edit ? "400px" : "228px")};
   overflow-y: auto;
 `;
 

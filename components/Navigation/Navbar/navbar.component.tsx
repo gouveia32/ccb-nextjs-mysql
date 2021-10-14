@@ -203,7 +203,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
   const renderPatient = () => {
-    const { valueA, setValueA } = useContext(SimpleCtx);
+    //const { valueA, setValueA } = useContext(SimpleCtx);
     <Button
         size={"small"}
         variant={"outlined"}

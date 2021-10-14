@@ -49,7 +49,7 @@ export const NoteCardHeader = styled.div`
 
 export const NoteCardContent = styled.div`
   text-align: justify;
-  max-height: 400px;
+  max-height: 800px;
   overflow-y: auto;
 `;
 

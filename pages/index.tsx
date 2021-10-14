@@ -34,7 +34,7 @@ const transition = {
 const bannerVariants = {
   exit: { height: "0px", y: "-100%", transition },
   enter: {
-    height: "300px",
+    height: "600px",
     y: "0%",
     transition,
   },
