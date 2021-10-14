@@ -1,5 +1,6 @@
 import { Patient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import { deletePatient, searchPatients } from "../../../repositories/PatientRepository";
 import { getSession } from "next-auth/client";
 import { cRestMethods } from "../../../lib/RestAPI";
 
@@ -20,6 +21,18 @@ export default async function handler(
     } = req;
 
     switch (method) {
+      case cRestMethods.GET:
+        const patients: Patient[] = await searchPatients(
+          query as string,
+          patientId ? (patientId as string) : undefined,
+        );
+        //console.log("Aqui",tagId)
+        res.status(200).json(patients);
+        break;
+      case cRestMethods.DELETE:
+        await deletePatient(id as string);
+        res.status(200).json({ message: "Paciente apagado." });
+        break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);
         res.status(405).end(`Metodo ${method} Não Permitido`);

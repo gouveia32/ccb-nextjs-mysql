@@ -1,25 +1,200 @@
-import * as React from "react";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { all, call, put, select, takeLatest } from "redux-saga/effects";
+import { PatientObject, PatientType } from "../../models/Patient";
+import { ChangeActionType } from "../../lib/helpers";
+import { del, post, put as update } from "../../lib/RestAPI";
+import { toast } from "react-toastify";
+import { RootState } from "../../store/RootState";
 
-type SetValue = (value: any) => void;
-interface AppContextInterface {
-  valueA: any;
-  setValueA: SetValue;
+/**
+ * PatientsAPI State interface
+ */
+export interface PatientsAPIInterface {
+  newPatient: PatientType;
+  patients: PatientType[];
+  patientsLoading: boolean;
 }
 
-export const SimpleCtx = React.createContext<AppContextInterface | null>(null);
-
-const CtxProvider: React.FC = props => {
-  const [valueA, setValueA] = React.useState(null);
-  return (
-    <SimpleCtx.Provider
-      value={{
-        valueA,
-        setValueA
-      }}
-    >
-      {props.children}
-    </SimpleCtx.Provider>
-  );
+export const getInitialState = (): PatientsAPIInterface => {
+  return {
+    newPatient: PatientObject,
+    patients: [],
+    patientsLoading: false,
+  };
 };
 
-export default CtxProvider;
+/**
+ * PatientsAPI
+ */
+class PatientsApi {
+  private static instance: PatientsApi;
+
+  private constructor() {
+    this.handleFetchPatients = this.handleFetchPatients.bind(this);
+    this.handleAddPatient = this.handleAddPatient.bind(this);
+    this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
+    this.handleDeletePatient = this.handleDeletePatient.bind(this);
+
+    this.saga = this.saga.bind(this);
+  }
+
+  public static getInstance(): PatientsApi {
+    if (PatientsApi.instance) {
+      return this.instance;
+    }
+    this.instance = new PatientsApi();
+    return this.instance;
+  }
+
+  /*
+   * SLICE
+   */
+  public slice = createSlice({
+    name: "patientsApiSlice",
+    initialState: getInitialState(),
+    reducers: {
+      reset: (state) => getInitialState(),
+      handleChange(state, action: PayloadAction<ChangeActionType>) {
+        const patient: any = state.newPatient;
+        patient[action.payload.attr] = action.payload.value;
+        state.newPatient = patient;
+      },
+      fetchPatients(state) {
+        state.patientsLoading = true;
+      },
+      setPatients(state, action: PayloadAction<PatientType[]>) {
+        state.patients = action.payload;
+        state.patientsLoading = false;
+      },
+      addPatient() {},
+      updatePatient(state, action: PayloadAction<PatientType>) {},
+      deletePatient(state, action: PayloadAction<PatientType>) {},
+    },
+  });
+
+  /*
+   * SAGAS
+   */
+  public *handleFetchPatients(): Generator<any> {
+    const request = () =>
+      fetch(`/api/patients`, {
+        method: "GET",
+      }).then((res) => res.json());
+
+    try {
+      const patients: any = yield call(request);
+
+      yield put(this.slice.actions.setPatients(patients));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public *handleAddPatient(): Generator<any> {
+    const patient: PatientType | any = yield select(selectNewPatient);
+
+    if (patient.name.length === 0) {
+      toast.warning(`Você precisa dar um nome para a patient.`);
+      return;
+    }
+
+    toast.info(`Adding patient...`);
+
+    try {
+      const response = yield call(post, "/api/patients", patient);
+      toast.success("Patient added.");
+
+      yield put(this.slice.actions.reset());
+      yield put(this.slice.actions.fetchPatients());
+    } catch (e) {
+      console.log(e);
+      toast.error("Patient was not added. Something went wrong...");
+    }
+  }
+
+  public *handleUpdatePatient(action: PayloadAction<PatientType>): Generator<any> {
+    if (action.payload.name.length === 0) {
+      toast.warning(`You need to set the patient name.`);
+      return;
+    }
+
+    toast.info(`Updating patient...`);
+    try {
+      const response = yield call(update, "/api/patients", action.payload);
+      toast.success("Patient updated.");
+
+      yield put(this.slice.actions.reset());
+      yield put(this.slice.actions.fetchPatients());
+    } catch (e) {
+      console.log(e);
+      toast.error("Patient was not added. Something went wrong...");
+    }
+  }
+
+  public *handleDeletePatient(action: PayloadAction<PatientType>): Generator<any> {
+    toast.info(`Deleting patient...`);
+
+    try {
+      const res: any = yield call(del, `/api/patients/${action.payload.id}`);
+      yield put(this.slice.actions.fetchPatients());
+      toast.success("Patient deleted.");
+    } catch (e) {
+      console.log(e);
+      toast.error("Patient was not deleted. Something went wrong...");
+    }
+  }
+
+  /*
+   * SAGA - MAIN
+   */
+  public *saga(): Generator<any> {
+    const { addPatient, fetchPatients, deletePatient, updatePatient } = this.slice.actions;
+    yield all([
+      yield takeLatest([fetchPatients.type], this.handleFetchPatients),
+      yield takeLatest([addPatient.type], this.handleAddPatient),
+      yield takeLatest([updatePatient.type], this.handleUpdatePatient),
+      yield takeLatest([deletePatient.type], this.handleDeletePatient),
+    ]);
+  }
+
+  /*
+   * SELECTORS
+   */
+  private selectDomain(state: RootState) {
+    return state.patientsApiSlice || getInitialState();
+  }
+
+  public selectNewPatient = createSelector(
+    [this.selectDomain],
+    (patientsApiState) => patientsApiState.newPatient
+  );
+
+  public selectPatients = createSelector(
+    [this.selectDomain],
+    (patientsApiState) => patientsApiState.patients
+  );
+
+  public selectPatientsLoading = createSelector(
+    [this.selectDomain],
+    (patientsApiState) => patientsApiState.patientsLoading
+  );
+}
+
+export default PatientsApi.getInstance();
+
+export const {
+  actions: PatientsAPI,
+  reducer: PatientsApiReducer,
+  name: PatientsApiName,
+} = PatientsApi.getInstance().slice;
+
+export const {
+  selectNewPatient,
+  selectPatients,
+  selectPatientsLoading,
+  saga: PatientsApiSaga,
+  handleUpdatePatient,
+  handleDeletePatient,
+  handleAddPatient,
+  handleFetchPatients,
+} = PatientsApi.getInstance();

@@ -7,11 +7,30 @@ import prisma from "../lib/prisma";
 
 /**
  * Get all patients of current signed doctor
+ * 
+ */
+export const getAllPatients = async (): Promise<Patient[]> => {
+
+  const patients = await prisma.patient.findMany({
+    orderBy: {
+      createdAt: "asc",
+    }
+  });
+  //console.log("doctor:",doctor);
+  if (patients) {
+    return patients;
+  } else {
+    return [];
+  }
+};
+
+/**
+ * Get all patients of current signed doctor
  * @param doctorSession - session object of current doctor
  */
- export const getAllDoctorPatients = async (doctorSession: Session): Promise<Patient[]> => {
-   
-   const doctor = await prisma.doctor.findFirst({
+export const getAllDoctorPatients = async (doctorSession: Session): Promise<Patient[]> => {
+
+  const doctor = await prisma.doctor.findFirst({
     where: { name: doctorSession?.user?.name },
     include: {
       patients: {
@@ -29,11 +48,12 @@ import prisma from "../lib/prisma";
   }
 };
 
+
 /**
  * Get patient bt Id
  * @param id - session object of current doctor
  */
- export const getPatientById = async (id: string): Promise<Patient> => {
+export const getPatientById = async (id: string): Promise<Patient> => {
   return await prisma.patient.findFirst({
     where: { id: id },
   });
@@ -43,6 +63,45 @@ import prisma from "../lib/prisma";
  * Get first patient
  * 
  */
- export const getFirstPatient = async (): Promise<Patient> => {
+export const getFirstPatient = async (): Promise<Patient> => {
   return await prisma.patient.findFirst();
+};
+
+
+/**
+ * Search searchPatients of current signed doctor
+ * @param query
+ */
+export const searchPatients = async (
+  query: string,
+  patientId?: string
+): Promise<Patient[]> => {
+  const patients = await prisma.patient.findMany({
+    where: {
+      name: {
+        contains: query,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    }
+  });
+  //console.log("doctor:",doctor);
+  if (patients) {
+    return patients;
+  } else {
+    return [];
+  }
+};
+
+/**
+ * Delete patient by ID
+ * @param patientId
+ */
+export const deletePatient = async (patientId: string) => {
+  await prisma.checkPoint.deleteMany({
+    where: { patientId: patientId },
+  });
+
+  return await prisma.patient.delete({ where: { id: patientId } });
 };

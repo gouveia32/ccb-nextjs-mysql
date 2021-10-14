@@ -27,6 +27,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { TagType } from "../../../models/Tag";
+import { PatientType } from "../../../models/Patient";
 import TagsModal from "../../TagsModal/tags-modal.component";
 import Link from "next/link";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
@@ -41,15 +42,22 @@ import {
   selectSearchNotesQuery,
 } from "../../../API/NotesPageAPI/NotesAPI";
 
+import {
+  PatientsAPI,
+  selectPatients,
+  selectPatientsLoading,
+  selectNewPatient
+} from "../../../API/PatientsAPI/PatientsAPI";
+
+
 export interface NavbarProps {
   children: ReactNode;
 }
 
-import { SimpleCtx } from '../../AppContext/Context';
-import CtxProvider  from '../../AppContext/Context';
-
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
+
+
   const matchesMobileL = useMediaQuery(device.mobileL);
 
   const [openNav, setOpenNav] = useState(!matchesMobileL);
@@ -63,11 +71,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const router = useRouter();
 
   const tagsLoading: boolean = useSelector(selectTagsLoading);
-  //inclui patient
-  //
+  const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
 
   const tags: TagType[] = useSelector(selectTags);
   const newTag: TagType = useSelector(selectNewTag);
+
+  const patients: PatientType[] = useSelector(selectPatients); //incl
+  const newPatient: PatientType = useSelector(selectNewPatient); //incl
+
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
   const handleOnNavClick = () => {
@@ -76,6 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
+    dispatch(PatientsAPI.fetchPatients()) //incl
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -102,6 +114,24 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         url={`${PageLinks.tagsPage}/${tag.id}`}
         isTag={true}
         isActive={router.query.tagId === tag.id}
+        onClick={handleOnNavClick}
+      />
+    ))
+  );
+
+
+  const renderPatientLinks = patientsLoading ? (
+    <Loading size={25} />
+  ) : (
+    patients &&
+    patients.map((patient: PatientType, index: number) => (
+      <NavigationItem
+        key={patient.id}
+        name={patient.name}
+        icon={<LabelOutlinedIcon />}
+        url={`${PageLinks.patientsPage}/${patient.id}`}
+        isTag={true}
+        isActive={router.query.tagId === patient.id}
         onClick={handleOnNavClick}
       />
     ))
@@ -202,29 +232,32 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-  const renderPatient = () => {
-    //const { valueA, setValueA } = useContext(SimpleCtx);
+
+  /* const renderPatient = session && (    
     <Button
         size={"small"}
         variant={"outlined"}
         onClick={() => {
-          console.log("patient:", searchNotesQuery)
+          dispatch(
+            PatientsAPI.searchPatients({
+              query: 'cku4djcsk0090jc81f391fv0z'
+            })
+          )
         }}
+        
         startIcon={<PersonOutlineOutlinedIcon />}
       >
         Paciente
       </Button>
-  }
-
+  );
+ */
     return (
       <>
         <NavTop>
           {renderMenuIcon}
           {renderLogo}
           {renderSearchField}
-          <CtxProvider>
-            {renderPatient}
-          </CtxProvider>
+          {renderPatientLinks}
           {renderDoctorBar}
           {renderSignIn}
         </NavTop>
