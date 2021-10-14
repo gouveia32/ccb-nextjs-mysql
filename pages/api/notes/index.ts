@@ -7,24 +7,8 @@ import {
   updateNote,
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
-import React, { useContext } from 'react';
-import { getPatientById, getAllDoctorPatients } from "../../../repositories/PatientRepository";
-import { Session } from "next-auth";
 
-import CtxProvider from '../../../components/AppContext/Context';
-
-
-async function selectedPatient () {
-  //const { patient } = useContext(PatientContext);
-  //const patient = usePatientContext();
-
-  const patientId = "ckubmdq0w0085007tyojoqzn1";
-  
-  const p = await getPatientById(patientId);
-
-
-  return p.id
-}
+import { useEffect } from "react";
 
 type Data = {
   message: string;
@@ -35,6 +19,7 @@ export default async function handler(
   res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
+  const patientId = "cku4djcsk0090jc81f391fv0z";
 
   if (session) {
     const {
@@ -43,7 +28,6 @@ export default async function handler(
       body,
     } = req;
       //console.log("query:",session)
-    const patientId = await selectedPatient();
 
     switch (method) {
       case cRestMethods.GET:
@@ -52,7 +36,7 @@ export default async function handler(
         res.status(200).json(doctorNotes);
         break;
       case cRestMethods.POST:
-        await addNewNote(body, session, patientId);
+        await addNewNote(body, session);
         res.status(201).json({ message: "Nota criada." });
         break;
       case cRestMethods.PUT:

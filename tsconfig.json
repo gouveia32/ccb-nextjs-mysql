@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "API/PatientsAPI/PatientsAPI.js"  ],
+  ],
   "exclude": [
     "node_modules"
   ]

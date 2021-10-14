@@ -41,7 +41,7 @@ export default function NotesPage({ session, doctorNotes }: NotesPageProps) {
 
   const [notesToRender, setNotesToRender] = useState(doctorNotes);
 
-  const newNote = useSelector();
+  const newNote = useSelector(selectNote);
   const editNote = useSelector(selectEditNote);
   const searchNotes = useSelector(selectSearchNotes);
   const searchNotesLoading = useSelector(selectSearchNotesLoading);

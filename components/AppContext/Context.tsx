@@ -1,64 +1,30 @@
-import { useCallback, useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import { createContext } from 'use-context-selector'
+import * as React from "react";
 
-type Message = {
-  id: string;
-  author: string;
-  text: string;
+type SetValue = (value: any) => void;
+interface AppContextInterface {
+  valueA: any;
+  setValueA: SetValue;
+  valueB: any;
+  setValueB: SetValue;
 }
 
-type Patient = {
-  id: string;
-  name: string;
-}
+export const SimpleCtx = React.createContext<AppContextInterface | null>(null);
 
-type ChatContextType = {
-  messages: Message[]
-  connected: Patient[]
-  onNewMessage: (message: Omit<Message, 'id'>) => void
-  onPatientConnected: (name: string) => void
-}
-
-export const ChatContext = createContext({} as ChatContextType)
-
-export function ChatProvider({ children }) {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [connected, setConnected] = useState<Patient[]>([])
-
-  const onNewMessage = useCallback(({ author, text }: Omit<Message, 'id'>) => {
-    const id = uuid()
-
-    const message = {
-      id,
-      author,
-      text
-    }
-
-    setMessages(state => [...state, message]);
-  }, []);
-
-  const onPatientConnected = useCallback((name: string) => {
-    const id = uuid()
-
-    const patient = {
-      id,
-      name
-    }
-
-    setConnected(state => [...state, patient])
-  }, []);
-
+const CtxProvider: React.FC = props => {
+  const [valueA, setValueA] = React.useState(null);
+  const [valueB, setValueB] = React.useState(null);
   return (
-    <ChatContext.Provider 
-      value={{ 
-        messages,
-        connected,
-        onNewMessage,
-        onPatientConnected,
+    <SimpleCtx.Provider
+      value={{
+        valueA,
+        setValueA,
+        valueB,
+        setValueB
       }}
     >
-      {children}
-    </ChatContext.Provider>
-  )
-}
+      {props.children}
+    </SimpleCtx.Provider>
+  );
+};
+
+export default CtxProvider;

@@ -41,15 +41,12 @@ import {
   selectSearchNotesQuery,
 } from "../../../API/NotesPageAPI/NotesAPI";
 
-
-import {ChatContext} from '../../AppContext/Context';
-import { getPatientById } from "../../../repositories/PatientRepository";
-
-import A  from '../../Navigation/Navbar/A'
-
 export interface NavbarProps {
   children: ReactNode;
 }
+
+import { SimpleCtx } from '../../AppContext/Context';
+import CtxProvider  from '../../AppContext/Context';
 
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
@@ -205,26 +202,38 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
+  const renderPatient = () => {
+    const { valueA, setValueA } = useContext(SimpleCtx);
+    <Button
+        size={"small"}
+        variant={"outlined"}
+        onClick={() => {
+          console.log("patient:", searchNotesQuery)
+        }}
+        startIcon={<PersonOutlineOutlinedIcon />}
+      >
+        Paciente
+      </Button>
+  }
 
+    return (
+      <>
+        <NavTop>
+          {renderMenuIcon}
+          {renderLogo}
+          {renderSearchField}
+          <CtxProvider>
+            {renderPatient}
+          </CtxProvider>
+          {renderDoctorBar}
+          {renderSignIn}
+        </NavTop>
+        <NavContent>
+          {renderDrawer}
+          <NavRight>{children}</NavRight>
+        </NavContent>
+      </>
+    );
+  };
 
-  return (
-    <>
-      <NavTop>
-        {renderMenuIcon}
-        {renderLogo}
-        {renderSearchField}
-        <ChatContext.Provider>
-        <A />
-        </ ChatContext.Provider>
-        {renderDoctorBar}
-        {renderSignIn}
-      </NavTop>
-      <NavContent>
-        {renderDrawer}
-        <NavRight>{children}</NavRight>
-      </NavContent>
-    </>
-  );
-};
-
-export default React.memo(Navbar);
+  export default React.memo(Navbar);

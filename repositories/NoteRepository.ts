@@ -16,10 +16,14 @@ export const getAllDoctorNotes = async (
   patientId: string
 ): Promise<Note[]> => {
     //console.log("doctorSession:",doctorSession);
-  const patient =  await prisma.patient.findFirst({
-    where: { id: patientId },
+
+  const doctor = await prisma.doctor.findFirst({
+    where: { name: doctorSession.user?.name },
     include: {
       notes: {
+        where: { 
+          patientId: patientId 
+        },
         include: {
           tags: true,
           checkPoints: true,
@@ -30,8 +34,8 @@ export const getAllDoctorNotes = async (
       },
     },
   });
-  if (patient) {
-    return patient.notes;
+  if (doctor) {
+    return doctor.notes;
   } else {
     return [];
   }
@@ -110,14 +114,13 @@ export const searchNotes = async (
  */
 export const addNewNote = async (
   note: NoteType,
-  doctorSession: Session,
-  patientId: string
+  doctorSession: Session
 ): Promise<Note | undefined> => {
-  const patient = await prisma.patient.findFirst({
-    where: { id: patientId },
+  const doctor = await prisma.doctor.findFirst({
+    where: { name: doctorSession?.user?.name },
   });
 
-  if (patient) {
+  if (doctor) {
     const tags: any[] = note.tags.map((tag: TagType) => ({
       id: tag.id,
     }));
@@ -140,9 +143,9 @@ export const addNewNote = async (
         checkPoints: {
           create: [...checkPoints],
         },
-        patient: {
+        doctor: {
           connect: {
-            id: patient.id,
+            id: doctor.id,
           },
         },
       },
