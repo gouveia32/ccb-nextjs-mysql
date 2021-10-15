@@ -9,13 +9,13 @@ import { RootState } from "../../store/RootState";
 /**
  * PatientsAPI State interface
  */
-export interface PatientsAPIInterface {
+export interface PatientsApiInterface {
   newPatient: PatientType;
   patients: PatientType[];
   patientsLoading: boolean;
 }
 
-export const getInitialState = (): PatientsAPIInterface => {
+export const getInitialState = (): PatientsApiInterface => {
   return {
     newPatient: PatientObject,
     patients: [],

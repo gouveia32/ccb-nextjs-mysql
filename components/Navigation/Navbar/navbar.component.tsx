@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect, useState, useContext } from "react";
+import styled from "styled-components";
 import {
   NavContent,
   NavLeft,
@@ -7,6 +8,7 @@ import {
   NavTop,
   NavDoctor,
   NavDoctorImage,
+  NavDrop,
 } from "./navbar.styles";
 import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -120,23 +122,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
-  const renderPatientLinks = patientsLoading ? (
-    <Loading size={25} />
-  ) : (
-    patients &&
-    patients.map((patient: PatientType, index: number) => (
-      <NavigationItem
-        key={patient.id}
-        name={patient.name}
-        icon={<LabelOutlinedIcon />}
-        url={`${PageLinks.patientsPage}/${patient.id}`}
-        isTag={true}
-        isActive={router.query.tagId === patient.id}
-        onClick={handleOnNavClick}
-      />
-    ))
-  );
-
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||
       router.pathname.includes("/tags")) && (
@@ -193,6 +178,43 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       )}
     </NavDoctor>
   );
+
+
+
+  const [selectedPatient, setSelectedPatient] = useState<String>();
+
+  // This function is triggered when the select changes
+  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    setSelectedPatient(value);
+  };
+
+
+  const renderPatientLinks = patientsLoading ? (
+    <Loading size={25} />
+  ) : (
+      <select onChange={selectChange} style={NavDrop.select}>
+        {patients && patients.map(item => (
+          <option
+            key={item.id}
+            value={item.name}
+          >
+            {item.name}
+          </option>
+        ))}
+      </select>
+    /*     patients &&
+        patients.map((patient: PatientType, index: number) => (
+          <NavigationItem
+            key={patient.id}
+            name={patient.name}
+            icon={<LabelOutlinedIcon />}
+            url={`${PageLinks.patientsPage}/${patient.id}`}
+            onClick={handleOnNavClick}
+          />
+        )) */
+  );
+
 
   const renderLogo = (
     <Link href={PageLinks.landingPage}>
@@ -251,22 +273,22 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </Button>
   );
  */
-    return (
-      <>
-        <NavTop>
-          {renderMenuIcon}
-          {renderLogo}
-          {renderSearchField}
-          {renderPatientLinks}
-          {renderDoctorBar}
-          {renderSignIn}
-        </NavTop>
-        <NavContent>
-          {renderDrawer}
-          <NavRight>{children}</NavRight>
-        </NavContent>
-      </>
-    );
-  };
+  return (
+    <>
+      <NavTop>
+        {renderMenuIcon}
+        {renderLogo}
+        {renderSearchField}
+        {renderPatientLinks}
+        {renderDoctorBar}
+        {renderSignIn}
+      </NavTop>
+      <NavContent>
+        {renderDrawer}
+        <NavRight>{children}</NavRight>
+      </NavContent>
+    </>
+  );
+};
 
-  export default React.memo(Navbar);
+export default React.memo(Navbar);

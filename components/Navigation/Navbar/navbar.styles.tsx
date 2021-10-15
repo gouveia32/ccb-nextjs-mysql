@@ -123,6 +123,23 @@ const NavRight = styled.div`
   }
 `;
 
+  // Just some styles
+  const NavDrop: { [name: string]: React.CSSProperties } = {
+    container: {
+      marginTop: 50,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    select: {
+      padding: 5,
+      width: 200,
+    },
+    result: {
+      marginTop: 30,
+    },
+  };
+
 export {
   NavTop,
   NavLogo,
@@ -131,4 +148,5 @@ export {
   NavContent,
   NavRight,
   NavDoctorImage,
+  NavDrop,
 };
