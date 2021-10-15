@@ -5,6 +5,7 @@ import { ChangeActionType } from "../../lib/helpers";
 import { del, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
 import { RootState } from "../../store/RootState";
+import { createContext, useState } from "react";
 
 /**
  * PatientsAPI State interface
@@ -21,6 +22,29 @@ export const getInitialState = (): PatientsApiInterface => {
     patients: [],
     patientsLoading: false,
   };
+};
+
+
+type SetValue = (value: string) => void;
+interface AppContextInterface {
+  selectedPatient: string;
+  setSelectedPatient: SetValue;
+}
+
+export const PatientCtx = createContext<AppContextInterface | null>(null);
+
+export const CtxProvider: React.FC = props => {
+  const [selectedPatient, setSelectedPatient] = useState("");
+  return (
+    <PatientCtx.Provider
+      value={{
+        selectedPatient,
+        setSelectedPatient,
+      }}
+    >
+      {props.children}
+    </PatientCtx.Provider>
+  );
 };
 
 /**

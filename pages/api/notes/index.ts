@@ -8,7 +8,7 @@ import {
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Data = {
   message: string;
@@ -20,6 +20,7 @@ export default async function handler(
 ) {
   const session = await getSession({ req });
   const patientId = "cku4djcsk0090jc81f391fv0z";
+  //const [selectedPatient, setSelectedPatient] = useState<string>();
 
   if (session) {
     const {
@@ -32,7 +33,7 @@ export default async function handler(
     switch (method) {
       case cRestMethods.GET:
         const doctorNotes = await getAllDoctorNotes(session,patientId);
-        //console.log("Notas:",doctorNotes)
+        //console.log("PatientId:",selectedPatient)
         res.status(200).json(doctorNotes);
         break;
       case cRestMethods.POST:

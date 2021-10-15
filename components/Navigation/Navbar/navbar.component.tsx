@@ -48,7 +48,7 @@ import {
   PatientsAPI,
   selectPatients,
   selectPatientsLoading,
-  selectNewPatient
+  CtxProvider
 } from "../../../API/PatientsAPI/PatientsAPI";
 
 
@@ -59,6 +59,8 @@ export interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
+
+  const [selectedPatient, setSelectedPatient] = useState<string>();
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
@@ -79,7 +81,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const newTag: TagType = useSelector(selectNewTag);
 
   const patients: PatientType[] = useSelector(selectPatients); //incl
-  const newPatient: PatientType = useSelector(selectNewPatient); //incl
 
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
@@ -89,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
-    dispatch(PatientsAPI.fetchPatients()) //incl
+    dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -121,11 +122,41 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     ))
   );
 
+  //
+  // Seleciona paciente
+
+  // This function is triggered when the select changes
+  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+
+    console.log("selecionado:", value)
+    setSelectedPatient(value);
+  };
+
+
+  const renderPatientLinks = patientsLoading ? (
+    <Loading size={25} />
+  ) : (
+    <select onChange={selectChange} >
+      <option value="Selecione um paciente" selected disabled>
+        Selecione um paciente
+      </option>
+      {patients && patients.map(item => (
+        <option
+          value={item.id}
+          label={item.name}
+        >
+          {item.name}
+        </option>
+      ))}
+    </select>
+  );
 
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||
       router.pathname.includes("/tags")) && (
       <NavLeft open={openNav}>
+        {renderPatientLinks}
         <NavigationItem
           name={"Tags"}
           url={PageLinks.notesPage}
@@ -179,43 +210,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </NavDoctor>
   );
 
-
-
-  const [selectedPatient, setSelectedPatient] = useState<String>();
-
-  // This function is triggered when the select changes
-  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    setSelectedPatient(value);
-  };
-
-
-  const renderPatientLinks = patientsLoading ? (
-    <Loading size={25} />
-  ) : (
-      <select onChange={selectChange} style={NavDrop.select}>
-        {patients && patients.map(item => (
-          <option
-            key={item.id}
-            value={item.name}
-          >
-            {item.name}
-          </option>
-        ))}
-      </select>
-    /*     patients &&
-        patients.map((patient: PatientType, index: number) => (
-          <NavigationItem
-            key={patient.id}
-            name={patient.name}
-            icon={<LabelOutlinedIcon />}
-            url={`${PageLinks.patientsPage}/${patient.id}`}
-            onClick={handleOnNavClick}
-          />
-        )) */
-  );
-
-
   const renderLogo = (
     <Link href={PageLinks.landingPage}>
       <NavLogo>
@@ -255,38 +249,36 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
-  /* const renderPatient = session && (    
+  const renderAcao = session && (
     <Button
-        size={"small"}
-        variant={"outlined"}
-        onClick={() => {
-          dispatch(
-            PatientsAPI.searchPatients({
-              query: 'cku4djcsk0090jc81f391fv0z'
-            })
-          )
-        }}
-        
-        startIcon={<PersonOutlineOutlinedIcon />}
-      >
-        Paciente
-      </Button>
-  );
- */
+      size={"small"}
+      variant={"outlined"}
+      onClick={() => {
+        console.log("patient:", selectedPatient)
+      }}
+      startIcon={<PersonOutlineOutlinedIcon />}
+    >
+      AÇÃO
+    </Button>
+  )
+
   return (
     <>
-      <NavTop>
-        {renderMenuIcon}
-        {renderLogo}
-        {renderSearchField}
-        {renderPatientLinks}
-        {renderDoctorBar}
-        {renderSignIn}
-      </NavTop>
-      <NavContent>
-        {renderDrawer}
-        <NavRight>{children}</NavRight>
-      </NavContent>
+      <CtxProvider>
+        <NavTop>
+          {renderMenuIcon}
+          {renderLogo}
+          {renderSearchField}
+          {renderAcao}
+          {renderDoctorBar}
+          {renderSignIn}
+        </NavTop>
+        <NavContent>
+          {renderDrawer}
+          <NavRight>{children}</NavRight>
+        </NavContent>
+      </ CtxProvider>
+
     </>
   );
 };
