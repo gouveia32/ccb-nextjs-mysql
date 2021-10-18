@@ -22,7 +22,7 @@ export const getInitialState = (): PatientsApiInterface => {
   return {
     newPatient: PatientObject,
     patients: [],
-    selectPatient: '',
+    selectPatient: "",
     patientsLoading: false,
   };
 };
@@ -91,15 +91,16 @@ class PatientsApi {
         state.patientsLoading = true;
       },
       selectPatient(state) {                  //incl
-        state.patientsLoading = true;
-      },      
+        //state.patientsLoading = true;
+        //state.selectPatient = action.payload;
+      },
       setPatients(state, action: PayloadAction<PatientType[]>) {
         state.patients = action.payload;
         state.patientsLoading = false;
       },
       setSelectPatient(state, action: PayloadAction<PatientType>) {
-        state.selectPatient = action.payload.id;
-      },      
+        state.selectPatient = action.payload;
+      },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
       deletePatient(state, action: PayloadAction<PatientType>) { },
@@ -118,30 +119,32 @@ class PatientsApi {
     try {
       const patients: any = yield call(request);
 
-      console.log("Pacientes:",patients)
+      //console.log("Pacientes:", patients)
 
       yield put(this.slice.actions.setPatients(patients));
     } catch (e) {
       console.log(e);
     }
   }
-  public *handleSelectPatient(id?: string): Generator<any> {
+
+  public *handleSelectPatient(): Generator<any> {
     const request = () =>
-      fetch(`/api/patients/[id]`, {
+      fetch(`/api/patients`, {
         method: "GET",
       }).then((res) => res.json());
 
     try {
       const patients: any = yield call(request);
-      const patient = patients[0] ? patients[0] : null; ;
-      //console.log("Paciente:",patient)
+      const selectPatient = patients[0].id;
 
-      yield put(this.slice.actions.setSelectPatient(patient));
+      console.log("API:", selectPatient)
+
+      yield put(this.slice.actions.setSelectPatient(selectPatient));
     } catch (e) {
       console.log(e);
     }
-
   }
+
 
   public *handleAddPatient(): Generator<any> {
     const patient: PatientType | any = yield select(selectNewPatient);
@@ -204,7 +207,7 @@ class PatientsApi {
     const { addPatient, fetchPatients, selectPatient, deletePatient, updatePatient } = this.slice.actions;
     yield all([
       yield takeLatest([fetchPatients.type], this.handleFetchPatients),
-      //yield takeLatest([selectPatient.type], this.handleSelectPatient),
+      yield takeLatest([selectPatient.type], this.handleSelectPatient),
       yield takeLatest([addPatient.type], this.handleAddPatient),
       yield takeLatest([updatePatient.type], this.handleUpdatePatient),
       yield takeLatest([deletePatient.type], this.handleDeletePatient),

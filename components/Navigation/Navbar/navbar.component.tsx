@@ -56,19 +56,18 @@ export interface NavbarProps {
   children: ReactNode;
 }
 
-let GlobalSelectedPatient = "";
+let GlobalSelectedPatient: string | null = null;
 
 export function selectedPatient() {
   const patientId = GlobalSelectedPatient ? GlobalSelectedPatient : "";
-  
+
   return (patientId)
 }
 
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
-
-  //const [selectedPatient, setSelectedPatient] = useState<string>();
+  const [selectedPatient, setSelectedPatient] = useState<string>();
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
@@ -89,8 +88,12 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const newTag: TagType = useSelector(selectNewTag);
 
   const patients: PatientType[] = useSelector(selectPatients); //incl
-  const selectedPatient: string = useSelector(selectPatient); //incl
-  GlobalSelectedPatient = selectedPatient;
+
+  const patient: string | null = useSelector(selectPatient); //incl
+  GlobalSelectedPatient = patient
+  //setSelectedPatient (GlobalSelectedPatient);
+
+  console.log("Global inicial:", GlobalSelectedPatient)
 
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
@@ -140,9 +143,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-   console.log("selecionado:", value)
+    //console.log("selecionado:", value)
     //setSelectedPatient(value);
     GlobalSelectedPatient = value
+    console.log("Global (alt):", GlobalSelectedPatient)
   };
 
 

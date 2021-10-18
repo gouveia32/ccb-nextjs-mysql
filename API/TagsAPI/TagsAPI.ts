@@ -118,7 +118,7 @@ class TagsApi {
       return;
     }
 
-    toast.info(`Updating tag...`);
+    toast.info(`Alterando tag...`);
     try {
       const response = yield call(update, "/api/tags", action.payload);
       toast.success("Tag updated.");
