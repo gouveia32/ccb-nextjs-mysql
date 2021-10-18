@@ -1,6 +1,6 @@
 import { Patient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { deletePatient, searchPatients } from "../../../repositories/PatientRepository";
+import { deletePatient, searchPatients,getPatientById } from "../../../repositories/PatientRepository";
 import { getSession } from "next-auth/client";
 import { cRestMethods } from "../../../lib/RestAPI";
 
@@ -16,18 +16,17 @@ export default async function handler(
 
   if (session) {
     const {
-      query: { id, query, tagId, patientId },
+      query: { id },
       method,
     } = req;
 
     switch (method) {
       case cRestMethods.GET:
-        const patients: Patient[] = await searchPatients(
-          query as string,
-          patientId ? (patientId as string) : undefined,
+        const patient: Patient[] = await getPatientById(
+          id ? (id as string) : '',
         );
-        //console.log("Aqui",tagId)
-        res.status(200).json(patients);
+        console.log("Aqui",id)
+        res.status(200).json(patient);
         break;
       case cRestMethods.DELETE:
         await deletePatient(id as string);

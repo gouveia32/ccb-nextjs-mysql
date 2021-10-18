@@ -48,7 +48,7 @@ import {
   PatientsAPI,
   selectPatients,
   selectPatientsLoading,
-  CtxProvider
+  selectPatient
 } from "../../../API/PatientsAPI/PatientsAPI";
 
 
@@ -56,11 +56,19 @@ export interface NavbarProps {
   children: ReactNode;
 }
 
+let GlobalSelectedPatient = "";
+
+export function selectedPatient() {
+  const patientId = GlobalSelectedPatient ? GlobalSelectedPatient : "";
+  
+  return (patientId)
+}
+
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
 
-  const [selectedPatient, setSelectedPatient] = useState<string>();
+  //const [selectedPatient, setSelectedPatient] = useState<string>();
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
@@ -81,6 +89,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const newTag: TagType = useSelector(selectNewTag);
 
   const patients: PatientType[] = useSelector(selectPatients); //incl
+  const selectedPatient: string = useSelector(selectPatient); //incl
+  GlobalSelectedPatient = selectedPatient;
 
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
@@ -91,6 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
     dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
+    dispatch(PatientsAPI.selectPatient())    //pega o primeiro da lista
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -129,8 +140,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    console.log("selecionado:", value)
-    setSelectedPatient(value);
+   console.log("selecionado:", value)
+    //setSelectedPatient(value);
+    GlobalSelectedPatient = value
   };
 
 
@@ -143,6 +155,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </option>
       {patients && patients.map(item => (
         <option
+          key={item.id}
           value={item.id}
           label={item.name}
         >
@@ -254,7 +267,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       size={"small"}
       variant={"outlined"}
       onClick={() => {
-        console.log("patient:", selectedPatient)
+        console.log("patient:", GlobalSelectedPatient)
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >
@@ -264,20 +277,18 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   return (
     <>
-      <CtxProvider>
-        <NavTop>
-          {renderMenuIcon}
-          {renderLogo}
-          {renderSearchField}
-          {renderAcao}
-          {renderDoctorBar}
-          {renderSignIn}
-        </NavTop>
-        <NavContent>
-          {renderDrawer}
-          <NavRight>{children}</NavRight>
-        </NavContent>
-      </ CtxProvider>
+      <NavTop>
+        {renderMenuIcon}
+        {renderLogo}
+        {renderSearchField}
+        {renderAcao}
+        {renderDoctorBar}
+        {renderSignIn}
+      </NavTop>
+      <NavContent>
+        {renderDrawer}
+        <NavRight>{children}</NavRight>
+      </NavContent>
 
     </>
   );

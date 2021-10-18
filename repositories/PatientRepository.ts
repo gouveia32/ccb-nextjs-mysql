@@ -53,7 +53,7 @@ export const getAllDoctorPatients = async (doctorSession: Session): Promise<Pati
  * Get patient bt Id
  * @param id - session object of current doctor
  */
-export const getPatientById = async (id: string): Promise<Patient> => {
+export const getPatientById = async (id: string): Promise<Patient[]> => {
   return await prisma.patient.findFirst({
     where: { id: id },
   });
@@ -74,7 +74,7 @@ export const getFirstPatient = async (): Promise<Patient> => {
  */
 export const searchPatients = async (
   query: string,
-  patientId?: string
+  id?: string
 ): Promise<Patient[]> => {
   const patients = await prisma.patient.findMany({
     where: {

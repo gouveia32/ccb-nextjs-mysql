@@ -9,6 +9,7 @@ import {
 import { cRestMethods } from "../../../lib/RestAPI";
 
 import { useEffect, useState } from "react";
+import { selectedPatient } from "../../../components/Navigation/Navbar/navbar.component";
 
 type Data = {
   message: string;
@@ -19,7 +20,8 @@ export default async function handler(
   res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
-  const patientId = "cku4djcsk0090jc81f391fv0z";
+  const patientId = selectedPatient();
+  console.log("PatientId:",patientId)
   //const [selectedPatient, setSelectedPatient] = useState<string>();
 
   if (session) {
@@ -33,7 +35,7 @@ export default async function handler(
     switch (method) {
       case cRestMethods.GET:
         const doctorNotes = await getAllDoctorNotes(session,patientId);
-        //console.log("PatientId:",selectedPatient)
+
         res.status(200).json(doctorNotes);
         break;
       case cRestMethods.POST:

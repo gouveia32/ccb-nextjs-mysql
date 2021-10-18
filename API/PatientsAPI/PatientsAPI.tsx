@@ -6,6 +6,7 @@ import { del, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
 import { RootState } from "../../store/RootState";
 import { createContext, useState } from "react";
+import { StringifyOptions } from "querystring";
 
 /**
  * PatientsAPI State interface
@@ -13,6 +14,7 @@ import { createContext, useState } from "react";
 export interface PatientsApiInterface {
   newPatient: PatientType;
   patients: PatientType[];
+  selectPatient: string;
   patientsLoading: boolean;
 }
 
@@ -20,12 +22,13 @@ export const getInitialState = (): PatientsApiInterface => {
   return {
     newPatient: PatientObject,
     patients: [],
+    selectPatient: '',
     patientsLoading: false,
   };
 };
 
 
-type SetValue = (value: string) => void;
+/* type SetValue = (value: string) => void;
 interface AppContextInterface {
   selectedPatient: string;
   setSelectedPatient: SetValue;
@@ -45,7 +48,7 @@ export const CtxProvider: React.FC = props => {
       {props.children}
     </PatientCtx.Provider>
   );
-};
+}; */
 
 /**
  * PatientsAPI
@@ -55,6 +58,7 @@ class PatientsApi {
 
   private constructor() {
     this.handleFetchPatients = this.handleFetchPatients.bind(this);
+    this.handleSelectPatient = this.handleSelectPatient.bind(this);
     this.handleAddPatient = this.handleAddPatient.bind(this);
     this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
     this.handleDeletePatient = this.handleDeletePatient.bind(this);
@@ -86,13 +90,19 @@ class PatientsApi {
       fetchPatients(state) {
         state.patientsLoading = true;
       },
+      selectPatient(state) {                  //incl
+        state.patientsLoading = true;
+      },      
       setPatients(state, action: PayloadAction<PatientType[]>) {
         state.patients = action.payload;
         state.patientsLoading = false;
       },
-      addPatient() {},
-      updatePatient(state, action: PayloadAction<PatientType>) {},
-      deletePatient(state, action: PayloadAction<PatientType>) {},
+      setSelectPatient(state, action: PayloadAction<PatientType>) {
+        state.selectPatient = action.payload.id;
+      },      
+      addPatient() { },
+      updatePatient(state, action: PayloadAction<PatientType>) { },
+      deletePatient(state, action: PayloadAction<PatientType>) { },
     },
   });
 
@@ -108,10 +118,29 @@ class PatientsApi {
     try {
       const patients: any = yield call(request);
 
+      console.log("Pacientes:",patients)
+
       yield put(this.slice.actions.setPatients(patients));
     } catch (e) {
       console.log(e);
     }
+  }
+  public *handleSelectPatient(id?: string): Generator<any> {
+    const request = () =>
+      fetch(`/api/patients/[id]`, {
+        method: "GET",
+      }).then((res) => res.json());
+
+    try {
+      const patients: any = yield call(request);
+      const patient = patients[0] ? patients[0] : null; ;
+      //console.log("Paciente:",patient)
+
+      yield put(this.slice.actions.setSelectPatient(patient));
+    } catch (e) {
+      console.log(e);
+    }
+
   }
 
   public *handleAddPatient(): Generator<any> {
@@ -122,7 +151,7 @@ class PatientsApi {
       return;
     }
 
-    toast.info(`Adding patient...`);
+    toast.info(`Adicionando um paciente...`);
 
     try {
       const response = yield call(post, "/api/patients", patient);
@@ -132,7 +161,7 @@ class PatientsApi {
       yield put(this.slice.actions.fetchPatients());
     } catch (e) {
       console.log(e);
-      toast.error("Patient was not added. Something went wrong...");
+      toast.error("O paciente não foi adicionado. Algo deu errado...");
     }
   }
 
@@ -142,10 +171,10 @@ class PatientsApi {
       return;
     }
 
-    toast.info(`Updating patient...`);
+    toast.info(`Alterando o paciente...`);
     try {
       const response = yield call(update, "/api/patients", action.payload);
-      toast.success("Patient updated.");
+      toast.success("Paciente alterado.");
 
       yield put(this.slice.actions.reset());
       yield put(this.slice.actions.fetchPatients());
@@ -156,7 +185,7 @@ class PatientsApi {
   }
 
   public *handleDeletePatient(action: PayloadAction<PatientType>): Generator<any> {
-    toast.info(`Deleting patient...`);
+    toast.info(`Apagando paciente...`);
 
     try {
       const res: any = yield call(del, `/api/patients/${action.payload.id}`);
@@ -172,9 +201,10 @@ class PatientsApi {
    * SAGA - MAIN
    */
   public *saga(): Generator<any> {
-    const { addPatient, fetchPatients, deletePatient, updatePatient } = this.slice.actions;
+    const { addPatient, fetchPatients, selectPatient, deletePatient, updatePatient } = this.slice.actions;
     yield all([
       yield takeLatest([fetchPatients.type], this.handleFetchPatients),
+      //yield takeLatest([selectPatient.type], this.handleSelectPatient),
       yield takeLatest([addPatient.type], this.handleAddPatient),
       yield takeLatest([updatePatient.type], this.handleUpdatePatient),
       yield takeLatest([deletePatient.type], this.handleDeletePatient),
@@ -202,6 +232,11 @@ class PatientsApi {
     [this.selectDomain],
     (patientsApiState) => patientsApiState.patientsLoading
   );
+
+  public selectPatient = createSelector(
+    [this.selectDomain],
+    (patientsApiState) => patientsApiState.selectPatient
+  );
 }
 
 export default PatientsApi.getInstance();
@@ -215,6 +250,8 @@ export const {
 export const {
   selectNewPatient,
   selectPatients,
+  selectPatient,
+  handleSelectPatient,
   selectPatientsLoading,
   saga: PatientsApiSaga,
   handleUpdatePatient,
