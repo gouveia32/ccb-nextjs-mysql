@@ -14,7 +14,7 @@ import { StringifyOptions } from "querystring";
 export interface PatientsApiInterface {
   newPatient: PatientType;
   patients: PatientType[];
-  selectPatient: string;
+  selectPatient?: string;
   patientsLoading: boolean;
 }
 
@@ -27,6 +27,7 @@ export const getInitialState = (): PatientsApiInterface => {
   };
 };
 
+let GlobalSelectedPatient: string | undefined = '';
 
 /* type SetValue = (value: string) => void;
 interface AppContextInterface {
@@ -99,7 +100,7 @@ class PatientsApi {
         state.patientsLoading = false;
       },
       setSelectPatient(state, action: PayloadAction<PatientType>) {
-        state.selectPatient = action.payload;
+        state.selectPatient = action.payload.id;
       },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
@@ -136,6 +137,8 @@ class PatientsApi {
     try {
       const patients: any = yield call(request);
       const selectPatient = patients[0].id;
+
+      GlobalSelectedPatient = selectPatient
 
       console.log("API:", selectPatient)
 
@@ -243,6 +246,10 @@ class PatientsApi {
 }
 
 export default PatientsApi.getInstance();
+
+export function RetornaSelectPatient() {
+  return GlobalSelectedPatient
+}
 
 export const {
   actions: PatientsAPI,

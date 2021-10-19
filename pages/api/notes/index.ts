@@ -9,7 +9,7 @@ import {
 import { cRestMethods } from "../../../lib/RestAPI";
 
 import { useEffect, useState } from "react";
-import { selectedPatient } from "../../../components/Navigation/Navbar/navbar.component";
+import { RetornaSelectPatient } from "../../../API/PatientsAPI/PatientsAPI"
 
 type Data = {
   message: string;
@@ -20,8 +20,8 @@ export default async function handler(
   res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
-  const patientId = selectedPatient();
-  console.log("PatientId:",patientId)
+  const patientId: any = RetornaSelectPatient();
+  console.log("PatientId Index:",patientId)
   //const [selectedPatient, setSelectedPatient] = useState<string>();
 
   if (session) {

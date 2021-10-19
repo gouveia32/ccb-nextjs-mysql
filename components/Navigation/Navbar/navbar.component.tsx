@@ -48,7 +48,8 @@ import {
   PatientsAPI,
   selectPatients,
   selectPatientsLoading,
-  selectPatient
+  selectPatient,
+  RetornaSelectPatient
 } from "../../../API/PatientsAPI/PatientsAPI";
 
 
@@ -56,7 +57,7 @@ export interface NavbarProps {
   children: ReactNode;
 }
 
-let GlobalSelectedPatient: string | null = null;
+let GlobalSelectedPatient: string | undefined = '';
 
 export function selectedPatient() {
   const patientId = GlobalSelectedPatient ? GlobalSelectedPatient : "";
@@ -89,8 +90,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const patients: PatientType[] = useSelector(selectPatients); //incl
 
-  const patient: string | null = useSelector(selectPatient); //incl
-  GlobalSelectedPatient = patient
+  GlobalSelectedPatient = useSelector(selectPatient); //incl
+  //GlobalSelectedPatient = patient
   //setSelectedPatient (GlobalSelectedPatient);
 
   console.log("Global inicial:", GlobalSelectedPatient)
@@ -271,7 +272,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       size={"small"}
       variant={"outlined"}
       onClick={() => {
-        console.log("patient:", GlobalSelectedPatient)
+        const sp: any = RetornaSelectPatient();
+        console.log("patient:", sp)
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >
