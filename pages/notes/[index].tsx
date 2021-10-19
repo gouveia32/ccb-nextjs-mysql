@@ -151,6 +151,9 @@ export const getServerSideProps: GetServerSideProps<NotesPageProps> = async (
     context.req.headers.cookie!
   );
 
+  //console.log("cookie:",context.req.headers.cookie!)
+
+
   return {
     props: {
       session: session,

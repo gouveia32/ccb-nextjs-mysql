@@ -93,14 +93,15 @@ class PatientsApi {
       },
       selectPatient(state) {                  //incl
         //state.patientsLoading = true;
-        //state.selectPatient = action.payload;
       },
       setPatients(state, action: PayloadAction<PatientType[]>) {
         state.patients = action.payload;
         state.patientsLoading = false;
       },
       setSelectPatient(state, action: PayloadAction<PatientType>) {
+        console.log("payload antes:",state.selectPatient)
         state.selectPatient = action.payload.id;
+        console.log("payload depois:",state.selectPatient)
       },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
@@ -138,16 +139,15 @@ class PatientsApi {
       const patients: any = yield call(request);
       const selectPatient = patients[0].id;
 
-      GlobalSelectedPatient = selectPatient
+      //GlobalSelectedPatient = selectPatient
 
       console.log("API:", selectPatient)
 
-      yield put(this.slice.actions.setSelectPatient(selectPatient));
+      yield put(this.slice.actions.setSelectPatient({ id: selectPatient }));
     } catch (e) {
       console.log(e);
     }
   }
-
 
   public *handleAddPatient(): Generator<any> {
     const patient: PatientType | any = yield select(selectNewPatient);
@@ -248,7 +248,11 @@ class PatientsApi {
 export default PatientsApi.getInstance();
 
 export function RetornaSelectPatient() {
-  return GlobalSelectedPatient
+  
+  const selPatient = PatientsApi.selectPatient
+  console.log("ret:",selPatient)
+
+  return selPatient
 }
 
 export const {

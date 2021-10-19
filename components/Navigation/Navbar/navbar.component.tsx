@@ -52,23 +52,20 @@ import {
   RetornaSelectPatient
 } from "../../../API/PatientsAPI/PatientsAPI";
 
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
 export interface NavbarProps {
   children: ReactNode;
 }
 
-let GlobalSelectedPatient: string | undefined = '';
 
-export function selectedPatient() {
-  const patientId = GlobalSelectedPatient ? GlobalSelectedPatient : "";
-
-  return (patientId)
+export function parseCookies(req) {
+  return cookie.parse(req ? req.headers.cookie || "" : document.cookie)
 }
-
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
-  const [selectedPatient, setSelectedPatient] = useState<string>();
+  const [selectedPatient, setSelectedPatient] = useCookies(["patient"])
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
@@ -89,12 +86,21 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const newTag: TagType = useSelector(selectNewTag);
 
   const patients: PatientType[] = useSelector(selectPatients); //incl
+  const patient: string | null = useSelector(selectPatient); //incl
 
-  GlobalSelectedPatient = useSelector(selectPatient); //incl
   //GlobalSelectedPatient = patient
-  //setSelectedPatient (GlobalSelectedPatient);
+  setCookie({ res }, 'fromServer', 'value', {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          });
 
-  console.log("Global inicial:", GlobalSelectedPatient)
+  setSelectedPatient("patient", JSON.stringify(patient), {
+        path: "/",
+        maxAge: 3600 * 4, // Expires after 8hr
+        sameSite: true,
+      })
+
+  //console.log("Global:", GlobalSelectedPatient)
 
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
@@ -144,10 +150,13 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    //console.log("selecionado:", value)
-    //setSelectedPatient(value);
-    GlobalSelectedPatient = value
-    console.log("Global (alt):", GlobalSelectedPatient)
+    dispatch(PatientsAPI.setSelectPatient({ id: value }));
+
+    setSelectedPatient(value);    setSelectedPatient("patient", JSON.stringify(value), {
+        path: "/",
+        maxAge: 3600 * 4, // Expires after 8hr
+        sameSite: true,
+      })
   };
 
 
@@ -272,8 +281,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       size={"small"}
       variant={"outlined"}
       onClick={() => {
-        const sp: any = RetornaSelectPatient();
-        console.log("patient:", sp)
+        const data = cookies.get('patient')
+        console.log("cookie:", data)
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >
