@@ -27,7 +27,6 @@ export const getInitialState = (): PatientsApiInterface => {
   };
 };
 
-let GlobalSelectedPatient: string | undefined = '';
 
 /* type SetValue = (value: string) => void;
 interface AppContextInterface {
@@ -98,9 +97,9 @@ class PatientsApi {
         state.patients = action.payload;
         state.patientsLoading = false;
       },
-      setSelectPatient(state, action: PayloadAction<PatientType>) {
+      setSelectPatient(state, action: PayloadAction<string>) {
         console.log("payload antes:",state.selectPatient)
-        state.selectPatient = action.payload.id;
+        state.selectPatient = action.payload;
         console.log("payload depois:",state.selectPatient)
       },
       addPatient() { },
@@ -143,7 +142,7 @@ class PatientsApi {
 
       console.log("API:", selectPatient)
 
-      yield put(this.slice.actions.setSelectPatient({ id: selectPatient }));
+      yield put(this.slice.actions.setSelectPatient(selectPatient));
     } catch (e) {
       console.log(e);
     }
@@ -246,14 +245,6 @@ class PatientsApi {
 }
 
 export default PatientsApi.getInstance();
-
-export function RetornaSelectPatient() {
-  
-  const selPatient = PatientsApi.selectPatient
-  console.log("ret:",selPatient)
-
-  return selPatient
-}
 
 export const {
   actions: PatientsAPI,

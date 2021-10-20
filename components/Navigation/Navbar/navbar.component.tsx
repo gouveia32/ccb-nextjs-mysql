@@ -49,7 +49,6 @@ import {
   selectPatients,
   selectPatientsLoading,
   selectPatient,
-  RetornaSelectPatient
 } from "../../../API/PatientsAPI/PatientsAPI";
 
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
@@ -58,14 +57,8 @@ export interface NavbarProps {
   children: ReactNode;
 }
 
-
-export function parseCookies(req) {
-  return cookie.parse(req ? req.headers.cookie || "" : document.cookie)
-}
-
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
-  const [selectedPatient, setSelectedPatient] = useCookies(["patient"])
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
@@ -86,21 +79,16 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const newTag: TagType = useSelector(selectNewTag);
 
   const patients: PatientType[] = useSelector(selectPatients); //incl
-  const patient: string | null = useSelector(selectPatient); //incl
 
-  //GlobalSelectedPatient = patient
-  setCookie({ res }, 'fromServer', 'value', {
-            maxAge: 30 * 24 * 60 * 60,
-            path: '/',
-          });
+  const patient: string | undefined = useSelector(selectPatient); //incl
 
-  setSelectedPatient("patient", JSON.stringify(patient), {
-        path: "/",
-        maxAge: 3600 * 4, // Expires after 8hr
-        sameSite: true,
-      })
+  //console.log("Inicial:", patient)
 
-  //console.log("Global:", GlobalSelectedPatient)
+  // Set
+  setCookie(null, 'pe-patient', patient ? patient : '', {
+    maxAge: 30 * 24 * 60 * 60,
+    path: '/',
+  })
 
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
@@ -150,13 +138,12 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    dispatch(PatientsAPI.setSelectPatient({ id: value }));
+    //console.log("id selec:",value);
 
-    setSelectedPatient(value);    setSelectedPatient("patient", JSON.stringify(value), {
-        path: "/",
-        maxAge: 3600 * 4, // Expires after 8hr
-        sameSite: true,
-      })
+    setCookie(null, 'pe-patient', value ? value : '', {
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    })
   };
 
 
@@ -281,8 +268,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       size={"small"}
       variant={"outlined"}
       onClick={() => {
-        const data = cookies.get('patient')
-        console.log("cookie:", data)
+        const cookie = parseCookies(null);
+        const patientId = cookie['pe-patient'];
+        //const data = cookies.get('patient')
+        console.log("cookie:",patientId)
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >

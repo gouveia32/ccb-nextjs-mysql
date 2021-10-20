@@ -7,9 +7,9 @@ import {
   updateNote,
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
+import { parseCookies } from 'nookies'
 
 import { useEffect, useState } from "react";
-import { RetornaSelectPatient } from "../../../API/PatientsAPI/PatientsAPI"
 
 type Data = {
   message: string;
@@ -20,9 +20,6 @@ export default async function handler(
   res: NextApiResponse<Data | Note[]>
 ) {
   const session = await getSession({ req });
-  const patientId: any = RetornaSelectPatient();
-  console.log("PatientId Index:",patientId)
-  //const [selectedPatient, setSelectedPatient] = useState<string>();
 
   if (session) {
     const {
@@ -30,6 +27,11 @@ export default async function handler(
       method,
       body,
     } = req;
+
+    const cookie = parseCookies(null);
+    const patientId = cookie['pe-patient'];
+  
+    console.log("PatientId Index:",cookie)
       //console.log("query:",session)
 
     switch (method) {
