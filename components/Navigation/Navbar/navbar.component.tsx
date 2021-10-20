@@ -53,6 +53,7 @@ import {
 
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
+
 export interface NavbarProps {
   children: ReactNode;
 }
@@ -84,7 +85,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   //console.log("Inicial:", patient)
 
-  // Set
+  function MyCookie() {
+    const cookie = parseCookies(null);
+    const patientId = cookie['pe-patient'];
+
+    return patientId
+  }
+
+  // Guarda o Id do paciente
   setCookie(null, 'pe-patient', patient ? patient : '', {
     maxAge: 30 * 24 * 60 * 60,
     path: '/',
@@ -140,16 +148,19 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
     //console.log("id selec:",value);
 
+    //atualiza o Id do paciente selecionado
     setCookie(null, 'pe-patient', value ? value : '', {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     })
+
   };
 
 
   const renderPatientLinks = patientsLoading ? (
     <Loading size={25} />
   ) : (
+    
     <select onChange={selectChange} >
       <option value="Selecione um paciente" selected disabled>
         Selecione um paciente
@@ -159,6 +170,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           key={item.id}
           value={item.id}
           label={item.name}
+          selected={item.id === MyCookie()}
         >
           {item.name}
         </option>
@@ -268,10 +280,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       size={"small"}
       variant={"outlined"}
       onClick={() => {
-        const cookie = parseCookies(null);
-        const patientId = cookie['pe-patient'];
-        //const data = cookies.get('patient')
-        console.log("cookie:",patientId)
+        console.log("cookie:", MyCookie())
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >

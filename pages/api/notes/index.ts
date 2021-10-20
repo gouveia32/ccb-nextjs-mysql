@@ -10,6 +10,8 @@ import { cRestMethods } from "../../../lib/RestAPI";
 import { parseCookies } from 'nookies'
 
 import { useEffect, useState } from "react";
+import { GetServerSideProps } from 'next'
+import nookies from 'nookies'
 
 type Data = {
   message: string;
@@ -26,13 +28,12 @@ export default async function handler(
       query: { id, name },
       method,
       body,
+      cookies,
     } = req;
 
-    const cookie = parseCookies(null);
-    const patientId = cookie['pe-patient'];
+    const patientId = cookies['pe-patient'];
   
-    console.log("PatientId Index:",cookie)
-      //console.log("query:",session)
+    //console.log("PatientId Index:",patientId)
 
     switch (method) {
       case cRestMethods.GET:
@@ -57,4 +58,16 @@ export default async function handler(
     res.status(401);
   }
   res.end();
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  let cookies = nookies.get(ctx)
+  console.log("cookies:",cookies)
+
+  return {
+    props: {
+      server: true,
+      cookies,
+    },
+  }
 }

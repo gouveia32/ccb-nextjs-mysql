@@ -28,27 +28,6 @@ export const getInitialState = (): PatientsApiInterface => {
 };
 
 
-/* type SetValue = (value: string) => void;
-interface AppContextInterface {
-  selectedPatient: string;
-  setSelectedPatient: SetValue;
-}
-
-export const PatientCtx = createContext<AppContextInterface | null>(null);
-
-export const CtxProvider: React.FC = props => {
-  const [selectedPatient, setSelectedPatient] = useState("");
-  return (
-    <PatientCtx.Provider
-      value={{
-        selectedPatient,
-        setSelectedPatient,
-      }}
-    >
-      {props.children}
-    </PatientCtx.Provider>
-  );
-}; */
 
 /**
  * PatientsAPI
@@ -98,9 +77,9 @@ class PatientsApi {
         state.patientsLoading = false;
       },
       setSelectPatient(state, action: PayloadAction<string>) {
-        console.log("payload antes:",state.selectPatient)
+        //console.log("payload antes:",state.selectPatient)
         state.selectPatient = action.payload;
-        console.log("payload depois:",state.selectPatient)
+        //console.log("payload depois:",state.selectPatient)
       },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
@@ -138,9 +117,8 @@ class PatientsApi {
       const patients: any = yield call(request);
       const selectPatient = patients[0].id;
 
-      //GlobalSelectedPatient = selectPatient
 
-      console.log("API:", selectPatient)
+      //console.log("API:", selectPatient)
 
       yield put(this.slice.actions.setSelectPatient(selectPatient));
     } catch (e) {

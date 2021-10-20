@@ -103,7 +103,7 @@ export default function TagsPage({ session, tagNotes }: TagsPageProps) {
         </TagsPageNotes>
       ) : (
         <TagsPageNoNotes>
-          <h1>Desculpe, Não tem nota para esta tag...</h1>
+          <h1>Não tem nota para esta tag...</h1>
         </TagsPageNoNotes>
       )}
     </>

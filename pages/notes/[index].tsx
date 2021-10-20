@@ -116,7 +116,7 @@ export default function NotesPage({ session, doctorNotes }: NotesPageProps) {
     </NotesPageNotes>
   ) : (
     <NotesPageNoNotes>
-      <h1>Desculpe, sem consulta disponível...</h1>
+      <h1>Não tem nota para este paciente...</h1>
     </NotesPageNoNotes>
   );
 
