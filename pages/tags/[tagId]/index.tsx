@@ -23,17 +23,24 @@ import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 import Head from "next/head";
 
+import nookies from 'nookies'
+
 export interface TagsPageProps {
   session: Session | null;
   tagNotes: NoteType[];
+  cookies: any;
 }
 
-export default function TagsPage({ session, tagNotes }: TagsPageProps) {
+export default function TagsPage({ session, tagNotes, cookies }: TagsPageProps) {
   const dispatch = useDispatch();
+
+  const patientId = cookies['pe-patient'];
 
   const router = useRouter();
 
   const [notesToRender, setNotesToRender] = useState(tagNotes);
+
+  console.log("tagNotes:",patientId)
 
   const editNote = useSelector(selectEditNote);
   const currentRoute = useSelector(selectCurrentRoute);
@@ -75,7 +82,7 @@ export default function TagsPage({ session, tagNotes }: TagsPageProps) {
   return (
     <>
       <Head>
-        <title>Tag notes</title>
+        <title>Notas com Etiqueta</title>
       </Head>
       {searchNotesLoading ? (
         <Loading size={30} classname="mt-4" />
@@ -114,6 +121,7 @@ export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
   context
 ) => {
   const session = await getSession(context);
+  let cookies = nookies.get(context)
 
   if (!session) {
     return {
@@ -121,6 +129,7 @@ export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
         permanent: false,
         destination: PageLinks.landingPage,
       },
+      cookies,
     };
   }
 

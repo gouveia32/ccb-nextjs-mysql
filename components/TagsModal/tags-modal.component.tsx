@@ -38,7 +38,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
 
   const renderModal = (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Edit tags</DialogTitle>
+      <DialogTitle>Altera etiquetas</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-2">
           <Grid item={true}>
@@ -79,7 +79,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
     <>
       {renderModal}
       <NavigationItem
-        name={"Altera tags"}
+        name={"Altera etiquetas"}
         onClick={() => setOpen((prevState) => !prevState)}
         icon={<EditOutlinedIcon />}
       />

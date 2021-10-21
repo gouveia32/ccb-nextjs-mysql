@@ -28,6 +28,7 @@ export default async function handler(
     switch (method) {
       case cRestMethods.GET:
         const doctorTags = await getAllDoctorTags(session);
+        console.log("Aqui:::")
         res.status(200).json(doctorTags);
         break;
       case cRestMethods.POST:

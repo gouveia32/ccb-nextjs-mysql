@@ -73,13 +73,19 @@ export const updateTag = async (tag: TagType): Promise<Tag | undefined> => {
 /**
  * Get all searchNotes of given tag by its ID
  * @param tagId
+ * @param patientId
  */
-export const getTagNotes = async (tagId: string): Promise<Note[]> => {
+export const getTagNotes = async (tagId: string, patientId: string): Promise<Note[]> => {
   return await prisma.note.findMany({
     where: {
-      tags: {
-        some: { id: tagId },
-      },
+      AND: [ {
+        tags: {
+          some: { id: tagId },
+        },
+        patientId: {
+          equals: patientId,
+        },
+      }]
     },
     include: {
       tags: true,

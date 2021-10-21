@@ -15,6 +15,7 @@ import {
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import AddNote from "../AddNote/add-note.component";
+import { parseISO, format } from 'date-fns';
 
 const transition = {
   type: "spring",
@@ -69,9 +70,11 @@ const NoteCard: React.FC<NoteCardProps> = ({
     </NoteCardHeader>
   );
 
+  const dc = parseISO(note.createdAt);
+
   const renderContent =
     note.noteType === NoteTypeEnum.TEXT ? (
-      <NoteCardContent>{note.content}</NoteCardContent>
+      <NoteCardContent>[{format(dc,'dd/MM/yy')}] {note.content}</NoteCardContent>
     ) : (
       <NoteCardContent>
         {note.checkPoints

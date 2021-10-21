@@ -179,9 +179,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     (router.pathname.includes("/notes") ||
       router.pathname.includes("/tags")) && (
       <NavLeft open={openNav}>
-        {renderPatientLinks}
         <NavigationItem
-          name={"Tags"}
+          name={"Etiquetas"}
           url={PageLinks.notesPage}
           icon={<EmojiObjectsOutlinedIcon />}
           isActive={
@@ -272,7 +271,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
-  const renderAcao = session && (
+   const renderAcao = session && (
     <Button
       size={"small"}
       variant={"outlined"}
@@ -281,17 +280,18 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >
-      Teste
+      Paciente:
     </Button>
   )
-
+ 
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
-        {renderAcao}
+        {renderAcao}     
+        {renderPatientLinks}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
