@@ -7,9 +7,7 @@ import {
   updateNote,
 } from "../../../repositories/NoteRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
-import { parseCookies } from 'nookies'
 
-import { useEffect, useState } from "react";
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 
@@ -37,12 +35,12 @@ export default async function handler(
 
     switch (method) {
       case cRestMethods.GET:
-        const doctorNotes = await getAllDoctorNotes(session,patientId);
+        const doctorNotes = await getAllDoctorNotes(session, patientId);
 
         res.status(200).json(doctorNotes);
         break;
       case cRestMethods.POST:
-        await addNewNote(body, session);
+        await addNewNote(body, session, patientId);
         res.status(201).json({ message: "Nota criada." });
         break;
       case cRestMethods.PUT:

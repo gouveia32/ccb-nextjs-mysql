@@ -92,12 +92,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     return patientId
   }
 
-  // Guarda o Id do paciente
-  setCookie(null, 'pe-patient', patient ? patient : '', {
-    maxAge: 30 * 24 * 60 * 60,
-    path: '/',
-  })
-
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
   const handleOnNavClick = () => {
@@ -107,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
     dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
-    dispatch(PatientsAPI.selectPatient())    //pega o primeiro da lista
+    //dispatch(PatientsAPI.selectPatient())    //pega o primeiro da lista
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -146,21 +140,24 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    //console.log("id selec:",value);
-
-    //atualiza o Id do paciente selecionado
-    setCookie(null, 'pe-patient', value ? value : '', {
+    setCookie(undefined, 'pe-patient', value ? value : '', {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     })
-
+    dispatch(
+      NotesAPI.searchNotes({
+        query: '',
+        tagId: router.query.tagId
+          ? (router.query.tagId as string)
+          : undefined,
+      })
+    )
+    refresh();
   };
-
 
   const renderPatientLinks = patientsLoading ? (
     <Loading size={25} />
-  ) : (
-    
+  ) : (  
     <select onChange={selectChange} >
       <option value="Selecione um paciente" selected disabled>
         Selecione um paciente
@@ -217,7 +214,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <NavDoctor>
       <NavDoctorImage imageUrl={session?.user?.image}></NavDoctorImage>
       <h6 className="m-0 ms-2 me-3">
-        <strong>{session?.user?.name}</strong>
+        <strong>{session?.user?.name} </strong>
       </h6>
       {matchesMobileL ? (
         <IconButton size={"small"} onClick={() => signOut()}>
@@ -284,7 +281,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       }}
       startIcon={<PersonOutlineOutlinedIcon />}
     >
-      AÇÃO
+      Teste
     </Button>
   )
 

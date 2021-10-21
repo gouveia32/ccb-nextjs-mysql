@@ -46,6 +46,7 @@ export const getAllDoctorNotes = async (
  * @param query
  * @param doctorSession - session object of current doctor
  * @param tagId - ID of tag to search for tags notes
+ * @param patientId
  */
 export const searchNotes = async (
   query: string,
@@ -53,9 +54,7 @@ export const searchNotes = async (
   tagId?: string,
   patientId?: string
 ): Promise<Note[]> => {
-  //console.log("query-search-query:",query)
-  //console.log("query-search-tagId:",tagId)
-  //console.log("query-search-patientId:",patientId)
+  console.log("query-search-query:",tagId)
   const doctor = tagId
     ? await prisma.doctor.findFirst({
         where: { name: doctorSession?.user?.name },
@@ -65,6 +64,7 @@ export const searchNotes = async (
               name: {
                 contains: query,
               },
+              patientId: patientId,
               tags: {
                 some: {
                   id: tagId,
@@ -89,6 +89,7 @@ export const searchNotes = async (
               name: {
                 contains: query,
               },
+              patientId: patientId,
             },
             include: {
               tags: true,
@@ -114,7 +115,8 @@ export const searchNotes = async (
  */
 export const addNewNote = async (
   note: NoteType,
-  doctorSession: Session
+  doctorSession: Session,
+  patientId?: string
 ): Promise<Note | undefined> => {
   const doctor = await prisma.doctor.findFirst({
     where: { name: doctorSession?.user?.name },
@@ -148,6 +150,11 @@ export const addNewNote = async (
             id: doctor.id,
           },
         },
+        patient: {
+          connect: {
+            id: patientId,
+          }
+        }
       },
     });
     return newNote;
