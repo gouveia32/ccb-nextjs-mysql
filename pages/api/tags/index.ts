@@ -8,6 +8,7 @@ import {
   updateTag,
 } from "../../../repositories/TagRepository";
 
+
 type Data = {
   message: string;
 };
@@ -25,19 +26,21 @@ export default async function handler(
       body,
     } = req;
 
+    //const patientId = cookies['pe-patient'];
+
     switch (method) {
       case cRestMethods.GET:
         const doctorTags = await getAllDoctorTags(session);
-        console.log("Aqui:::")
+        //console.log("Aqui:::",patientId)
         res.status(200).json(doctorTags);
         break;
       case cRestMethods.POST:
         await addNewTag(body, session);
-        res.status(201).json({ message: "Tag Criada." });
+        res.status(201).json({ message: "Etiqueta Criada." });
         break;
       case cRestMethods.PUT:
         await updateTag(JSON.parse(body));
-        res.status(200).json({ message: "Tag alterada." });
+        res.status(200).json({ message: "Etiqueta alterada." });
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);

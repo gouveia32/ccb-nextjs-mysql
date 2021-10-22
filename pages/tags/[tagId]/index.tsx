@@ -35,12 +35,13 @@ export default function TagsPage({ session, tagNotes, cookies }: TagsPageProps) 
   const dispatch = useDispatch();
 
   const patientId = cookies['pe-patient'];
+  
+  //console.log("cookies:",patientId)
 
   const router = useRouter();
 
   const [notesToRender, setNotesToRender] = useState(tagNotes);
-
-  console.log("tagNotes:",patientId)
+  //console.log("tagNotes:",patientId)
 
   const editNote = useSelector(selectEditNote);
   const currentRoute = useSelector(selectCurrentRoute);
@@ -129,7 +130,6 @@ export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
         permanent: false,
         destination: PageLinks.landingPage,
       },
-      cookies,
     };
   }
 
@@ -140,10 +140,12 @@ export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
     context.req.headers.cookie!
   );
 
+  //console.log("cookie:",doctorNotes)
   return {
     props: {
       session: session,
       tagNotes: doctorNotes,
+      cookies,
     },
   };
 };

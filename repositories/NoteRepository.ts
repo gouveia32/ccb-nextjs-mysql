@@ -16,7 +16,6 @@ export const getAllDoctorNotes = async (
   patientId?: string
 ): Promise<Note[]> => {
   //console.log("patientId:",patientId);
-
   const doctor = await prisma.doctor.findFirst({
     where: { name: doctorSession.user?.name },
     include: {

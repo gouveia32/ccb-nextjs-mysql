@@ -23,11 +23,11 @@ export default async function handler(
     switch (method) {
       case cRestMethods.DELETE:
         await deleteTag(id as string);
-        res.status(200).json({ message: "Tag deleted." });
+        res.status(200).json({ message: "Etiqueta aoagada." });
         break;
       default:
         res.setHeader("Allow", ["GET", "PUT"]);
-        res.status(405).end(`Method ${method} Not Allowed`);
+        res.status(405).end(`Método ${method} Não Permitido`);
     }
   } else {
     // Not Signed in
