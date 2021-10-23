@@ -29,3 +29,13 @@ $ yarn test
 It is possible to sign in either with Github account or guest credentials account.
 
 To guest sign in please use username: `guest` 
+
+
+
+
+
+
+database: pe-nextjs
+username: 89mxxd5cg4d1
+host: 2vplch3t6vz4.us-east-4.psdb.cloud
+password: pscale_pw__IsH9AvGZ-rXfXlyEjtMT-XiFXLxuGBn4tyhjp7-rY8

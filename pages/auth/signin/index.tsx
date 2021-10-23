@@ -30,7 +30,7 @@ export default function SignInPage({ providers }: SignInProps) {
       <SignInPageLogo>
         <KeepLogo />
       </SignInPageLogo>
-      <SignInPageHeadline>Notes</SignInPageHeadline>
+      <SignInPageHeadline>Prontuário</SignInPageHeadline>
     </>
   );
 
@@ -101,7 +101,7 @@ export default function SignInPage({ providers }: SignInProps) {
   return (
     <>
       <Head>
-        <title>SignIn page</title>
+        <title>Página de Login</title>
         <meta name="description" content="SignIn page" />
       </Head>
       <SignInPageContainer>{renderForm()}</SignInPageContainer>
