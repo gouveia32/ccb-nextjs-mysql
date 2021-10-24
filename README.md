@@ -39,3 +39,8 @@ database: pe-nextjs
 username: 89mxxd5cg4d1
 host: 2vplch3t6vz4.us-east-4.psdb.cloud
 password: pscale_pw__IsH9AvGZ-rXfXlyEjtMT-XiFXLxuGBn4tyhjp7-rY8
+
+
+
+pscale connect pe-nextjs initial-setup --port 3309
+pscale connect pe-nextjs shadow --port 3310

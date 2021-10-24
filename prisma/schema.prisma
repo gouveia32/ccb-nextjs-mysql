@@ -114,10 +114,6 @@ model CheckPoint {
 }
 
 
-
-
-
-
 //model Paciente2 {
 //  id              Int        @id @default(autoincrement())
 //  nome            String
@@ -130,3 +126,9 @@ model CheckPoint {
 //  tipo_sanguineo  String
 //  status          Int        @default(1)
 //}
+
+
+// risma migrate dev --name init
+// pscale deploy-request create pe-nextjs initial-setup
+// pscale connect pe-nextjs  main --port 3309
+// pscale connect pe-nextjs shadow --port 3310
