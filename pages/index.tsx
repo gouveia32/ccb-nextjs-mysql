@@ -26,11 +26,6 @@ import ListIcon from "@material-ui/icons/List";
 import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 import useSwitchTimeout from "../hooks/useSwitchTimeout";
 
-import {
-  PatientsAPI,
-  selectPatients,
-  selectPatientsLoading,
-} from "../API/PatientsAPI/PatientsAPI";
 
 const transition = {
   type: "spring",
