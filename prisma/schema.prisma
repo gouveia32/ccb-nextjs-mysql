@@ -5,13 +5,14 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
+  planetScaleMode = true
 }
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  previewFeatures = ["planetScaleMode"]
 }
+
 
 model Account {
   id                 String    @id @default(cuid())
