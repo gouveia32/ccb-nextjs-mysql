@@ -16,7 +16,7 @@ export default async function handler(
 ) {
   const session = await getSession({ req });
   
-  //if (session) {
+  if (session) {
     const {
       query: { id, name },
       method,
@@ -35,9 +35,9 @@ export default async function handler(
         res.setHeader("Allow", ["GET", "PUT"]);
         res.status(405).end(`Método ${method} Não éPermitido`);
     }
-  //} else {
+  } else {
     // Not Signed in
-  //  res.status(401);
-  //}
+    res.status(401);
+  }
   res.end();
 }
