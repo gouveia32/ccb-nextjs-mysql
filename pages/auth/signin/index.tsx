@@ -40,7 +40,7 @@ export default function SignInPage({ providers }: SignInProps) {
       <TextField
         margin={"normal"}
         label={"Nome do Médico"}
-        placeholder={"Digite o nome do médico doctorname"}
+        placeholder={"Digite o nome do médico"}
         variant={"standard"}
         fullWidth={true}
         size={"small"}
@@ -55,7 +55,7 @@ export default function SignInPage({ providers }: SignInProps) {
         onKeyDown={(event) =>
           event.keyCode === 13 && signIn("credentials", { doctorName: doctorName })
         }
-        value={doctorName}
+        value={doctorName.toUpperCase()}
       />
       <Button
         size={"small"}
