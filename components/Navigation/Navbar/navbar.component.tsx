@@ -135,7 +135,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   //
   // Seleciona paciente
-
   // This function is triggered when the select changes
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
@@ -155,25 +154,26 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     refresh();
   };
 
-  const renderPatientLinks = patientsLoading ? (
-    <Loading size={25} />
-  ) : (  
-    <select onChange={selectChange} >
-      <option value="Selecione um paciente" selected disabled>
-        Selecione um paciente
-      </option>
-      {patients && patients.map(item => (
-        <option
-          key={item.id}
-          value={item.id}
-          label={item.name}
-          selected={item.id === MyCookie()}
-        >
-          {item.name}
+  const renderPatientLinks = session && (
+    patientsLoading ? (
+      <Loading size={25} />
+    ) : (
+      <select onChange={selectChange} >
+        <option value="Selecione um paciente" selected disabled>
+          Selecione um paciente
         </option>
-      ))}
-    </select>
-  );
+        {patients && patients.map(item => (
+          <option
+            key={item.id}
+            value={item.id}
+            label={item.name}
+            selected={item.id === MyCookie()}
+          >
+            {item.name}
+          </option>
+        ))}
+      </select>
+    ));
 
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||
@@ -270,8 +270,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-
-   const renderAcao = session && (
+  const renderAcao = session && (
     <Button
       size={"small"}
       variant={"outlined"}
@@ -283,14 +282,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       Paciente:
     </Button>
   )
- 
+
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
-        {renderAcao}     
+        {renderAcao}
         {renderPatientLinks}
         {renderDoctorBar}
         {renderSignIn}
