@@ -73,6 +73,11 @@ export default function TagsPage({ session, tagNotes, cookies }: TagsPageProps) 
     dispatch(NotesAPI.deleteNote(note));
   };
 
+  const handleTeste = (note: NoteType) => {
+    ;
+  };
+
+
   const handleClickNoteCheckItem = (
     note: NoteType,
     checkitem: CheckPointType

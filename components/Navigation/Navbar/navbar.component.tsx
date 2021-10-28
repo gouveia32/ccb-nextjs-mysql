@@ -277,6 +277,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       onClick={() => {
         console.log("cookie:", MyCookie())
       }}
+      
       startIcon={<PersonOutlineOutlinedIcon />}
     >
       Paciente:
