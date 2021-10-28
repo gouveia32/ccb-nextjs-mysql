@@ -8,7 +8,6 @@ import {
   NavTop,
   NavDoctor,
   NavDoctorImage,
-  NavDrop,
 } from "./navbar.styles";
 import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -51,7 +50,8 @@ import {
   selectPatient,
 } from "../../../API/PatientsAPI/PatientsAPI";
 
-import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import { parseCookies, setCookie } from 'nookies'
+import AddNote from "../../AddNote/add-note.component"
 
 
 export interface NavbarProps {
@@ -63,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
-  const [openNav, setOpenNav] = useState(!matchesMobileL);
+  const [openNav, setOpenNav] = useState(matchesMobileL);
 
   const [session, loading] = useSession();
 
@@ -175,7 +175,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </select>
     ));
 
-
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||
       router.pathname.includes("/tags")) && (
@@ -271,6 +270,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
+
   const renderAcao = session && (
     <Button
       size={"small"}
@@ -278,7 +278,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       onClick={() => {
         console.log("cookie:", MyCookie())
       }}
-      
+
       startIcon={<PersonOutlineOutlinedIcon />}
     >
       Paciente:

@@ -79,7 +79,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
     <>
       {renderModal}
       <NavigationItem
-        name={"Altera etiquetas"}
+        name={"Altera"}
         onClick={() => setOpen((prevState) => !prevState)}
         icon={<EditOutlinedIcon />}
       />
