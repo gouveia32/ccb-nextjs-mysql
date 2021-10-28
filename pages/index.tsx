@@ -5,10 +5,6 @@ import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
 import { PageLinks } from "../lib/Links";
 import {
-  LandingPageBanner,
-  LandingPageBannerText,
-  LandingPageBannerWrapper,
-  LandingPageCardWrapper,
   LandingPageContentWrapper,
   LandingPageHeading,
   LandingPageSubHeading,
@@ -16,13 +12,7 @@ import {
 } from "../views/styles";
 import {
   Button,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  IconButton,
 } from "@material-ui/core";
-import NoteIcon from "@material-ui/icons/Note";
-import ListIcon from "@material-ui/icons/List";
 import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 import useSwitchTimeout from "../hooks/useSwitchTimeout";
 
@@ -42,16 +32,7 @@ const bannerVariants = {
 };
 
 export default function LandingPage() {
-  const {
-    switchContent: firstCardSwitch,
-    setSwitchContent: setFirstCardSwitch,
-  } = useSwitchTimeout(3);
-
-  const {
-    switchContent: secondCardSwitch,
-    setSwitchContent: setSecondCardSwitch,
-  } = useSwitchTimeout(4);
-
+  
   const renderHeader = (
     <>
       <LandingPageHeading>Prontuário</LandingPageHeading>
@@ -64,113 +45,30 @@ export default function LandingPage() {
         Entrar
       </Button>
       <LandingPageSubHeading>
-        Capiture o que vier na sua mente
+        Registre toda as informações da consulta
       </LandingPageSubHeading>
     </>
-  );
-
-  const renderLeftShowNoteWrapper = (
-    <LandingPageCardWrapper>
-      <LandingPageBannerWrapper>
-        <LandingPageBanner
-          imageUrl={
-            "https://www.google.com/keep/img/capture/note-item-bg-2x.jpg"
-          }
-          position="absolute"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-        >
-          <LandingPageBannerText>Diferentes tipos de notas</LandingPageBannerText>
-        </LandingPageBanner>
-        <LandingPageBanner
-          position="absolute"
-          color="#ffe900"
-          initial={"exit"}
-          animate={firstCardSwitch ? "enter" : "exit"}
-          exit={"exit"}
-          variants={bannerVariants}
-          style={{ originX: 0.5 }}
-        >
-          Cool awesome exciting note
-        </LandingPageBanner>
-      </LandingPageBannerWrapper>
-      <IconButton onClick={() => setFirstCardSwitch(!firstCardSwitch)}>
-        <NoteIcon />
-      </IconButton>
-    </LandingPageCardWrapper>
-  );
-
-  const renderRightShowNoteWrapper = (
-    <LandingPageCardWrapper className="ms-5">
-      <LandingPageBannerWrapper>
-        <LandingPageBanner
-          imageUrl={
-            "https://www.google.com/keep/img/capture/list-item-bg-2x.jpg"
-          }
-          position="absolute"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-        >
-          <LandingPageBannerText>Some useful note</LandingPageBannerText>
-        </LandingPageBanner>
-        <LandingPageBanner
-          position="absolute"
-          color="#1ce8b5"
-          initial={"exit"}
-          animate={secondCardSwitch ? "enter" : "exit"}
-          exit={"exit"}
-          variants={bannerVariants}
-          style={{ originX: 0.5 }}
-        >
-          <h5 className="fw-bold">Shopping list</h5>
-          <FormControlLabel control={<Checkbox />} label="Pão" />
-          <FormControlLabel control={<Checkbox />} label="Ovos" />
-          <FormControlLabel control={<Checkbox />} label="Carne" />
-          <Divider className="bg-dark" />
-          <FormControlLabel
-            control={<Checkbox color={"default"} checked={true} />}
-            label="Salad"
-            style={{ textDecoration: "line-through" }}
-          />
-          <FormControlLabel
-            control={<Checkbox color={"default"} checked={true} />}
-            label="Milk"
-            style={{ textDecoration: "line-through" }}
-          />
-        </LandingPageBanner>
-      </LandingPageBannerWrapper>
-      <IconButton
-        onClick={() => setSecondCardSwitch(!secondCardSwitch)}
-        size={"medium"}
-      >
-        <ListIcon />
-      </IconButton>
-    </LandingPageCardWrapper>
   );
 
   const renderMainContent = (
     <LandingPageWrapper>
       {renderHeader}
       <LandingPageContentWrapper>
-        {renderLeftShowNoteWrapper}
-        {renderRightShowNoteWrapper}
       </LandingPageContentWrapper>
     </LandingPageWrapper>
   );
 
   return (
     <>
-        <Head>
-          <title>Prontuário</title>
-          <meta
-            name="description"
-            content="Aplicativo para genrencia Prontuários"
-          />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        {renderMainContent}
+      <Head>
+        <title>Prontuário</title>
+        <meta
+          name="description"
+          content="Aplicativo para genrencia Prontuários"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {renderMainContent}
     </>
   );
 }

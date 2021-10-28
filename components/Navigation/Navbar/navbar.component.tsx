@@ -63,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const matchesMobileL = useMediaQuery(device.mobileL);
 
-  const [openNav, setOpenNav] = useState(matchesMobileL);
+  const [openNav, setOpenNav] = useState(!matchesMobileL);
 
   const [session, loading] = useSession();
 
@@ -236,7 +236,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <Link href={PageLinks.landingPage}>
       <NavLogo>
         <KeepLogo className="ms-2" />
-        <h2 className="m-0 ms-2">Consultas</h2>
+        <h2 className="m-0 ms-2">Notas</h2>
       </NavLogo>
     </Link>
   );
@@ -284,6 +284,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       Paciente:
     </Button>
   )
+
 
   return (
     <>

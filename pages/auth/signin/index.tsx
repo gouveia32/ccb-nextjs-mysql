@@ -14,7 +14,6 @@ import {
   SignInPageHeadline,
   SignInPageLogo,
 } from "../../../views/auth/signin/sigin.styles";
-import GitHubIcon from "@material-ui/icons/GitHub";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 
@@ -69,32 +68,13 @@ export default function SignInPage({ providers }: SignInProps) {
     </>
   );
 
-  const renderOtherProvidersInputs =
-    providers &&
-    Object.values(providers).map(
-      (provider: ClientSafeProvider) =>
-        provider.name !== "credentials" && (
-          <Button
-            key={provider.name}
-            size={"small"}
-            className="mt-2"
-            variant={"outlined"}
-            fullWidth={true}
-            endIcon={<GitHubIcon />}
-            onClick={() => signIn(provider.id)}
-          >
-            Logar Com
-          </Button>
-        )
-    );
-
   const renderForm = () => {
     return (
       <SignInPageForm>
         {renderHeader}
         {renderCredentialsInput}
         <Divider className="w-100 mt-3 bg-dark" variant={"fullWidth"} />
-        {renderOtherProvidersInputs}
+{/*         {renderOtherProvidersInputs} */}
       </SignInPageForm>
     );
   };
