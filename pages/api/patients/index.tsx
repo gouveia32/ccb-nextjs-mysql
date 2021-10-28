@@ -4,8 +4,6 @@ import { getSession } from "next-auth/client";
 import { getAllPatients } from "../../../repositories/PatientRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
 
-import { useEffect } from "react";
-
 type Data = {
   message: string;
 };

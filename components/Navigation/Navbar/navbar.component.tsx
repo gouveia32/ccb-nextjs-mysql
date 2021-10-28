@@ -159,7 +159,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <Loading size={25} />
     ) : (
       <select onChange={selectChange} >
-        <option value="Selecione um paciente" selected disabled>
+        <option value="Selecione um paciente" >
           Selecione um paciente
         </option>
         {patients && patients.map(item => (
@@ -174,6 +174,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         ))}
       </select>
     ));
+
 
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||

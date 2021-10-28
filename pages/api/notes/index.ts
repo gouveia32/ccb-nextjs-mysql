@@ -58,7 +58,7 @@ export default async function handler(
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let cookies = nookies.get(ctx)
-  console.log("cookies:",cookies)
+  //console.log("cookies:",cookies)
 
   return {
     props: {

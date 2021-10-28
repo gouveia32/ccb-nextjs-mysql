@@ -28,13 +28,15 @@ import { ApiLinks, PageLinks } from "../../lib/Links";
 import { CheckPointType } from "../../models/CheckPointObject";
 import { Loading } from "../../components/Loading/loading.component";
 import Head from "next/head";
+import nookies from 'nookies'
 
 export interface NotesPageProps {
   session: Session | null;
   doctorNotes: NoteType[];
+  patientId: any;
 }
 
-export default function NotesPage({ session, doctorNotes }: NotesPageProps) {
+export default function NotesPage({ session, doctorNotes, patientId }: NotesPageProps) {
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -114,11 +116,12 @@ export default function NotesPage({ session, doctorNotes }: NotesPageProps) {
         />
       ))}
     </NotesPageNotes>
-  ) : (
-    <NotesPageNoNotes>
-      <h1>Não tem nota para este paciente...</h1>
-    </NotesPageNoNotes>
-  );
+  ) : ( 
+    patientId !== "Selecione um paciente" && 
+      <NotesPageNoNotes>
+        <h1>Sem nota...</h1>
+      </NotesPageNoNotes>
+  );  
 
   //console.log("note:",notesToRender)
   return (
@@ -153,11 +156,13 @@ export const getServerSideProps: GetServerSideProps<NotesPageProps> = async (
 
   //console.log("cookie:",context.req.headers.cookie!)
 
+  const patientId = nookies.get(context)['pe-patient'];
 
   return {
     props: {
       session: session,
       doctorNotes: doctorNotes,
+      patientId,
     },
   };
 };
