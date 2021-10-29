@@ -46,12 +46,14 @@ import {
 import {
   PatientsAPI,
   selectPatients,
+  selectNewPatient,
   selectPatientsLoading,
   selectPatient,
 } from "../../../API/PatientsAPI/PatientsAPI";
 
 import { parseCookies, setCookie } from 'nookies'
-import AddNote from "../../AddNote/add-note.component"
+
+import PatientsModal from "../../PatientsModal/patients-modal.component";
 
 
 export interface NavbarProps {
@@ -74,16 +76,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const router = useRouter();
 
   const tagsLoading: boolean = useSelector(selectTagsLoading);
-  const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
-
   const tags: TagType[] = useSelector(selectTags);
   const newTag: TagType = useSelector(selectNewTag);
 
-  const patients: PatientType[] = useSelector(selectPatients); //incl
+  const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
+  const patients: PatientType[] = useSelector(selectPatients);
+  const newPatient: PatientType = useSelector(selectNewPatient);
 
   const patient: string | undefined = useSelector(selectPatient); //incl
-
-  //console.log("Inicial:", patient)
 
   function MyCookie() {
     const cookie = parseCookies(null);
@@ -271,12 +271,30 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
+  const renderPatientModal = session && (
+    <PatientsModal
+      newPatient={newPatient}
+      patients={patients}
+      patientsLoading={patientsLoading}
+      onChange={(value: ChangeActionType) =>
+        dispatch(PatientsAPI.handleChange(value))
+      }
+      onAddPatient={() => dispatch(PatientsAPI.addPatient())}
+      onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
+      onDeletePatient={(patient: PatientType) => {
+        dispatch(PatientsAPI.deletePatient(patient));
+        refresh();
+      }}
+    />
+
+  );
+
   const renderAcao = session && (
     <Button
       size={"small"}
       variant={"outlined"}
       onClick={() => {
-        console.log("cookie:", MyCookie())
+        console.log("...", open);
       }}
 
       startIcon={<PersonOutlineOutlinedIcon />}
@@ -285,23 +303,22 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </Button>
   )
 
-
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
         {renderSearchField}
-        {renderAcao}
+        {renderPatientModal}
         {renderPatientLinks}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
       <NavContent>
+
         {renderDrawer}
         <NavRight>{children}</NavRight>
       </NavContent>
-
     </>
   );
 };

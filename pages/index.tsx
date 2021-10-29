@@ -19,7 +19,7 @@ import useSwitchTimeout from "../hooks/useSwitchTimeout";
 
 const transition = {
   type: "spring",
-  stiffness: 80,
+  stiffness: 80, 
 };
 
 const bannerVariants = {

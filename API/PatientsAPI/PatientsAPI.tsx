@@ -138,7 +138,7 @@ class PatientsApi {
 
     try {
       const response = yield call(post, "/api/patients", patient);
-      toast.success("Patient added.");
+      toast.success("Paciente adicionado.");
 
       yield put(this.slice.actions.reset());
       yield put(this.slice.actions.fetchPatients());

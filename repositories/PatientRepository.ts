@@ -95,13 +95,46 @@ export const searchPatients = async (
 };
 
 /**
- * Delete patient by ID
- * @param patientId
+ * Add new tag for current logged doctor
+ * @param patient - tag to add
  */
-export const deletePatient = async (patientId: string) => {
-  await prisma.checkPoint.deleteMany({
-    where: { patientId: patientId },
-  });
+export const addNewPatient = async (
+  patient: Patient,
+): Promise<Patient | undefined> => {
 
-  return await prisma.patient.delete({ where: { id: patientId } });
+  const newPatient = await prisma.patient.create({
+    data: {
+      name: patient.name,
+    },
+  });
+  return newPatient;
 };
+
+  /**
+   * Update given Tag
+   * @param patient
+   */
+  export const updatePatient = async (patient: PatientType): Promise<Patient | undefined> => {
+    console.log("paciente alt:",patient)
+    return await prisma.patient.update({
+      where: {
+        id: patient.id,
+      },
+      data: {
+        name: patient.name,
+      },
+    });
+  };
+
+
+  /**
+   * Delete patient by ID
+   * @param patientId
+   */
+  export const deletePatient = async (patientId: string) => {
+    await prisma.checkPoint.deleteMany({
+      where: { patientId: patientId },
+    });
+
+    return await prisma.patient.delete({ where: { id: patientId } });
+  };
