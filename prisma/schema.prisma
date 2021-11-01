@@ -27,6 +27,7 @@ model Account {
   doctor             Doctor     @relation(fields: [doctorId], references: [id])
 
   @@unique([providerId, providerAccountId])
+  @@index([doctorId], name: "idx_account_doctor")
 }
 
 model Session {
@@ -38,6 +39,7 @@ model Session {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   doctor       Doctor     @relation(fields: [doctorId], references: [id])
+  @@index([doctorId], name: "idx_doctor")
 }
 
 model Doctor  {
@@ -83,25 +85,28 @@ model Note {
   id          String @default(cuid()) @id
   name        String
   noteType    String @default("TEXT")
-  content     String
+  content     String @db.LongText
   color       String
   pinned      Boolean
   createdAt   DateTime @default(now())
   tags        Tag[]
   checkPoints CheckPoint[]
-  doctor       Doctor     @relation(fields: [doctorId], references: [id])
+  doctor      Doctor     @relation(fields: [doctorId], references: [id])
   doctorId    String
   patient     Patient     @relation(fields: [patientId], references: [id])
   patientId   String
+  @@index([doctorId], name: "idx_note_doctor")
+  @@index([patientId], name: "idx_note_patient")
   }
 
 model Tag {
-  id        String @default(cuid()) @id
-  name      String
-  createdAt DateTime @default(now())
-  notes     Note[]
-  doctor       Doctor     @relation(fields: [doctorId], references: [id])
-  doctorId  String
+  id         String @default(cuid()) @id
+  name       String
+  createdAt  DateTime @default(now())
+  notes      Note[]
+  doctor     Doctor     @relation(fields: [doctorId], references: [id])
+  doctorId   String
+  @@index([doctorId], name: "idx_doctor")
 }
 
 model CheckPoint {
@@ -110,6 +115,8 @@ model CheckPoint {
   checked Boolean
   note    Note @relation(fields: [noteId], references: [id])
   noteId  String
+  @@index([noteId], name: "idx_note")
+
 }
 
 

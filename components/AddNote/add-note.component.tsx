@@ -144,7 +144,7 @@ const AddNote: React.FC<AddNoteProps> = ({
   const renderTextContentInput = (
     <>
       <AddNoteInputContent
-        {...register(cNoteModel.content, { maxLength: 1000 })}
+        {...register(cNoteModel.content, { maxLength: 5000 })}
         onFocus={() => setFocused(true)}
         rows={edit ? 17 : 13} //alterado
         onChange={(event) =>

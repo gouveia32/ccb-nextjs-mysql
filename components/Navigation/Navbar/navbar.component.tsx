@@ -274,7 +274,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const renderPatientModal = session && (
     <PatientsModal
       newPatient={newPatient}
-      patients={patients}
+      patient={patients[0]}  //depois ajustar para o cliente selecionado
       patientsLoading={patientsLoading}
       onChange={(value: ChangeActionType) =>
         dispatch(PatientsAPI.handleChange(value))

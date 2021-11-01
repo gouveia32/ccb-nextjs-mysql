@@ -3,10 +3,12 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  DialogActions,
   Grid,
   IconButton,
   TextField,
 } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 import { cPatientModel, PatientType } from "../../models/Patient";
@@ -17,7 +19,7 @@ import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
 
 export interface PatientsModalProps {
   newPatient: PatientType;
-  patients: PatientType[];
+  patient: PatientType;
   patientsLoading: boolean;
   onChange: (value: ChangeActionType) => void;
   onAddPatient: () => void;
@@ -27,7 +29,7 @@ export interface PatientsModalProps {
 
 const PatientsModal: React.FC<PatientsModalProps> = ({
   newPatient,
-  patients,
+  patient,
   patientsLoading,
   onChange,
   onAddPatient,
@@ -35,45 +37,32 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const renderModal = (
-    <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Altera pacientes</DialogTitle>
+    <Dialog
+      fullWidth={false}
+      maxWidth={'md'}
+      open={open}
+      onClose={() => setOpen(false)}>
+      <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
-        <Grid container={true} className="mb-2">
-          <Grid item={true}>
-            <TextField
-              value={newPatient.name}
-              fullWidth={true}
-              size={"small"}
-              variant={"standard"}
-              onChange={(event) =>
-                onChange({ attr: cPatientModel.name, value: event.target.value })
-              }
-              onKeyDown={(event) => event.code === "Enter" && onAddPatient()}
-            />
-          </Grid>
-          <Grid item={true}>
-            <IconButton size={"small"} onClick={onAddPatient}>
-              <CheckOutlinedIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-        {patientsLoading ? (
-          <Loading size={20} />
-        ) : (
-          patients &&
-          patients.map((patient: PatientType, k: number) => (
-            <PatientModalItem
-              key={patient.id}
-              patient={patient}
-              onDeletePatient={onDeletePatient}
-              onUpdatePatient={onUpdatePatient}
-            />
-          ))
-        )}
+        <div>
+          Nome: {patient.name}
+        </ div>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Não
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Sim
+          </Button>
+        </DialogActions>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
   //console.log("aqui...")
   return (
