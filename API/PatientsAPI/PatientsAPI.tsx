@@ -14,7 +14,7 @@ import { StringifyOptions } from "querystring";
 export interface PatientsApiInterface {
   newPatient: PatientType;
   patients: PatientType[];
-  selectPatient?: string;
+  selectPatient?: PatientType;
   patientsLoading: boolean;
 }
 
@@ -22,12 +22,10 @@ export const getInitialState = (): PatientsApiInterface => {
   return {
     newPatient: PatientObject,
     patients: [],
-    selectPatient: "",
+    selectPatient: PatientObject,
     patientsLoading: false,
   };
 };
-
-
 
 /**
  * PatientsAPI
@@ -76,7 +74,7 @@ class PatientsApi {
         state.patients = action.payload;
         state.patientsLoading = false;
       },
-      setSelectPatient(state, action: PayloadAction<string>) {
+      setSelectPatient(state, action: PayloadAction<PatientType>) {
         //console.log("payload antes:",state.selectPatient)
         state.selectPatient = action.payload;
         //console.log("payload depois:",state.selectPatient)

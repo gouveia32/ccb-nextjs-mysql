@@ -17,6 +17,7 @@ import NavigationItem from "../Navigation/NavItem/navitem.component";
 import { Loading } from "../Loading/loading.component";
 import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
 
+
 export interface PatientsModalProps {
   newPatient: PatientType;
   patient: PatientType;
@@ -42,6 +43,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     setOpen(false);
   };
 
+  console.log("Modal:",patient)
+
   const renderModal = (
     <Dialog
       fullWidth={false}
@@ -53,6 +56,18 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         <div>
           Nome: {patient.name}
         </ div>
+        <div>
+          Email: {patient.email}
+        </ div>  
+        <div>
+          Tel: {patient.telephone}
+        </ div>     
+        <div>
+          Altura: {patient.heigth}
+        </ div>           
+        <div>
+          Peso: {patient.weigth}
+        </ div> 
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Não

@@ -83,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const patients: PatientType[] = useSelector(selectPatients);
   const newPatient: PatientType = useSelector(selectNewPatient);
 
-  const patient: string | undefined = useSelector(selectPatient); //incl
+  const patient: PatientType | undefined = useSelector(selectPatient); //incl
 
   function MyCookie() {
     const cookie = parseCookies(null);
@@ -101,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
     dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
-    //dispatch(PatientsAPI.selectPatient())    //pega o primeiro da lista
+    dispatch(PatientsAPI.selectPatient())    //pega o primeiro da lista
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -271,10 +271,11 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
+  const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
     <PatientsModal
       newPatient={newPatient}
-      patient={patients[0]}  //depois ajustar para o cliente selecionado
+      patient={p}  //depois ajustar para o cliente selecionado
       patientsLoading={patientsLoading}
       onChange={(value: ChangeActionType) =>
         dispatch(PatientsAPI.handleChange(value))
