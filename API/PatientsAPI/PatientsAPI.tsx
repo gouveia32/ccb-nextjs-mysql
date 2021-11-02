@@ -8,13 +8,14 @@ import { RootState } from "../../store/RootState";
 import { createContext, useState } from "react";
 import { StringifyOptions } from "querystring";
 
+import { parseCookies } from 'nookies'
 /**
  * PatientsAPI State interface
  */
 export interface PatientsApiInterface {
   newPatient: PatientType;
   patients: PatientType[];
-  selectPatient?: PatientType;
+  patient: PatientType;
   patientsLoading: boolean;
 }
 
@@ -22,7 +23,7 @@ export const getInitialState = (): PatientsApiInterface => {
   return {
     newPatient: PatientObject,
     patients: [],
-    selectPatient: PatientObject,
+    patient: PatientObject,
     patientsLoading: false,
   };
 };
@@ -35,7 +36,7 @@ class PatientsApi {
 
   private constructor() {
     this.handleFetchPatients = this.handleFetchPatients.bind(this);
-    this.handleSelectPatient = this.handleSelectPatient.bind(this);
+    this.handlePatient = this.handlePatient.bind(this);
     this.handleAddPatient = this.handleAddPatient.bind(this);
     this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
     this.handleDeletePatient = this.handleDeletePatient.bind(this);
@@ -67,16 +68,16 @@ class PatientsApi {
       fetchPatients(state) {
         state.patientsLoading = true;
       },
-      selectPatient(state) {                  //incl
+      patient(state) {                  //incl
         //state.patientsLoading = true;
       },
       setPatients(state, action: PayloadAction<PatientType[]>) {
         state.patients = action.payload;
         state.patientsLoading = false;
       },
-      setSelectPatient(state, action: PayloadAction<PatientType>) {
+      setPatient(state, action: PayloadAction<PatientType>) {
         //console.log("payload antes:",state.selectPatient)
-        state.selectPatient = action.payload;
+        state.patient = action.payload;
         //console.log("payload depois:",state.selectPatient)
       },
       addPatient() { },
@@ -105,20 +106,21 @@ class PatientsApi {
     }
   }
 
-  public *handleSelectPatient(): Generator<any> {
+  public *handlePatient(): Generator<any> {
+    const cookie = parseCookies(null);
+    const patientId = cookie['pe-patient'];
     const request = () =>
-      fetch(`/api/patients`, {
+      fetch(`/api/patients/${patientId}`, {
         method: "GET",
       }).then((res) => res.json());
 
     try {
-      const patients: any = yield call(request);
-      const selectPatient = patients[0].id;
 
+      const patient: any = yield call(request);
 
-      //console.log("API:", selectPatient)
+     // console.log("API:", patient)
 
-      yield put(this.slice.actions.setSelectPatient(selectPatient));
+      yield put(this.slice.actions.setPatient(patient));
     } catch (e) {
       console.log(e);
     }
@@ -182,10 +184,10 @@ class PatientsApi {
    * SAGA - MAIN
    */
   public *saga(): Generator<any> {
-    const { addPatient, fetchPatients, selectPatient, deletePatient, updatePatient } = this.slice.actions;
+    const { addPatient, fetchPatients, patient, deletePatient, updatePatient } = this.slice.actions;
     yield all([
       yield takeLatest([fetchPatients.type], this.handleFetchPatients),
-      yield takeLatest([selectPatient.type], this.handleSelectPatient),
+      yield takeLatest([patient.type], this.handlePatient),
       yield takeLatest([addPatient.type], this.handleAddPatient),
       yield takeLatest([updatePatient.type], this.handleUpdatePatient),
       yield takeLatest([deletePatient.type], this.handleDeletePatient),
@@ -216,7 +218,7 @@ class PatientsApi {
 
   public selectPatient = createSelector(
     [this.selectDomain],
-    (patientsApiState) => patientsApiState.selectPatient
+    (patientsApiState) => patientsApiState.patient
   );
 }
 
@@ -232,7 +234,7 @@ export const {
   selectNewPatient,
   selectPatients,
   selectPatient,
-  handleSelectPatient,
+  handlePatient,
   selectPatientsLoading,
   saga: PatientsApiSaga,
   handleUpdatePatient,

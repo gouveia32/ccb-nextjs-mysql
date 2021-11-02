@@ -43,7 +43,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     setOpen(false);
   };
 
-  console.log("Modal:",patient)
+  //console.log("Modal:",patient)
 
   const renderModal = (
     <Dialog

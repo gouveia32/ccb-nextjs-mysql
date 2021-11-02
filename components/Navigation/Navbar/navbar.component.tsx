@@ -101,7 +101,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
     dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
-    dispatch(PatientsAPI.selectPatient())    //pega o primeiro da lista
+    dispatch(PatientsAPI.patient())    //pega o primeiro da lista
+    
   }, [dispatch, session]);
 
   const renderMenuIcon = session && (
@@ -143,6 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     })
+    dispatch(PatientsAPI.patient())
     dispatch(
       NotesAPI.searchNotes({
         query: '',
@@ -160,7 +162,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     ) : (
       <select onChange={selectChange} >
         <option value="Selecione um paciente" >
-          Selecione um paciente
+          Selecione um paciente 
         </option>
         {patients && patients.map(item => (
           <option
@@ -271,11 +273,11 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
-  const p: PatientType = patient ? patient : newPatient
+  //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
     <PatientsModal
       newPatient={newPatient}
-      patient={p}  //depois ajustar para o cliente selecionado
+      patient={patient}  //depois ajustar para o cliente selecionado
       patientsLoading={patientsLoading}
       onChange={(value: ChangeActionType) =>
         dispatch(PatientsAPI.handleChange(value))

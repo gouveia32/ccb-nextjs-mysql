@@ -25,7 +25,7 @@ export default async function handler(
         const patient: Patient[] = await getPatientById(
           id ? (id as string) : '',
         );
-        console.log("Aqui",id)
+        //console.log("Aqui",id)
         res.status(200).json(patient);
         break;
       case cRestMethods.DELETE:

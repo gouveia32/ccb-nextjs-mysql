@@ -53,23 +53,20 @@ export const searchNotes = async (
   tagId?: string,
   patientId?: string
 ): Promise<Note[]> => {
-  console.log("query-search-query:", patientId)
+  console.log("query-search-query:", query)
   const doctor = tagId
     ? await prisma.doctor.findFirst({
       where: { name: doctorSession?.user?.name },
       include: {
         notes: {
           where: {
-            AND: [
-              {
-                name: {
-                  contains: query,
-                },
-                patientId: {
-                  equals: patientId,
-                },
-              },
-            ],
+            AND: [{
+              patientId: { equals: patientId },
+              OR: [{
+                name: { contains: query },
+                content: { contains: query },
+              }],
+            }],
             tags: {
               some: {
                 id: tagId,
