@@ -17,6 +17,10 @@ import NavigationItem from "../Navigation/NavItem/navitem.component";
 import { Loading } from "../Loading/loading.component";
 import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
 
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 
 export interface PatientsModalProps {
   newPatient: PatientType;
@@ -38,12 +42,37 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
-  
+
   const handleClose = () => {
     setOpen(false);
   };
 
   //console.log("Modal:",patient)
+
+  // form validation rules 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .required('Title is required'),
+    email: Yup.string()
+      .required('First Name is required'),
+    telephone: Yup.string()
+      .required('Last Name is required'),
+    height: Yup.string()
+      .email('Email is invalid')
+      .required('Email is required'),
+    weight: Yup.string()
+      .required('Role is required'),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { errors } = formState;
+
+  const isAddMode = !patient;
+
+  function onSubmit() {
+    return isAddMode
+  }
 
   const renderModal = (
     <Dialog
@@ -53,21 +82,37 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       onClose={() => setOpen(false)}>
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <h1>{isAddMode ? 'Inserir Paciente' : 'Alterar Paciente'}</h1>
+          <div className="form-row">
+            <div className="form-group col-5">
+              <label>email</label>
+              <input type="text" {...register('email')} className={`form-control ${errors.email ? 'is-invalid' : ''}`} />
+              <div className="invalid-feedback">{errors.email?.message}</div>
+            </div>
+            <div className="form-group col-5">
+              <label>Telefone</label>
+              <input type="text" {...register('telephone')} className={`form-control ${errors.telephone ? 'is-invalid' : ''}`} />
+              <div className="invalid-feedback">{errors.telephone?.message}</div>
+            </div>
+          </div>
+
+        </form>
         <div>
           Nome: {patient.name}
         </ div>
         <div>
           Email: {patient.email}
-        </ div>  
+        </ div>
         <div>
           Tel: {patient.telephone}
-        </ div>     
+        </ div>
         <div>
-          Altura: {patient.heigth}
-        </ div>           
+          Altura: {patient.height}
+        </ div>
         <div>
-          Peso: {patient.weigth}
-        </ div> 
+          Peso: {patient.weight}
+        </ div>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Não

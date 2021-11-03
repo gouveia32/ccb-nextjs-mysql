@@ -3,8 +3,8 @@ export interface PatientModel {
   name: string;
   email: string;
   telephone: string;
-  heigth: number;
-  weigth: number;
+  height: number;
+  weight: number;
 }
 
 export type PatientType = PatientModel;
@@ -14,8 +14,8 @@ export const cPatientModel = {
   name: "name",
   email: "email",
   telephone: "telephone",
-  heigth: "heigth",
-  weigth: "weigth",
+  height: "heigth",
+  weight: "weigth",
 };
 
 export const PatientObject: PatientType = {
@@ -23,8 +23,8 @@ export const PatientObject: PatientType = {
   name: "",
   email: "",
   telephone: "",
-  heigth: 0,
-  weigth: 0,
+  height: 0,
+  weight: 0,
 };
 
 export function isPatientType(object: any): object is PatientType {
