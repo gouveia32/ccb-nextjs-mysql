@@ -18,6 +18,7 @@ import { Loading } from "../Loading/loading.component";
 import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
 
 import { useForm } from 'react-hook-form';
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -82,37 +83,49 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       onClose={() => setOpen(false)}>
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h1>{isAddMode ? 'Inserir Paciente' : 'Alterar Paciente'}</h1>
-          <div className="form-row">
-            <div className="form-group col-5">
-              <label>email</label>
-              <input type="text" {...register('email')} className={`form-control ${errors.email ? 'is-invalid' : ''}`} />
-              <div className="invalid-feedback">{errors.email?.message}</div>
-            </div>
-            <div className="form-group col-5">
-              <label>Telefone</label>
-              <input type="text" {...register('telephone')} className={`form-control ${errors.telephone ? 'is-invalid' : ''}`} />
-              <div className="invalid-feedback">{errors.telephone?.message}</div>
+        <Form>
+          <div>
+            <label htmlFor="fullName" className="p4-5 px-1 font-thin">
+              Nome:
+            </label>
+            <Field
+              type="text"
+              name="name"
+              placeholder="Nome"
+              className="px-4 py-3 w-full mt-2 border-2 rounded-md text-sm outline-none focus:border-1 focus:border-purple-600 "
+            />
+            <div className="text-red-600 font-semibold text-xs">
+              <ErrorMessage name="name" />
             </div>
           </div>
+          <div className="flex flex-col mb-5">
+            <label htmlFor="email" className="pt-5 px-1 font-thin">
+              Email:
+            </label>
+            <Field
+              type="text"
+              name="email"
+              placeholder="Email"
+              className="px-4 py-3 w-full mt-2 border-2 rounded-md text-sm outline-none focus:border-1 focus:border-purple-600 "
+            />
+            <div className="text-red-600 font-semibold text-xs">
+              <ErrorMessage name="email" />
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="mt-4 mb-3 w-full bg-green-500 hover:bg-green-300 hover:text-black text-white py-2 rounded-md transition duration-100"
+          >
+            Submit
+          </button>
+        </Form>
 
-        </form>
-        <div>
-          Nome: {patient.name}
-        </ div>
-        <div>
-          Email: {patient.email}
-        </ div>
-        <div>
-          Tel: {patient.telephone}
-        </ div>
-        <div>
-          Altura: {patient.height}
-        </ div>
-        <div>
-          Peso: {patient.weight}
-        </ div>
+
+
+
+
+
+
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Não
