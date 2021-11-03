@@ -18,7 +18,6 @@ import { Loading } from "../Loading/loading.component";
 import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
 
 import { useForm } from 'react-hook-form';
-import { Formik, Field, Form, ErrorMessage } from "formik";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -83,49 +82,63 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       onClose={() => setOpen(false)}>
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
-        <Form>
-          <div>
-            <label htmlFor="fullName" className="p4-5 px-1 font-thin">
-              Nome:
-            </label>
-            <Field
-              type="text"
-              name="name"
-              placeholder="Nome"
-              className="px-4 py-3 w-full mt-2 border-2 rounded-md text-sm outline-none focus:border-1 focus:border-purple-600 "
+      <Grid container={true} className="mb-2" >
+          <Grid item={true}>
+            <TextField
+              label={"Nome:"}
+              value={patient.name}
+              fullWidth={true}
+              size={"small"}
+              variant={"filled"}
+              onChange={(event) =>
+                onChange({ attr: cPatientModel.name, value: event.target.value })
+              }
             />
-            <div className="text-red-600 font-semibold text-xs">
-              <ErrorMessage name="name" />
-            </div>
-          </div>
-          <div className="flex flex-col mb-5">
-            <label htmlFor="email" className="pt-5 px-1 font-thin">
-              Email:
-            </label>
-            <Field
-              type="text"
-              name="email"
-              placeholder="Email"
-              className="px-4 py-3 w-full mt-2 border-2 rounded-md text-sm outline-none focus:border-1 focus:border-purple-600 "
+            <TextField
+              label={"Email:"}
+              value={patient.email}
+              fullWidth={true}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                onChange({ attr: cPatientModel.email, value: event.target.value })
+              }
             />
-            <div className="text-red-600 font-semibold text-xs">
-              <ErrorMessage name="email" />
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="mt-4 mb-3 w-full bg-green-500 hover:bg-green-300 hover:text-black text-white py-2 rounded-md transition duration-100"
-          >
-            Submit
-          </button>
-        </Form>
+            <TextField
+              label={"Telefone:"}
+              value={patient.telephone}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                onChange({ attr: cPatientModel.telephone, value: event.target.value })
+              }
+            />
+            <TextField
+              label={"Altura:"}
+              value={patient.height}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                onChange({ attr: cPatientModel.height, value: event.target.value })
+              }
+            />
+              <TextField
+              label={"Peso:"}
+              value={patient.weight}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                onChange({ attr: cPatientModel.weight, value: event.target.value })
+              }
+            />
+          </Grid>
+          
+        </Grid>
 
-
-
-
-
-
-
+        
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Não
