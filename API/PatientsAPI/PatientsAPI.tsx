@@ -19,9 +19,11 @@ export interface PatientsApiInterface {
   patientsLoading: boolean;
 }
 
+const PatientInit: PatientType = { ...PatientObject };
+
 export const getInitialState = (): PatientsApiInterface => {
   return {
-    newPatient: PatientObject,
+    newPatient: PatientInit,
     patients: [],
     patient: PatientObject,
     patientsLoading: false,
@@ -150,20 +152,21 @@ class PatientsApi {
 
   public *handleUpdatePatient(action: PayloadAction<PatientType>): Generator<any> {
     if (action.payload.name.length === 0) {
-      toast.warning(`You need to set the patient name.`);
+      toast.warning(`Você precisa iinformar um nome.`);
       return;
     }
 
-    toast.info(`Alterando o paciente...`+action.payload.id);
+    toast.info(`Alterando o paciente...`);
+    console.log("alterando:",action.payload)
     try {
-      const response = yield call(update, '/api/patients/${action.payload.id}', action.payload);
+      const response = yield call(update, '/api/patients', action.payload);
       toast.success("Paciente alterado.");
 
       yield put(this.slice.actions.reset());
       yield put(this.slice.actions.fetchPatients());
     } catch (e) {
       console.log(e);
-      toast.error("Patient was not added. Something went wrong...");
+      toast.error("O Paciente não foi inserido. Algo deu errado...");
     }
   }
 
@@ -173,10 +176,10 @@ class PatientsApi {
     try {
       const res: any = yield call(del, `/api/patients/${action.payload.id}`);
       yield put(this.slice.actions.fetchPatients());
-      toast.success("Patient deleted.");
+      toast.success("Paciente apagado.");
     } catch (e) {
       console.log(e);
-      toast.error("Patient was not deleted. Something went wrong...");
+      toast.error("O Paciente não foi apagado. Algo deu errado...");
     }
   }
 

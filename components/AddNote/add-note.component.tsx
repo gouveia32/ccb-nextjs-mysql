@@ -157,7 +157,7 @@ const AddNote: React.FC<AddNoteProps> = ({
         value={noteModel.content}
       />
       {errors.content?.type === "required" && (
-        <AddNoteInputErrorMessage>Too long</AddNoteInputErrorMessage>
+        <AddNoteInputErrorMessage>Muito Longo</AddNoteInputErrorMessage>
       )}
     </>
   );
@@ -264,7 +264,7 @@ const AddNote: React.FC<AddNoteProps> = ({
             className="mt-2"
             disabled={noteModel.name.length === 0}
           >
-            {edit ? "Alterar" : "Adicionar"}
+            {edit ? "Alterar" : "Inserir"}
           </Button>
         </AddNoteInputContentWrapper>
       )}

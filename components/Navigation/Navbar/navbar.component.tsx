@@ -81,7 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
   const patients: PatientType[] = useSelector(selectPatients);
-  const newPatient: PatientType = useSelector(selectNewPatient);
+  //const newPatient: PatientType = useSelector(selectNewPatient);
 
   const patient: PatientType | undefined = useSelector(selectPatient); //incl
 
@@ -276,8 +276,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
     <PatientsModal
-      newPatient={newPatient}
-      patient={patient}  //depois ajustar para o cliente selecionado
+      patient={patient}
       patientsLoading={patientsLoading}
       onChange={(value: ChangeActionType) =>
         dispatch(PatientsAPI.handleChange(value))

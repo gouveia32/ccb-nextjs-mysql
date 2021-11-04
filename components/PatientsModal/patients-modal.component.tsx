@@ -25,7 +25,6 @@ import * as Yup from 'yup';
 
 
 export interface PatientsModalProps {
-  newPatient: PatientType;
   patient: PatientType;
   patientsLoading: boolean;
   onChange: (value: ChangeActionType) => void;
@@ -35,7 +34,6 @@ export interface PatientsModalProps {
 }
 
 const PatientsModal: React.FC<PatientsModalProps> = ({
-  newPatient,
   patient,
   patientsLoading,
   onChange,
@@ -48,6 +46,14 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   const handleClose = () => {
     console.log("c:", cPatientModel)
     setOpen(false);
+  };
+
+  const handleChange = (attr: string, val: any) => {
+    const newPatient: any = { ...patient };
+    console.log("newPtient1:",newPatient)
+    newPatient[attr] = val;
+    console.log("newPtient2:",newPatient)
+    onChange(newPatient);
   };
 
   //console.log("Modal:",patient)
@@ -77,7 +83,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               size={"small"}
               variant={"filled"}
               onChange={(event) =>
-                onChange({ attr: cPatientModel.name, value: event.target.value })
+                handleChange(cPatientModel.name, event.target.value)
               }
             />
             <TextField
@@ -87,7 +93,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                onChange({ attr: cPatientModel.email, value: event.target.value })
+                handleChange(cPatientModel.email, event.target.value)
               }
             />
             <TextField
@@ -97,7 +103,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                onChange({ attr: cPatientModel.telephone, value: event.target.value })
+                handleChange(cPatientModel.telephone, event.target.value)
               }
             />
             <TextField
@@ -107,7 +113,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                onChange({ attr: cPatientModel.height, value: event.target.value })
+                handleChange(cPatientModel.height, event.target.value)
               }
             />
             <TextField
@@ -117,11 +123,10 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                onChange({ attr: cPatientModel.weight, value: event.target.value })
+                handleChange(cPatientModel.weight, event.target.value)
               }
             />
           </Grid>
-
         </Grid>
 
 
