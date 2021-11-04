@@ -292,20 +292,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   );
 
-  const renderAcao = session && (
-    <Button
-      size={"small"}
-      variant={"outlined"}
-      onClick={() => {
-        console.log("...", open);
-      }}
-
-      startIcon={<PersonOutlineOutlinedIcon />}
-    >
-      Paciente:
-    </Button>
-  )
-
   return (
     <>
       <NavTop>

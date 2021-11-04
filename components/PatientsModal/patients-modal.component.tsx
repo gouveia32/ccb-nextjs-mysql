@@ -11,6 +11,8 @@ import {
 import Button from "@material-ui/core/Button";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
+import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
+
 import { cPatientModel, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
@@ -44,29 +46,13 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
 
   const handleClose = () => {
+    console.log("c:", cPatientModel)
     setOpen(false);
   };
 
   //console.log("Modal:",patient)
 
   // form validation rules 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .required('Title is required'),
-    email: Yup.string()
-      .required('First Name is required'),
-    telephone: Yup.string()
-      .required('Last Name is required'),
-    height: Yup.string()
-      .email('Email is invalid')
-      .required('Email is required'),
-    weight: Yup.string()
-      .required('Role is required'),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
-  const { errors } = formState;
 
   const isAddMode = !patient;
 
@@ -82,7 +68,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       onClose={() => setOpen(false)}>
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
-      <Grid container={true} className="mb-2" >
+        <Grid container={true} className="mb-3" >
           <Grid item={true}>
             <TextField
               label={"Nome:"}
@@ -124,7 +110,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
                 onChange({ attr: cPatientModel.height, value: event.target.value })
               }
             />
-              <TextField
+            <TextField
               label={"Peso:"}
               value={patient.weight}
               fullWidth={false}
@@ -135,17 +121,18 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               }
             />
           </Grid>
-          
+
         </Grid>
 
-        
+
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Não
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Sim
-          </Button>
+          <IconButton size={"small"} onClick={handleClose}>
+            <CloseOutlinedIcon />Não
+          </IconButton>
+
+          <IconButton size={"small"} onClick={(event) => onUpdatePatient(patient)}>
+            <CheckOutlinedIcon />Sim
+          </IconButton>
         </DialogActions>
       </DialogContent>
     </Dialog >

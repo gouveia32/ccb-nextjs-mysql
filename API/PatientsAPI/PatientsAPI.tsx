@@ -154,9 +154,9 @@ class PatientsApi {
       return;
     }
 
-    toast.info(`Alterando o paciente...`);
+    toast.info(`Alterando o paciente...`+action.payload.id);
     try {
-      const response = yield call(update, "/api/patients", action.payload);
+      const response = yield call(update, '/api/patients/${action.payload.id}', action.payload);
       toast.success("Paciente alterado.");
 
       yield put(this.slice.actions.reset());
