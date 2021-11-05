@@ -23,6 +23,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
+import { useRouter } from 'next/router';
 
 export interface PatientsModalProps {
   patient: PatientType;
@@ -49,10 +50,27 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   };
 
   //console.log("Modal:",patient)
+  const isAddMode = !patient;
+  const router = useRouter();
 
   // form validation rules 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .required('Nome é obrigatório'),
 
-  const isAddMode = !patient;
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  // set default form values if in edit mode
+  //if (!isAddMode) {
+  //  formOptions.defaultValues = defaultValues;
+  //}
+
+  // get functions to build form with useForm() hook
+  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { errors } = formState;
+
+  // form validation rules 
 
   const handleChange = (attr: string, val: any) => {
     const newPatient: any = { ...patient };
@@ -61,21 +79,31 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     console.log("newPtient2:", newPatient)
     onChange(newPatient);
   };
-  
-  const { register, handleSubmit } = useForm();
-  
+
   const [name, setName] = useState(patient.name)
   const [weight, setWeight] = useState(patient.weight)
 
-  function onSubmit() {
-    const p: PatientType = { ...patient };
-
-      p.name = name,
-      p.weight = weight
-
-    console.log("sub:",p)
+  function onSubmit(data: any) {
     return isAddMode
-  }
+        ? createPatient(data)
+        : updatePatient(patient.id, data);
+}
+
+function createPatient(data: any) {
+  return ( null )
+}
+
+function updatePatient(id: string, data: any) {
+  const p: PatientType = { ...data };
+  console.log("id:", id)
+  console.log("data:", data)
+  console.log("p:", p)
+  {onChange}
+  return (null);
+}
+
+
+
 
   const renderModal = (
     <Dialog
@@ -93,10 +121,11 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               fullWidth={true}
               size={"small"}
               variant={"filled"}
-              onChange={(e) => patient.namesetName(e.target.value)}
+              {...register('name')}
+              onChange={(e) => setName(e.target.value)}
             />
             <TextField
-              label={"Altura:"}
+              label={"Peso:"}
               value={patient.weight}
               {...register("weigth")}
               fullWidth={true}
@@ -104,6 +133,12 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               variant={"outlined"}
               onChange={(e) => setWeight(parseInt(e.target.value))}
             />
+
+            <div className="form-group col-5">
+              <label>Altura</label>
+              <input type="text" {...register('heigth')} className={`form-control ${errors.heigth ? 'is-invalid' : ''}`} />
+              <div className="invalid-feedback">{errors.heigth?.message}</div>
+            </div>
 
 
             <input type="submit" />
