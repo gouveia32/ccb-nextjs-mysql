@@ -44,16 +44,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
 
   const handleClose = () => {
-    console.log("c:", cPatientModel)
+    console.log("c:", patient)
     setOpen(false);
-  };
-
-  const handleChange = (attr: string, val: any) => {
-    const newPatient: any = { ...patient };
-    console.log("newPtient1:",newPatient)
-    newPatient[attr] = val;
-    console.log("newPtient2:",newPatient)
-    onChange(newPatient);
   };
 
   //console.log("Modal:",patient)
@@ -62,7 +54,26 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 
   const isAddMode = !patient;
 
+  const handleChange = (attr: string, val: any) => {
+    const newPatient: any = { ...patient };
+    console.log("newPtient1:", newPatient)
+    newPatient[attr] = val;
+    console.log("newPtient2:", newPatient)
+    onChange(newPatient);
+  };
+  
+  const { register, handleSubmit } = useForm();
+  
+  const [name, setName] = useState(patient.name)
+  const [weight, setWeight] = useState(patient.weight)
+
   function onSubmit() {
+    const p: PatientType = { ...patient };
+
+      p.name = name,
+      p.weight = weight
+
+    console.log("sub:",p)
     return isAddMode
   }
 
@@ -75,6 +86,31 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-3" >
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              label={"Nome:"}
+              value={patient.name}
+              fullWidth={true}
+              size={"small"}
+              variant={"filled"}
+              onChange={(e) => patient.namesetName(e.target.value)}
+            />
+            <TextField
+              label={"Altura:"}
+              value={patient.weight}
+              {...register("weigth")}
+              fullWidth={true}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(e) => setWeight(parseInt(e.target.value))}
+            />
+
+
+            <input type="submit" />
+          </form>
+
+
+          {/* 
           <Grid item={true}>
             <TextField
               label={"Nome:"}
@@ -126,7 +162,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
                 handleChange(cPatientModel.weight, event.target.value)
               }
             />
-          </Grid>
+          </Grid> */}
+
         </Grid>
 
 
@@ -135,7 +172,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             <CloseOutlinedIcon />Não
           </IconButton>
 
-          <IconButton size={"small"} onClick={(event) => onUpdatePatient(patient)}>
+          <IconButton size={"small"} onClick={onSubmit}>
             <CheckOutlinedIcon />Sim
           </IconButton>
         </DialogActions>
