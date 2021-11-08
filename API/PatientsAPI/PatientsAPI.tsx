@@ -80,7 +80,7 @@ class PatientsApi {
       setPatient(state, action: PayloadAction<PatientType>) {
         //console.log("payload antes:",state.selectPatient)
         state.patient = action.payload;
-        console.log("payload depois:",state.patient)
+        //console.log("payload depois:",state.patient)
       },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },

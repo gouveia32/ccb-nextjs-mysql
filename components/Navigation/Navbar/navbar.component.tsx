@@ -53,7 +53,7 @@ import {
 
 import { parseCookies, setCookie } from 'nookies'
 
-import PatientsModal from "../../PatientsModal/patients-modal.component";
+import PatientModal from "../../PatientsModal/patient-modal.component";
 
 
 export interface NavbarProps {
@@ -277,8 +277,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
-    <PatientsModal
-      selectedPatient={Patient}
+    <PatientModal
+      inputs={{name: "Jose", email: "gouveia32@gmail.com", telephone: "98801-5232"}}
       patientsLoading={patientsLoading}
       onChange={(value: ChangeActionType) =>
         dispatch(PatientsAPI.handleChange(value))
