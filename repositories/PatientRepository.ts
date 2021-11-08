@@ -123,8 +123,8 @@ export const addNewPatient = async (
         name: patient.name,
         email: patient.email,
         telephone: patient.telephone,
-        height: parseInt(patient.height),
-        weight: parseInt(patient.weight),
+        height: patient.height,
+        weight: patient.weight,
         image: patient.image,
       },
     });
