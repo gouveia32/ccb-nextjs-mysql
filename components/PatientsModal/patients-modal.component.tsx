@@ -18,15 +18,22 @@ import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
 import { Loading } from "../Loading/loading.component";
 import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import {
+  PatientsAPI,
+  selectPatients,
+  selectNewPatient,
+  selectPatientsLoading,
+  selectPatient,
+} from "../../API/PatientsAPI/PatientsAPI";
 
-import { useRouter } from 'next/router';
 
 export interface PatientsModalProps {
-  patient: PatientType;
+  selectedPatient: PatientType;
   patientsLoading: boolean;
   onChange: (value: ChangeActionType) => void;
   onAddPatient: () => void;
@@ -35,7 +42,7 @@ export interface PatientsModalProps {
 }
 
 const PatientsModal: React.FC<PatientsModalProps> = ({
-  patient,
+  selectedPatient,
   patientsLoading,
   onChange,
   onAddPatient,
@@ -43,15 +50,29 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [query, setQuery] = useState(selectedPatient);
+  
+  console.log("selPatient inicial:", selectedPatient)
+
+
+  console.log("query inic", query)
+
+
+  const dispatch = useDispatch();
 
   const handleClose = () => {
-    console.log("c:", patient)
+    //console.log("c:", patient)
     setOpen(false);
   };
 
+  const handleOpen = () => {
+    //console.log("c:", patient)
+    setQuery(selectedPatient);
+  };
+
+  
   //console.log("Modal:",patient)
-  const isAddMode = !patient;
-  const router = useRouter();
+  const isAddMode = !selectedPatient;
 
   // form validation rules 
   const validationSchema = Yup.object().shape({
@@ -59,7 +80,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       .required('Nome é obrigatório'),
 
   });
-  const formOptions = { resolver: yupResolver(validationSchema) };
+  //const formOptions = { resolver: yupResolver(validationSchema) };
 
   // set default form values if in edit mode
   //if (!isAddMode) {
@@ -67,40 +88,66 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   //}
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
-  const { errors } = formState;
+  //const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  //const { errors } = formState;
 
   // form validation rules 
 
-  const handleChange = (attr: string, val: any) => {
-    const newPatient: any = { ...patient };
-    console.log("newPtient1:", newPatient)
-    newPatient[attr] = val;
-    console.log("newPtient2:", newPatient)
-    onChange(newPatient);
-  };
-
-  const [name, setName] = useState(patient.name)
-  const [weight, setWeight] = useState(patient.weight)
+  /*   const handleChange = (attr: string, val: any) => {
+      const newPatient: any = { ...patient };
+      console.log("newPtient1:", newPatient)
+      newPatient[attr] = val;
+      console.log("newPtient2:", newPatient)
+      onChange(newPatient);
+    };
+   */
 
   function onSubmit(data: any) {
     return isAddMode
-        ? createPatient(data)
-        : updatePatient(patient.id, data);
-}
+      ? createPatient(data)
+      : onUpdatePatient(data);
+  }
 
-function createPatient(data: any) {
-  return ( null )
-}
+  function createPatient(data: any) {
+    return (null)
+  }
+  /* 
+    function updatePatient(id: string, data: any) {
+      let p: PatientType = { ...patient };
+  
+      p.name = data.name;
+      p.email = data.email;
+      p.telephone = data.telephone;
+      p.height = data.height;
+      p.weight = data.weight;
+      p.image = '';
+  
+      setOpen(false);
+      onUpdatePatient(p);
+    } */
 
-function updatePatient(id: string, data: any) {
-  const p: PatientType = { ...data };
-  console.log("id:", id)
-  console.log("data:", data)
-  console.log("p:", p)
-  {onChange}
-  return (null);
-}
+
+  // Update inputs value
+  const handleParam = () => (e: any) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setQuery((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  // Form Submit function
+/*   const formSubmit = (e: any) => {
+    e.preventDefault();
+    const formData = new FormData();
+    Object.entries(query).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    console.log("formData", formData);
+    //onUpdatePatient(formData);
+    setQuery(patient);
+  }; */
 
 
 
@@ -114,7 +161,51 @@ function updatePatient(id: string, data: any) {
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-3" >
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={onSubmit}>
+            <div>
+              <label>Name</label>
+              <input
+                type="text"
+                name="name"
+                required
+                placeholder="Name"
+                className="form-control"
+                value={query.name}
+                onChange={handleParam()}
+              />
+            </div>
+            <div>
+              <label>Email</label>
+              <input
+                type="text"
+                name="email"
+                required
+                placeholder="Email"
+                className="form-control"
+                value={query.email}
+                onChange={handleParam()}
+              />
+            </div>
+            <div>
+              <label>Telefone</label>
+              <input
+                type="text"
+                name="telephone"
+                required
+                placeholder="Telefone"
+                className="form-control"
+                value={query.telephone}
+                onChange={handleParam()}
+              />
+            </div>
+            <button type="submit">Gravar</button>
+          </form>
+
+
+
+
+
+          {/*  <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               label={"Nome:"}
               value={patient.name}
@@ -124,45 +215,15 @@ function updatePatient(id: string, data: any) {
               {...register('name')}
               onChange={(e) => setName(e.target.value)}
             />
-            <TextField
-              label={"Peso:"}
-              value={patient.weight}
-              {...register("weigth")}
-              fullWidth={true}
-              size={"small"}
-              variant={"outlined"}
-              onChange={(e) => setWeight(parseInt(e.target.value))}
-            />
+  
 
-            <div className="form-group col-5">
-              <label>Altura</label>
-              <input type="text" {...register('heigth')} className={`form-control ${errors.heigth ? 'is-invalid' : ''}`} />
-              <div className="invalid-feedback">{errors.heigth?.message}</div>
-            </div>
-
-
-            <input type="submit" />
-          </form>
-
-
-          {/* 
-          <Grid item={true}>
-            <TextField
-              label={"Nome:"}
-              value={patient.name}
-              fullWidth={true}
-              size={"small"}
-              variant={"filled"}
-              onChange={(event) =>
-                handleChange(cPatientModel.name, event.target.value)
-              }
-            />
             <TextField
               label={"Email:"}
               value={patient.email}
               fullWidth={true}
               size={"small"}
               variant={"outlined"}
+              {...register("email")}
               onChange={(event) =>
                 handleChange(cPatientModel.email, event.target.value)
               }
@@ -173,31 +234,31 @@ function updatePatient(id: string, data: any) {
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
+              {...register("telephone")}
               onChange={(event) =>
                 handleChange(cPatientModel.telephone, event.target.value)
               }
             />
             <TextField
-              label={"Altura:"}
-              value={patient.height}
-              fullWidth={false}
-              size={"small"}
-              variant={"outlined"}
-              onChange={(event) =>
-                handleChange(cPatientModel.height, event.target.value)
-              }
-            />
-            <TextField
               label={"Peso:"}
-              value={patient.weight}
-              fullWidth={false}
+              //value={patient.weight}
+              fullWidth={true}
               size={"small"}
               variant={"outlined"}
-              onChange={(event) =>
-                handleChange(cPatientModel.weight, event.target.value)
-              }
+              {...register("weight")}
+              onChange={(e) => setWeight(parseInt(e.target.value))}
             />
-          </Grid> */}
+
+            <div className="form-group col-5">
+              <label>Altura</label>
+              <input type="text" {...register('height')} className={`form-control ${errors.height ? 'is-invalid' : ''}`} />
+              <div className="invalid-feedback">{errors.height?.message}</div>
+            </div>
+
+
+        
+          </form>
+
 
         </Grid>
 
@@ -210,7 +271,8 @@ function updatePatient(id: string, data: any) {
           <IconButton size={"small"} onClick={onSubmit}>
             <CheckOutlinedIcon />Sim
           </IconButton>
-        </DialogActions>
+        </DialogActions> */}
+        </ Grid>
       </DialogContent>
     </Dialog >
   );

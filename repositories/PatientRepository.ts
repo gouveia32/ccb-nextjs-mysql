@@ -4,7 +4,6 @@ import { PatientType } from "../models/Patient";
 import prisma from "../lib/prisma";
 
 
-
 /**
  * Get all patients of current signed doctor
  * 
@@ -111,7 +110,7 @@ export const addNewPatient = async (
 };
 
   /**
-   * Update given Tag
+   * Update given Patient
    * @param patient
    */
   export const updatePatient = async (patient: PatientType): Promise<Patient | undefined> => {
@@ -122,6 +121,11 @@ export const addNewPatient = async (
       },
       data: {
         name: patient.name,
+        email: patient.email,
+        telephone: patient.telephone,
+        height: parseInt(patient.height),
+        weight: parseInt(patient.weight),
+        image: patient.image,
       },
     });
   };

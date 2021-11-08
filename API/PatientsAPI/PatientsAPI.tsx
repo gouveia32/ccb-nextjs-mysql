@@ -38,7 +38,7 @@ class PatientsApi {
 
   private constructor() {
     this.handleFetchPatients = this.handleFetchPatients.bind(this);
-    this.handlePatient = this.handlePatient.bind(this);
+    this.handleFetchPatient = this.handleFetchPatient.bind(this);
     this.handleAddPatient = this.handleAddPatient.bind(this);
     this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
     this.handleDeletePatient = this.handleDeletePatient.bind(this);
@@ -70,7 +70,7 @@ class PatientsApi {
       fetchPatients(state) {
         state.patientsLoading = true;
       },
-      patient(state) {                  //incl
+      fetchPatient(state) {                  //incl
         //state.patientsLoading = true;
       },
       setPatients(state, action: PayloadAction<PatientType[]>) {
@@ -80,7 +80,7 @@ class PatientsApi {
       setPatient(state, action: PayloadAction<PatientType>) {
         //console.log("payload antes:",state.selectPatient)
         state.patient = action.payload;
-        //console.log("payload depois:",state.selectPatient)
+        console.log("payload depois:",state.patient)
       },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
@@ -108,7 +108,7 @@ class PatientsApi {
     }
   }
 
-  public *handlePatient(): Generator<any> {
+  public *handleFetchPatient(): Generator<any> {
     const cookie = parseCookies(null);
     const patientId = cookie['pe-patient'];
     const request = () =>
@@ -120,7 +120,7 @@ class PatientsApi {
 
       const patient: any = yield call(request);
 
-     // console.log("API:", patient)
+     //console.log("API:", patient)
 
       yield put(this.slice.actions.setPatient(patient));
     } catch (e) {
@@ -187,10 +187,10 @@ class PatientsApi {
    * SAGA - MAIN
    */
   public *saga(): Generator<any> {
-    const { addPatient, fetchPatients, patient, deletePatient, updatePatient } = this.slice.actions;
+    const { addPatient, fetchPatients, fetchPatient, deletePatient, updatePatient } = this.slice.actions;
     yield all([
       yield takeLatest([fetchPatients.type], this.handleFetchPatients),
-      yield takeLatest([patient.type], this.handlePatient),
+      yield takeLatest([fetchPatient.type], this.handleFetchPatient),
       yield takeLatest([addPatient.type], this.handleAddPatient),
       yield takeLatest([updatePatient.type], this.handleUpdatePatient),
       yield takeLatest([deletePatient.type], this.handleDeletePatient),
@@ -237,7 +237,6 @@ export const {
   selectNewPatient,
   selectPatients,
   selectPatient,
-  handlePatient,
   selectPatientsLoading,
   saga: PatientsApiSaga,
   handleUpdatePatient,
