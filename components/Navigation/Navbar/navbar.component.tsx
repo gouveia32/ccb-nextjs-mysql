@@ -54,6 +54,7 @@ import {
 import { parseCookies, setCookie } from 'nookies'
 
 import PatientModal from "../../PatientsModal/patient-modal.component";
+import PatientForm from "../../PatientsModal/contact"
 
 
 export interface NavbarProps {
@@ -146,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     })
 
     Patient = dispatch(PatientsAPI.fetchPatient()).payload
-    
+
     dispatch(
       NotesAPI.searchNotes({
         query: '',
@@ -278,7 +279,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
     <PatientModal
-      inputs={{name: "Jose", email: "gouveia32@gmail.com", telephone: "98801-5232"}}
+      patient={Patient}
       patientsLoading={patientsLoading}
       onChange={(value: ChangeActionType) =>
         dispatch(PatientsAPI.handleChange(value))
