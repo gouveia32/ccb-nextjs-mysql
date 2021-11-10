@@ -54,7 +54,7 @@ import {
 import { parseCookies, setCookie } from 'nookies'
 
 import PatientModal from "../../PatientsModal/patient-modal.component";
-import PatientForm from "../../PatientsModal/contact"
+import PatientForm from "../../PatientsModal/patient-form"
 
 
 export interface NavbarProps {

@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import PatientForm from "./contact"
+import PatientForm from "./patient-form"
 
 
 export interface PatientsModalProps {
@@ -36,7 +36,7 @@ const PatientModal: React.FC<PatientsModalProps> = ({
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
   let [query, setQuery] = useState(patient);
-  
+
   console.log("selPatient inicial:", patient)
 
 
@@ -53,7 +53,7 @@ const PatientModal: React.FC<PatientsModalProps> = ({
     setQuery(patient);
   };
 
-  
+
   //console.log("Modal:",patient)
   const isAddMode = !patient
   function onSubmit(data: any) {
@@ -134,7 +134,20 @@ const PatientModal: React.FC<PatientsModalProps> = ({
   //console.log("aqui...")
   return (
     <>
-      {renderModal}
+      <Dialog
+        fullWidth={false}
+        maxWidth={'md'}
+        open={open}
+        onClose={() => setOpen(false)}>
+        <DialogTitle>------------- Altera paciente -------------</DialogTitle>
+        <DialogContent>
+          <Grid container={true} className="mb-3" >
+
+            {PatientForm(patient)}
+          </Grid>
+        </DialogContent>
+      </Dialog >
+
       <NavigationItem
         name={"Alterar"}
         onClick={() => setOpen((prevState) => !prevState)}

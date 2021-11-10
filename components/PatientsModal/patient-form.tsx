@@ -20,7 +20,11 @@ import {
 
 export default function PatientForm(patient: PatientType) {
     const [open, setOpen] = useState<boolean>(false);
-    const [query, setQuery] = useState(patient);
+    const [query, setQuery] = useState({
+      name: "José Alves de Gouveia",
+      email: "gouveia32@gmail.com",
+      telephone: ""
+    });
 
     console.log("contact:",patient)
 
@@ -46,17 +50,7 @@ export default function PatientForm(patient: PatientType) {
         }).then(() => setQuery (patient));
     };
 
-    
-
     return (
-        <Dialog
-        fullWidth={false}
-        maxWidth={'md'}
-        open={open}
-        onClose={() => setOpen(false)}>
-        <DialogTitle>------------- Altera paciente -------------</DialogTitle>
-        <DialogContent>
-          <Grid container={true} className="mb-3" >
           <form onSubmit={formSubmit}>
           <div>
             <label>Name</label>
@@ -94,12 +88,8 @@ export default function PatientForm(patient: PatientType) {
               onChange={handleParam()}
             />
           </div>
-          <button type="submit">Send</button>
+          <button type="submit">Enviar</button>
         </form>
-
-          </Grid>
-        </DialogContent>
-      </Dialog >
     )
    
 
