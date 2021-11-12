@@ -51,10 +51,7 @@ import {
 } from "../../../API/PatientsAPI/PatientsAPI";
 
 import { parseCookies, setCookie } from 'nookies'
-
 import PatientModal from "../../PatientsModal/patient-modal.component";
-import PatientForm from "../../PatientsModal/patient-form"
-
 
 export interface NavbarProps {
   children: ReactNode;
