@@ -16,12 +16,7 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import { cPatientModel, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
-import { Loading } from "../Loading/loading.component";
-import PatientModalItem from "./PatientModalItem/patient-modal-item.component";
 
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 
 
 export interface PatientsModalProps {
@@ -42,7 +37,6 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [query, setQuery] = useState(patient);
   const newPatient: any = { ...patient };
 
   const handleClose = () => {
@@ -50,13 +44,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     setOpen(false);
   };
 
-  const handleChange = (attr: string, val: any) => {
-    newPatient[attr] = val;
-    onChange(newPatient);
-  };
-
-  
-  // form validation rules 
+    // form validation rules 
 
   const isAddMode = !patient;
 
@@ -72,57 +60,58 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           <Grid item={true}>
             <TextField
               label={"Nome:"}
-              defaultValue={query.name}
+              defaultValue={newPatient.name}
               fullWidth={true}
               size={"small"}
               variant={"filled"}
               onChange={(event) =>
-                handleChange(cPatientModel.name, event.target.value)
+                newPatient["name"] = event.target.value
               }
             />
             <TextField
               label={"Email:"}
-              defaultValue={query.email}
+              defaultValue={newPatient.email}
               fullWidth={true}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                handleChange(cPatientModel.email, event.target.value)
+                newPatient["email"] = event.target.value
               }
             />
             <TextField
               label={"Telefone:"}
-              defaultValue={query.telephone}
+              defaultValue={newPatient.telephone}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                handleChange(cPatientModel.telephone, event.target.value)
+                newPatient["telephone"] = event.target.value
               }
             />
             <TextField
               label={"Altura:"}
-              defaultValue={query.height}
+              type={"number"}
+              defaultValue={newPatient.height}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                handleChange(cPatientModel.height, event.target.value)
+                newPatient["height"] =  parseInt(event.target.value)
               }
             />
             <TextField
               label={"Peso:"}
-              defaultValue={query.weight}
+              type={"number"}
+              defaultValue={newPatient.weight}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
-              onChange={(event) =>
-                handleChange(cPatientModel.weight, event.target.value)
+              onChange={(event) => 
+                newPatient["weight"] =  parseInt(event.target.value)
               }
             />
           </Grid>
         </Grid>
-
 
         <DialogActions>
           <IconButton size={"small"} onClick={handleClose}>
@@ -130,9 +119,11 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           </IconButton>
 
           <IconButton size={"small"} onClick={(event) => {
+            //console.log("Vou gravar:",newPatient)
             onUpdatePatient(newPatient);
+            onChange(newPatient)
             setOpen(false);
-            }}>
+          }}>
             <CheckOutlinedIcon />Sim
           </IconButton>
         </DialogActions>
@@ -146,7 +137,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       <NavigationItem
         name={"Alterar"}
         onClick={() => {
-          //setQuery(patient)
+          //console.log("No click:",patient)
           setOpen((prevState) => !prevState)
         }}
         icon={<EditOutlinedIcon />}

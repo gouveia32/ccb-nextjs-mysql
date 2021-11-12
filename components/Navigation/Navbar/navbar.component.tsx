@@ -46,7 +46,6 @@ import {
 import {
   PatientsAPI,
   selectPatients,
-  selectNewPatient,
   selectPatientsLoading,
   selectPatient,
 } from "../../../API/PatientsAPI/PatientsAPI";
@@ -147,15 +146,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     })
 
     Patient = dispatch(PatientsAPI.fetchPatient()).payload
-
-    dispatch(
-      NotesAPI.searchNotes({
-        query: '',
-        tagId: router.query.tagId
-          ? (router.query.tagId as string)
-          : undefined,
-      })
-    )
     refresh();
   };
 
@@ -281,9 +271,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <PatientModal
       patient={Patient}
       patientsLoading={patientsLoading}
-      onChange={(value: ChangeActionType) =>
+      onChange={(value: ChangeActionType) => {
         dispatch(PatientsAPI.handleChange(value))
-      }
+        selectChange
+      }}
       onAddPatient={() => dispatch(PatientsAPI.addPatient())}
       onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
       onDeletePatient={(patient: PatientType) => {
