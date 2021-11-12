@@ -26,6 +26,7 @@ export default function PatientForm(patient: PatientType) {
       telephone: ""
     });
 
+    
     console.log("contact:",patient)
 
     // Update inputs value

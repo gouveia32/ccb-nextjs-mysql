@@ -114,7 +114,8 @@ export const addNewPatient = async (
    * @param patient
    */
   export const updatePatient = async (patient: PatientType): Promise<Patient | undefined> => {
-    console.log("paciente alt:",patient)
+    const height = patient.height;
+    //console.log("paciente alt:",patient)
     return await prisma.patient.update({
       where: {
         id: patient.id,
@@ -123,8 +124,8 @@ export const addNewPatient = async (
         name: patient.name,
         email: patient.email,
         telephone: patient.telephone,
-        height: patient.height,
-        weight: patient.weight,
+        height: parseInt(patient.height),
+        weight: parseInt(patient.weight),
         image: patient.image,
       },
     });

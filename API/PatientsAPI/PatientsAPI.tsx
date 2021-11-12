@@ -157,8 +157,9 @@ class PatientsApi {
     }
 
     toast.info(`Alterando o paciente...`);
-    console.log("alterando:",action.payload)
+    //console.log("alterando:",action.payload)
     try {
+      console.log("Antes",action.payload)
       const response = yield call(update, '/api/patients', action.payload);
       toast.success("Paciente alterado.");
 
