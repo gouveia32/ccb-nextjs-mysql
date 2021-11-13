@@ -142,7 +142,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       path: '/',
     })
 
-    Patient = dispatch(PatientsAPI.fetchPatient()).payload
+    dispatch(PatientsAPI.fetchPatient()).payload
+    //console.log("selectChange ", Patient)
     refresh();
   };
 
@@ -268,12 +269,18 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <PatientModal
       patient={Patient}
       patientsLoading={patientsLoading}
-      onChange={(value: ChangeActionType) => {
+      onChangePatient={(value: ChangeActionType) => {
+        //console.log("p onChange value ", value)
         dispatch(PatientsAPI.handleChange(value))
+        //console.log("p onChange", Patient)
         selectChange
       }}
       onAddPatient={() => dispatch(PatientsAPI.addPatient())}
-      onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
+      onUpdatePatient={(patient: PatientType) => {
+        dispatch(PatientsAPI.updatePatient(patient))
+        Patient = patient
+        //console.log("p onChange value ", Patient)
+      }}
       onDeletePatient={(patient: PatientType) => {
         dispatch(PatientsAPI.deletePatient(patient));
         refresh();

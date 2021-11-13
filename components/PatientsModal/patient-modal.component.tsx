@@ -16,13 +16,18 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import { cPatientModel, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  PatientsAPI,
+  selectPatients,
+  selectPatientsLoading,
+  selectPatient,
+} from "../../API/PatientsAPI/PatientsAPI";
 
 export interface PatientsModalProps {
   patient: PatientType;
   patientsLoading: boolean;
-  onChange: (value: ChangeActionType) => void;
+  onChangePatient: (value: ChangeActionType) => void;
   onAddPatient: () => void;
   onUpdatePatient: (patient: PatientType) => void;
   onDeletePatient: (patient: PatientType) => void;
@@ -31,13 +36,16 @@ export interface PatientsModalProps {
 const PatientsModal: React.FC<PatientsModalProps> = ({
   patient,
   patientsLoading,
-  onChange,
+  onChangePatient,
   onAddPatient,
   onUpdatePatient,
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
-  const newPatient: any = { ...patient };
+  let newPatient: any = { ...patient };
+
+
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     //console.log("c:", cPatientModel)
@@ -53,7 +61,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       fullWidth={false}
       maxWidth={'md'}
       open={open}
-      onClose={() => setOpen(false)}>
+      onClose={handleClose}>
       <DialogTitle>------------- Altera paciente -------------</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-3" >
@@ -115,16 +123,15 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 
         <DialogActions>
           <IconButton size={"small"} onClick={handleClose}>
-            <CloseOutlinedIcon />Não
+            <CloseOutlinedIcon />Fechar
           </IconButton>
-
           <IconButton size={"small"} onClick={(event) => {
             //console.log("Vou gravar:",newPatient)
             onUpdatePatient(newPatient);
-            onChange(newPatient)
+            //onChangePatient(newPatient)
             setOpen(false);
           }}>
-            <CheckOutlinedIcon />Sim
+            <CheckOutlinedIcon />Alterar
           </IconButton>
         </DialogActions>
       </DialogContent>
@@ -139,6 +146,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         onClick={() => {
           //console.log("No click:",patient)
           setOpen((prevState) => !prevState)
+          //dispatch(PatientsAPI.fetchPatient()).payload
+
         }}
         icon={<EditOutlinedIcon />}
       />
