@@ -268,7 +268,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-
   //console.log("newPatient:",Patient)
   //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
@@ -300,9 +299,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
-        {renderSearchField}
         {renderPatientModal}
         {renderPatientLinks}
+        {renderSearchField}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>

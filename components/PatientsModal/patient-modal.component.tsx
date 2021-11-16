@@ -141,6 +141,13 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 
         <DialogActions>
           <IconButton size={"small"} onClick={(event) => {
+            setEdit(false)
+            newPatient = { ...PatientObject };
+            setOpen(true);
+          }}>
+            <AddOutlinedIcon />Novo
+          </IconButton>
+          <IconButton size={"small"} onClick={(event) => {
             if (edit) {
               onUpdatePatient(editPatient);
             } else {
@@ -162,7 +169,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   return (
     <>
       {renderModal}
-      <NavigationItem
+{/*       <NavigationItem
         name={""}
         onClick={() => {
           setEdit(false)
@@ -171,7 +178,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         }}
         icon={<AddOutlinedIcon />}
       />
-      <NavigationItem
+ */}      <NavigationItem
         name={"Paciente:"}
         onClick={() => {
           setEdit(true)
