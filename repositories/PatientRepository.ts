@@ -137,7 +137,7 @@ export const addNewPatient = async (
    * @param patientId
    */
   export const deletePatient = async (patientId: string) => {
-    await prisma.checkPoint.deleteMany({
+    await prisma.note.deleteMany({
       where: { patientId: patientId },
     });
 

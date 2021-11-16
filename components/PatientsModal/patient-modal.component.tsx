@@ -13,6 +13,7 @@ import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
+import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 
 import { cPatientModel, PatientObject, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
@@ -40,10 +41,16 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
-  let newPatient1 = edit ? { ...patient } : { ...newPatient };
+  let editPatient = edit ? { ...patient } : { ...newPatient };
 
   const handleClose = () => {
     //console.log("c:", cPatientModel)
+    setOpen(false);
+  };
+
+  const handleDelete = () => {
+    onDeletePatient(editPatient);
+    console.log("delete:", editPatient)
     setOpen(false);
   };
 
@@ -54,6 +61,13 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     setOpen(false);
     //console.log("c:", cPatientModel)
   };
+
+  const renderButtonDelete = edit && (
+    <IconButton size={"small"} onClick={handleDelete}>
+      <DeleteOutlineOutlinedIcon />Apagar
+    </IconButton>
+
+  )
 
   const renderModal = (
     <Dialog
@@ -67,58 +81,58 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           <Grid item={true}>
             <TextField
               label={"Nome:"}
-              defaultValue={newPatient1.name}
+              defaultValue={editPatient.name}
               fullWidth={true}
               size={"small"}
               variant={"filled"}
               onChange={(event) =>
-                edit ? newPatient1["name"] = event.target.value
+                edit ? editPatient["name"] = event.target.value
                   : onChangePatient({ attr: cPatientModel.name, value: event.target.value })
               }
             />
             <TextField
               label={"Email:"}
-              defaultValue={newPatient1.email}
+              defaultValue={editPatient.email}
               fullWidth={true}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                edit ? newPatient1["email"] = event.target.value
+                edit ? editPatient["email"] = event.target.value
                   : onChangePatient({ attr: cPatientModel.email, value: event.target.value })
               }
             />
             <TextField
               label={"Telefone:"}
-              defaultValue={newPatient1.telephone}
+              defaultValue={editPatient.telephone}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                edit ? newPatient1["telephone"] = event.target.value
+                edit ? editPatient["telephone"] = event.target.value
                   : onChangePatient({ attr: cPatientModel.telephone, value: event.target.value })
               }
             />
             <TextField
               label={"Altura:"}
               type={"number"}
-              defaultValue={newPatient1.height}
+              defaultValue={editPatient.height}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                edit ? newPatient1["height"] = parseInt(event.target.value)
+                edit ? editPatient["height"] = parseInt(event.target.value)
                   : onChangePatient({ attr: cPatientModel.height, value: event.target.value })
               }
             />
             <TextField
               label={"Peso:"}
               type={"number"}
-              defaultValue={newPatient1.weight}
+              defaultValue={editPatient.weight}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                edit ? newPatient1["weight"] = parseInt(event.target.value)
+                edit ? editPatient["weight"] = parseInt(event.target.value)
                   : onChangePatient({ attr: cPatientModel.weight, value: event.target.value })
               }
             />
@@ -126,22 +140,19 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         </Grid>
 
         <DialogActions>
-          <IconButton size={"small"} onClick={handleClose}>
-            <CloseOutlinedIcon />Fechar
-          </IconButton>
           <IconButton size={"small"} onClick={(event) => {
-            //console.log("Vou gravar:",newPatient)
-            //edit ? onUpdatePatient(newPatient) : onAddPatient();
             if (edit) {
-              onUpdatePatient(newPatient1);
+              onUpdatePatient(editPatient);
             } else {
-              //console.log("nePatient dig:", newPatient)
               onAddPatient();
             }
-            //onChangePatient(newPatient)
             setOpen(false);
           }}>
-            <CheckOutlinedIcon />Alterar
+            <CheckOutlinedIcon />Gravar
+          </IconButton>
+          {renderButtonDelete}
+          <IconButton size={"small"} onClick={handleClose}>
+            <CloseOutlinedIcon />Fechar
           </IconButton>
         </DialogActions>
       </DialogContent>
@@ -155,17 +166,15 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         name={""}
         onClick={() => {
           setEdit(false)
-          //console.log("No click:",patient)
           newPatient = { ...PatientObject };
           setOpen((prevState) => !prevState)
         }}
         icon={<AddOutlinedIcon />}
       />
       <NavigationItem
-        name={""}
+        name={"Paciente:"}
         onClick={() => {
           setEdit(true)
-          //console.log("No click:",patient)
           setOpen((prevState) => !prevState)
         }}
         icon={<EditOutlinedIcon />}

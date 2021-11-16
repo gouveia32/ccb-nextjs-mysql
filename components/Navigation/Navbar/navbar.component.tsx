@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useState, useContext } from "react";
-import styled from "styled-components";
 import {
   NavContent,
   NavLeft,
@@ -31,7 +30,6 @@ import { TagType } from "../../../models/Tag";
 import { PatientType } from "../../../models/Patient";
 import TagsModal from "../../TagsModal/tags-modal.component";
 import Link from "next/link";
-import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import { ChangeActionType } from "../../../lib/helpers";
 import { Loading } from "../../Loading/loading.component";
 import useRouterRefresh from "../../../hooks/useRouterRefresh";
@@ -60,7 +58,6 @@ export interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
-
   const matchesMobileL = useMediaQuery(device.mobileL);
 
   const [openNav, setOpenNav] = useState(!matchesMobileL);
@@ -77,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const tags: TagType[] = useSelector(selectTags);
   const newTag: TagType = useSelector(selectNewTag);
 
-  console.log("newTag",newTag);
+  //console.log("newTag",newTag);
 
   const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
   const patients: PatientType[] = useSelector(selectPatients);
@@ -122,13 +119,13 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const renderTagLinks = tagsLoading ? (
     <Loading size={25} />
-  ) : (
+  ) : (    
     tags &&
     tags.map((tag: TagType, index: number) => (
       <NavigationItem
         key={tag.id}
+        icon={(index + 1) }
         name={tag.name}
-        icon={<LabelOutlinedIcon />}
         url={`${PageLinks.tagsPage}/${tag.id}`}
         isTag={true}
         isActive={router.query.tagId === tag.id}
@@ -139,7 +136,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   //
   // Seleciona paciente
-  // This function is triggered when the select changes
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
@@ -273,7 +269,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
-  console.log("newPatient:",Patient)
+  //console.log("newPatient:",Patient)
   //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
     <PatientModal
