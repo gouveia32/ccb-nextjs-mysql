@@ -9,23 +9,19 @@ import {
   TextField,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
-import { cPatientModel, PatientType } from "../../models/Patient";
+import { cPatientModel, PatientObject, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  PatientsAPI,
-  selectPatients,
-  selectPatientsLoading,
-  selectPatient,
-} from "../../API/PatientsAPI/PatientsAPI";
+
 
 export interface PatientsModalProps {
   patient: PatientType;
+  newPatient: PatientType;
   patientsLoading: boolean;
   onChangePatient: (value: ChangeActionType) => void;
   onAddPatient: () => void;
@@ -35,6 +31,7 @@ export interface PatientsModalProps {
 
 const PatientsModal: React.FC<PatientsModalProps> = ({
   patient,
+  newPatient,
   patientsLoading,
   onChangePatient,
   onAddPatient,
@@ -42,19 +39,21 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
-  let newPatient: any = { ...patient };
-
-
-  const dispatch = useDispatch();
+  const [edit, setEdit] = useState<boolean>(false);
+  let newPatient1 = edit ? { ...patient } : { ...newPatient };
 
   const handleClose = () => {
     //console.log("c:", cPatientModel)
     setOpen(false);
   };
 
-    // form validation rules 
-
-  const isAddMode = !patient;
+  const handleGravar = () => {
+    console.log("Vou gravar: ", edit, " ", newPatient)
+    onUpdatePatient(newPatient)
+    //edit ? onUpdatePatient(newPatient) : onAddPatient(newPatient);
+    setOpen(false);
+    //console.log("c:", cPatientModel)
+  };
 
   const renderModal = (
     <Dialog
@@ -62,60 +61,65 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       maxWidth={'md'}
       open={open}
       onClose={handleClose}>
-      <DialogTitle>------------- Altera paciente -------------</DialogTitle>
+      <DialogTitle>------------- {edit ? 'ALTERAR' : 'NOVO'} PACIENTE -------------</DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-3" >
           <Grid item={true}>
             <TextField
               label={"Nome:"}
-              defaultValue={newPatient.name}
+              defaultValue={newPatient1.name}
               fullWidth={true}
               size={"small"}
               variant={"filled"}
               onChange={(event) =>
-                newPatient["name"] = event.target.value
+                edit ? newPatient1["name"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.name, value: event.target.value })
               }
             />
             <TextField
               label={"Email:"}
-              defaultValue={newPatient.email}
+              defaultValue={newPatient1.email}
               fullWidth={true}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                newPatient["email"] = event.target.value
+                edit ? newPatient1["email"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.email, value: event.target.value })
               }
             />
             <TextField
               label={"Telefone:"}
-              defaultValue={newPatient.telephone}
+              defaultValue={newPatient1.telephone}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                newPatient["telephone"] = event.target.value
+                edit ? newPatient1["telephone"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.telephone, value: event.target.value })
               }
             />
             <TextField
               label={"Altura:"}
               type={"number"}
-              defaultValue={newPatient.height}
+              defaultValue={newPatient1.height}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                newPatient["height"] =  parseInt(event.target.value)
+                edit ? newPatient1["height"] = parseInt(event.target.value)
+                  : onChangePatient({ attr: cPatientModel.height, value: event.target.value })
               }
             />
             <TextField
               label={"Peso:"}
               type={"number"}
-              defaultValue={newPatient.weight}
+              defaultValue={newPatient1.weight}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
-              onChange={(event) => 
-                newPatient["weight"] =  parseInt(event.target.value)
+              onChange={(event) =>
+                edit ? newPatient1["weight"] = parseInt(event.target.value)
+                  : onChangePatient({ attr: cPatientModel.weight, value: event.target.value })
               }
             />
           </Grid>
@@ -127,7 +131,13 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           </IconButton>
           <IconButton size={"small"} onClick={(event) => {
             //console.log("Vou gravar:",newPatient)
-            onUpdatePatient(newPatient);
+            //edit ? onUpdatePatient(newPatient) : onAddPatient();
+            if (edit) {
+              onUpdatePatient(newPatient1);
+            } else {
+              //console.log("nePatient dig:", newPatient)
+              onAddPatient();
+            }
             //onChangePatient(newPatient)
             setOpen(false);
           }}>
@@ -142,12 +152,21 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     <>
       {renderModal}
       <NavigationItem
-        name={"Alterar"}
+        name={""}
         onClick={() => {
+          setEdit(false)
+          //console.log("No click:",patient)
+          newPatient = { ...PatientObject };
+          setOpen((prevState) => !prevState)
+        }}
+        icon={<AddOutlinedIcon />}
+      />
+      <NavigationItem
+        name={""}
+        onClick={() => {
+          setEdit(true)
           //console.log("No click:",patient)
           setOpen((prevState) => !prevState)
-          //dispatch(PatientsAPI.fetchPatient()).payload
-
         }}
         icon={<EditOutlinedIcon />}
       />
@@ -156,3 +175,4 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 };
 
 export default React.memo(PatientsModal);
+

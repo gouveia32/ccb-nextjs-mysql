@@ -44,6 +44,7 @@ import {
 } from "../../../API/NotesPageAPI/NotesAPI";
 
 import {
+  selectNewPatient,
   PatientsAPI,
   selectPatients,
   selectPatientsLoading,
@@ -76,11 +77,16 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const tags: TagType[] = useSelector(selectTags);
   const newTag: TagType = useSelector(selectNewTag);
 
+  console.log("newTag",newTag);
+
   const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
   const patients: PatientType[] = useSelector(selectPatients);
   //const newPatient: PatientType = useSelector(selectNewPatient);
 
-  let Patient: PatientType | undefined = useSelector(selectPatient); //incl
+  let newPatient: PatientType = useSelector(selectNewPatient); //incl
+  let Patient: PatientType = useSelector(selectPatient); //incl
+
+  //console.log("newPatient...",Patient);
 
   function MyCookie() {
     const cookie = parseCookies(null);
@@ -191,7 +197,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           onChange={(value: ChangeActionType) =>
             dispatch(TagsAPI.handleChange(value))
           }
-          onAddTag={() => dispatch(TagsAPI.addTag())}
+          onAddTag={() => {
+            //console.log("newTag add:",newTag)
+            dispatch(TagsAPI.addTag())}
+          }
           onUpdateTag={(tag: TagType) => dispatch(TagsAPI.updateTag(tag))}
           onDeleteTag={(tag: TagType) => {
             dispatch(TagsAPI.deleteTag(tag));
@@ -264,10 +273,12 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
+  console.log("newPatient:",Patient)
   //const p: PatientType = patient ? patient : newPatient
   const renderPatientModal = session && (
     <PatientModal
       patient={Patient}
+      newPatient={newPatient}
       patientsLoading={patientsLoading}
       onChangePatient={(value: ChangeActionType) => {
         //console.log("p onChange value ", value)
@@ -275,12 +286,11 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         //console.log("p onChange", Patient)
         selectChange
       }}
-      onAddPatient={() => dispatch(PatientsAPI.addPatient())}
-      onUpdatePatient={(patient: PatientType) => {
-        dispatch(PatientsAPI.updatePatient(patient))
-        Patient = patient
-        //console.log("p onChange value ", Patient)
-      }}
+      onAddPatient={() => {
+        //console.log("newPatient add:",newPatient)
+        dispatch(PatientsAPI.addPatient())}
+      }
+      onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
       onDeletePatient={(patient: PatientType) => {
         dispatch(PatientsAPI.deletePatient(patient));
         refresh();

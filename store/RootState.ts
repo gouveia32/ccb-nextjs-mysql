@@ -12,6 +12,7 @@ export interface RootState {
   // API
   notesPageApiSlice?: NotesApiInterface;
   tagsApiSlice?: TagsAPIInterface;
+  patientsPageApiSlice?: PatientsApiInterface;
   patientsApiSlice?: PatientsApiInterface;
 }
 
@@ -21,6 +22,7 @@ export const mainReducers = {
   // API
   notesPageApiSlice: NotesApiReducer,
   tagsApiSlice: TagsApiReducer,
+  patientsPageApiSlice: PatientsApiReducer,
   patientsApiSlice: PatientsApiReducer,
 };
 

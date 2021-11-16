@@ -93,6 +93,7 @@ class TagsApi {
   public *handleAddTag(): Generator<any> {
     const tag: TagType | any = yield select(selectNewTag);
 
+    //console.log ("newTag:",tag)
     if (tag.name.length === 0) {
       toast.warning(`Você precisa dar um nome para a tag.`);
       return;

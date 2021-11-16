@@ -128,6 +128,7 @@ class PatientsApi {
     }
   }
 
+  //public *handleAddPatient(action: PayloadAction<PatientType>): Generator<any> {
   public *handleAddPatient(): Generator<any> {
     const patient: PatientType | any = yield select(selectNewPatient);
 
