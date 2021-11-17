@@ -8,7 +8,12 @@ import {
   IconButton,
   TextField,
 } from "@material-ui/core";
-import { ModalHeader, ModalClose } from "./patient-modal.styles"
+import {
+  ModalHeader,
+  ModalClose,
+  ButtonRec,
+  ButtonDelete,
+} from "./patient-modal.styles"
 import Button from "@material-ui/core/Button";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -63,10 +68,21 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     //console.log("c:", cPatientModel)
   };
 
-  const renderButtonDelete = edit && (
-    <IconButton size={"small"} onClick={handleDelete}>
-      <DeleteOutlineOutlinedIcon />Apagar
+  const renderButtonNew = edit && (
+    <IconButton size={"small"} onClick={(event) => {
+      setEdit(false)
+      editPatient = { ...newPatient };
+    }}>
+      <AddOutlinedIcon />Novo
     </IconButton>
+  )
+
+  const renderButtonDelete = edit && (
+    <ButtonDelete>
+      <IconButton size={"small"} onClick={handleDelete}>
+        <DeleteOutlineOutlinedIcon />Apagar
+      </IconButton>
+    </ButtonDelete>
 
   )
 
@@ -78,7 +94,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           <IconButton onClick={handleClose} size={"small"} >
             <CloseOutlinedIcon />
           </IconButton>
-        </ModalClose>      </ModalHeader>
+        </ModalClose>
+      </ModalHeader>
 
     </DialogTitle>
   );
@@ -96,6 +113,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             <TextField
               label={"Nome:"}
               defaultValue={editPatient.name}
+              value={edit ? null : editPatient.name}
               fullWidth={true}
               size={"small"}
               variant={"filled"}
@@ -107,6 +125,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             <TextField
               label={"Email:"}
               defaultValue={editPatient.email}
+              value={edit ? null : editPatient.email}
               fullWidth={true}
               size={"small"}
               variant={"outlined"}
@@ -118,6 +137,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             <TextField
               label={"Telefone:"}
               defaultValue={editPatient.telephone}
+              value={edit ? null : editPatient.telephone}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
@@ -130,6 +150,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               label={"Altura:"}
               type={"number"}
               defaultValue={editPatient.height}
+              value={edit ? null : editPatient.height}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
@@ -142,6 +163,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               label={"Peso:"}
               type={"number"}
               defaultValue={editPatient.weight}
+              value={edit ? null : editPatient.weight}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
@@ -154,23 +176,19 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         </Grid>
 
         <DialogActions>
-          <IconButton size={"small"} onClick={(event) => {
-            setEdit(false)
-            editPatient = { ...PatientObject };
-            //setOpen( true )
-          }}>
-            <AddOutlinedIcon />Novo
-          </IconButton>
-          <IconButton size={"small"} onClick={(event) => {
-            if (edit) {
-              onUpdatePatient(editPatient);
-            } else {
-              onAddPatient();
-            }
-            setOpen(false);
-          }}>
-            <CheckOutlinedIcon />Gravar
-          </IconButton>
+          {renderButtonNew}
+          <ButtonRec>
+            <IconButton size={"small"} onClick={(event) => {
+              if (edit) {
+                onUpdatePatient(editPatient);
+              } else {
+                onAddPatient();
+              }
+              setOpen(false);
+            }}>
+              <CheckOutlinedIcon />Gravar
+            </IconButton>
+          </ButtonRec>
           {renderButtonDelete}
         </DialogActions>
       </DialogContent>
@@ -180,16 +198,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   return (
     <>
       {renderModal}
-      {/*       <NavigationItem
-        name={""}
-        onClick={() => {
-          setEdit(false)
-          newPatient = { ...PatientObject };
-          setOpen((prevState) => !prevState)
-        }}
-        icon={<AddOutlinedIcon />}
-      />
- */}      <NavigationItem
+      <NavigationItem
         name={"Paciente:"}
         onClick={() => {
           setEdit(true)
