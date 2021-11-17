@@ -8,6 +8,7 @@ import {
   IconButton,
   TextField,
 } from "@material-ui/core";
+import { ModalHeader, ModalClose } from "./patient-modal.styles"
 import Button from "@material-ui/core/Button";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -69,13 +70,26 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 
   )
 
+  const renderHeader = (
+    <DialogTitle>
+      <ModalHeader>
+        {edit ? 'ALTERAR' : 'NOVO'} PACIENTE
+        <ModalClose>
+          <IconButton onClick={handleClose} size={"small"} >
+            <CloseOutlinedIcon />
+          </IconButton>
+        </ModalClose>      </ModalHeader>
+
+    </DialogTitle>
+  );
+
   const renderModal = (
     <Dialog
       fullWidth={false}
       maxWidth={'md'}
       open={open}
       onClose={handleClose}>
-      <DialogTitle>------------- {edit ? 'ALTERAR' : 'NOVO'} PACIENTE -------------</DialogTitle>
+      {renderHeader}
       <DialogContent>
         <Grid container={true} className="mb-3" >
           <Grid item={true}>
@@ -142,8 +156,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         <DialogActions>
           <IconButton size={"small"} onClick={(event) => {
             setEdit(false)
-            newPatient = { ...PatientObject };
-            setOpen(true);
+            editPatient = { ...PatientObject };
+            //setOpen( true )
           }}>
             <AddOutlinedIcon />Novo
           </IconButton>
@@ -158,9 +172,6 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             <CheckOutlinedIcon />Gravar
           </IconButton>
           {renderButtonDelete}
-          <IconButton size={"small"} onClick={handleClose}>
-            <CloseOutlinedIcon />Fechar
-          </IconButton>
         </DialogActions>
       </DialogContent>
     </Dialog >
@@ -169,7 +180,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   return (
     <>
       {renderModal}
-{/*       <NavigationItem
+      {/*       <NavigationItem
         name={""}
         onClick={() => {
           setEdit(false)
