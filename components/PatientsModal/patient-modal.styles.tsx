@@ -27,15 +27,21 @@ const ModalClose = styled.div`
 `;
 
 const ButtonRec = styled.button`
-  background: white;
+  background: #6fef1a6b;
   border-radius: 1rem;
   border-color: green;
 `;
 
 const ButtonDelete = styled.button`
-  background: white;
+  background: #f74a2b66;
   border-radius: 1rem;
   border-color: red;
+`;
+
+const ButtonNew = styled.button`
+  background: #eadedca6;
+  border-radius: 1rem;
+  border-color: black;
 `;
 
 export {
@@ -43,4 +49,5 @@ export {
   ModalClose,
   ButtonRec,
   ButtonDelete,
+  ButtonNew,
 };

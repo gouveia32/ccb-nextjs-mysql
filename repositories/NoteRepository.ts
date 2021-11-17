@@ -13,26 +13,41 @@ import prisma from "../lib/prisma";
  */
 export const getAllDoctorNotes = async (
   doctorSession: Session,
-  patientId?: string
+  Id?: string
 ): Promise<Note[]> => {
-  //console.log("patientId:",patientId);
-  const doctor = await prisma.doctor.findFirst({
-    where: { name: doctorSession.user?.name },
-    include: {
-      notes: {
-        where: {
-          patientId: patientId
-        },
-        include: {
-          tags: true,
-          checkPoints: true,
-        },
-        orderBy: {
-          createdAt: "asc",
+  console.log("patientId:", Id);
+  const doctor = Id === "none"
+    ? await prisma.doctor.findFirst({
+      where: { name: doctorSession.user?.name },
+      include: {
+        notes: {
+          include: {
+            tags: true,
+            checkPoints: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
         },
       },
-    },
-  });
+    })
+    : await prisma.doctor.findFirst({
+      where: { name: doctorSession.user?.name },
+      include: {
+        notes: {
+          where: {
+            patientId: Id
+          },
+          include: {
+            tags: true,
+            checkPoints: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
+    });
   if (doctor) {
     return doctor.notes;
   } else {
@@ -51,64 +66,89 @@ export const searchNotes = async (
   query: string,
   doctorSession: Session,
   tagId?: string,
-  patientId?: string
+  Id?: string
 ): Promise<Note[]> => {
-  console.log("query-search-query:", query)
+  console.log("tagId:", tagId)
+  console.log("patientgId:", Id)
   const doctor = tagId
-    ? await prisma.doctor.findFirst({
-      where: { name: doctorSession?.user?.name },
-      include: {
-        notes: {
-          where: {
-            AND: [{
-              patientId: { equals: patientId },
-              OR: [{
-                name: { contains: query },
-                content: { contains: query },
-              }],
-            }],
-            tags: {
-              some: {
-                id: tagId,
-              },
+    ? Id === "none"
+      ? await prisma.doctor.findFirst({               // com Tags sem Paciente
+        where: { name: doctorSession?.user?.name },
+        include: {
+          notes: {
+            where: {
+              content: { contains: query },
+              tags: { some: { id: tagId } },
+            },
+            include: {
+              tags: true,
+              checkPoints: true,
+            },
+            orderBy: {
+              createdAt: "asc",
             },
           },
-          include: {
-            tags: true,
-            checkPoints: true,
-          },
-          orderBy: {
-            createdAt: "asc",
+        },
+      })
+      : await prisma.doctor.findFirst({               // com Tags com Paciente
+        where: { name: doctorSession?.user?.name },
+        include: {
+          notes: {
+            where: {
+              AND: [
+                { patientId: Id },
+                { content: { contains: query } },
+              ],
+              tags: { some: { id: tagId } },
+            },
+            include: {
+              tags: true,
+              checkPoints: true,
+            },
+            orderBy: {
+              createdAt: "asc",
+            },
           },
         },
-      },
-    })
-    : await prisma.doctor.findFirst({
-      where: { name: doctorSession?.user?.name },
-      include: {
-        notes: {
-          where: {
-            AND: [
-              {
-                name: {
-                  contains: query,
-                },
-                patientId: {
-                  equals: patientId,
-                },
-              }
-            ],
-          },
-          include: {
-            tags: true,
-            checkPoints: true,
-          },
-          orderBy: {
-            createdAt: "asc",
+      })
+    : Id === "none"
+      ? await prisma.doctor.findFirst({             //sem Tag sem Paciente
+        where: { name: doctorSession?.user?.name },
+        include: {
+          notes: {
+            where: {
+              content: { contains: query },
+            },
+            include: {
+              tags: true,
+              checkPoints: true,
+            },
+            orderBy: {
+              createdAt: "asc",
+            },
           },
         },
-      },
-    });
+      })
+      : await prisma.doctor.findFirst({         //sem Tag com Paciente
+        where: { name: doctorSession?.user?.name },
+        include: {
+          notes: {
+            where: {
+              AND: [
+                { content: { contains: query } },
+                { patientId: Id },
+              ],
+            },
+            include: {
+              tags: true,
+              checkPoints: true,
+            },
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
+      });
   if (doctor) {
     return doctor.notes;
   } else {

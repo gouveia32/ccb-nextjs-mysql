@@ -139,12 +139,15 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
+    console.log("Sel:",value)
     setCookie(undefined, 'pe-patient', value ? value : '', {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     })
 
+  
     dispatch(PatientsAPI.fetchPatient()).payload
+    dispatch(NotesAPI.reset());
     //console.log("selectChange ", Patient)
     refresh();
   };
@@ -154,7 +157,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <Loading size={25} />
     ) : (
       <select onChange={selectChange} >
-        <option value="Selecione um paciente" >
+        <option value="none" >
           Selecione um paciente
         </option>
         {patients && patients.map(item => (

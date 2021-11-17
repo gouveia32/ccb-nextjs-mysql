@@ -13,6 +13,7 @@ import {
   ModalClose,
   ButtonRec,
   ButtonDelete,
+  ButtonNew,
 } from "./patient-modal.styles"
 import Button from "@material-ui/core/Button";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
@@ -69,12 +70,14 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   };
 
   const renderButtonNew = edit && (
-    <IconButton size={"small"} onClick={(event) => {
-      setEdit(false)
-      editPatient = { ...newPatient };
-    }}>
-      <AddOutlinedIcon />Novo
-    </IconButton>
+    <ButtonNew>
+      <IconButton size={"small"} onClick={(event) => {
+        setEdit(false)
+        editPatient = { ...newPatient };
+      }}>
+        <AddOutlinedIcon />Novo
+      </IconButton>
+    </ButtonNew>
   )
 
   const renderButtonDelete = edit && (
@@ -186,7 +189,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               }
               setOpen(false);
             }}>
-              <CheckOutlinedIcon />Gravar
+              <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
             </IconButton>
           </ButtonRec>
           {renderButtonDelete}
