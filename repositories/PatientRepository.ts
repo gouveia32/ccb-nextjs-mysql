@@ -109,37 +109,43 @@ export const addNewPatient = async (
   return newPatient;
 };
 
-  /**
-   * Update given Patient
-   * @param patient
-   */
-  export const updatePatient = async (patient: PatientType): Promise<Patient | undefined> => {
-    const height = patient.height;
-    //console.log("paciente alt:",patient)
-    return await prisma.patient.update({
-      where: {
-        id: patient.id,
-      },
-      data: {
-        name: patient.name,
-        email: patient.email,
-        telephone: patient.telephone,
-        height: patient.height,
-        weight: patient.weight,
-        image: patient.image,
-      },
-    });
-  };
+/**
+ * Update given Patient
+ * @param patient
+ */
+export const updatePatient = async (patient: PatientType): Promise<Patient | undefined> => {
+  const height = patient.height;
+  //console.log("paciente alt:",patient)
+  return await prisma.patient.update({
+    where: {
+      id: patient.id,
+    },
+    data: {
+      name: patient.name,
+      email: patient.email,
+      phone: patient.phone,
+      logradoro: patient.logradoro,
+      numero: patient.numero,
+      bairro: patient.bairro,
+      municipio: patient.municipio,
+      uf: patient.uf,
+      cep: patient.cep,
+      height: patient.height,
+      weight: patient.weight,
+      image: patient.image,
+    },
+  });
+};
 
 
-  /**
-   * Delete patient by ID
-   * @param patientId
-   */
-  export const deletePatient = async (patientId: string) => {
-    await prisma.note.deleteMany({
-      where: { patientId: patientId },
-    });
+/**
+ * Delete patient by ID
+ * @param patientId
+ */
+export const deletePatient = async (patientId: string) => {
+  await prisma.note.deleteMany({
+    where: { patientId: patientId },
+  });
 
-    return await prisma.patient.delete({ where: { id: patientId } });
-  };
+  return await prisma.patient.delete({ where: { id: patientId } });
+};

@@ -4,13 +4,15 @@ import {
   DialogContent,
   DialogTitle,
   DialogActions,
+  Divider,
   Grid,
   IconButton,
   TextField,
 } from "@material-ui/core";
 import {
-  ModalHeader,
-  ModalClose,
+  HeaderLeft,
+  HeaderRight,
+  FootLeft,
   ButtonRec,
   ButtonDelete,
   ButtonNew,
@@ -86,19 +88,18 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         <DeleteOutlineOutlinedIcon />Apagar
       </IconButton>
     </ButtonDelete>
-
   )
 
   const renderHeader = (
     <DialogTitle>
-      <ModalHeader>
+      <HeaderLeft>
         {edit ? 'ALTERAR' : 'NOVO'} PACIENTE
-        <ModalClose>
+        <HeaderRight>
           <IconButton onClick={handleClose} size={"small"} >
             <CloseOutlinedIcon />
           </IconButton>
-        </ModalClose>
-      </ModalHeader>
+        </HeaderRight>
+      </HeaderLeft>
 
     </DialogTitle>
   );
@@ -139,14 +140,26 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             />
             <TextField
               label={"Telefone:"}
-              defaultValue={editPatient.telephone}
-              value={edit ? null : editPatient.telephone}
+              defaultValue={editPatient.phone}
+              value={edit ? null : editPatient.phone}
               fullWidth={false}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
-                edit ? editPatient["telephone"] = event.target.value
-                  : onChangePatient({ attr: cPatientModel.telephone, value: event.target.value })
+                edit ? editPatient["phone"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.phone, value: event.target.value })
+              }
+            />
+            <TextField
+              label={"Rua:"}
+              defaultValue={editPatient.logradoro}
+              value={edit ? null : editPatient.logradoro}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                edit ? editPatient["logradoro"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.logradoro, value: event.target.value })
               }
             />
             <TextField
@@ -179,20 +192,22 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         </Grid>
 
         <DialogActions>
-          {renderButtonNew}
-          <ButtonRec>
-            <IconButton size={"small"} onClick={(event) => {
-              if (edit) {
-                onUpdatePatient(editPatient);
-              } else {
-                onAddPatient();
-              }
-              setOpen(false);
-            }}>
-              <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
-            </IconButton>
-          </ButtonRec>
-          {renderButtonDelete}
+          <FootLeft>
+            {renderButtonNew}
+            <ButtonRec>
+              <IconButton size={"small"} onClick={(event) => {
+                if (edit) {
+                  onUpdatePatient(editPatient);
+                } else {
+                  onAddPatient();
+                }
+                setOpen(false);
+              }}>
+                <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
+              </IconButton>
+            </ButtonRec>
+            {renderButtonDelete}
+          </FootLeft>
         </DialogActions>
       </DialogContent>
     </Dialog >

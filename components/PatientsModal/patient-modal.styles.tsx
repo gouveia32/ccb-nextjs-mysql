@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 
-const ModalHeader = styled.div`
+const HeaderLeft = styled.div`
 width: 100%;
 padding: 0.5rem 0;
 border-bottom: 1px solid rgba(gray, 0.5);
@@ -14,7 +14,7 @@ background-color: #f5b500;
 `;
 
 
-const ModalClose = styled.div`
+const HeaderRight = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
@@ -25,6 +25,17 @@ const ModalClose = styled.div`
   h6 {
   }
 `;
+
+const FootLeft = styled.div`
+width: 100%;
+border-top: 1px solid #000;
+margin-top: 0.5rem;
+padding-top: 0.6rem;
+display: flex;
+align-items: center;
+color: #fff;
+`;
+
 
 const ButtonRec = styled.button`
   background: #6fef1a6b;
@@ -45,8 +56,9 @@ const ButtonNew = styled.button`
 `;
 
 export {
-  ModalHeader,
-  ModalClose,
+  HeaderLeft,
+  HeaderRight,
+  FootLeft,
   ButtonRec,
   ButtonDelete,
   ButtonNew,

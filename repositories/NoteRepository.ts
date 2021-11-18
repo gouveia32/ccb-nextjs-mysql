@@ -15,8 +15,8 @@ export const getAllDoctorNotes = async (
   doctorSession: Session,
   Id?: string
 ): Promise<Note[]> => {
-  console.log("patientId:", Id);
-  const doctor = Id === "none"
+  //console.log("patientId:", Id);
+  const doctor = Id === "DEFAULT"
     ? await prisma.doctor.findFirst({
       where: { name: doctorSession.user?.name },
       include: {
@@ -71,7 +71,7 @@ export const searchNotes = async (
   //console.log("tagId:", tagId)
   //console.log("patientgId:", Id)
   const doctor = tagId
-    ? Id === "none"
+    ? Id === "DEFAULT"
       ? await prisma.doctor.findFirst({               // com Tags sem Paciente
         where: { name: doctorSession?.user?.name },
         include: {
@@ -111,7 +111,7 @@ export const searchNotes = async (
           },
         },
       })
-    : Id === "none"
+    : Id === "DEFAULT"
       ? await prisma.doctor.findFirst({             //sem Tag sem Paciente
         where: { name: doctorSession?.user?.name },
         include: {

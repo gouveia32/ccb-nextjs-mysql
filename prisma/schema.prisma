@@ -60,9 +60,16 @@ model Patient  {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
-  telephone     String?
+  phone         String?
+  logradoro     String?
+  numero        String?
+  bairro        String?
+  municipio     String?
+  uf            String?
+  cep           String?
   height        Int?
   weight        Int?
+  blood         String?
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

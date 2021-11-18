@@ -2,7 +2,13 @@ export interface PatientModel {
   id: string;
   name: string;
   email: string;
-  telephone: string;
+  phone: string;
+  logradoro: string;
+  numero: string;
+  bairro: string;
+  municipio: string;
+  uf: string;
+  cep:  string;
   height: number;
   weight: number;
   image?: string;
@@ -14,7 +20,13 @@ export const cPatientModel = {
   id: "id",
   name: "name",
   email: "email",
-  telephone: "telephone",
+  phone: "phone",
+  logradoro: 'logradoro',
+  numero: 'numero',
+  bairro: 'bairro',
+  municipio: 'municipio',
+  uf: 'uf',
+  cep:  'cep',
   height: "height",
   weight: "weight",
   image: '',
@@ -24,7 +36,13 @@ export const PatientObject: PatientType = {
   id: "",
   name: "",
   email: "",
-  telephone: "",
+  phone: "",
+  logradoro: '',
+  numero: '',
+  bairro: '',
+  municipio: '',
+  uf: '',
+  cep:  '',
   height: 0,
   weight: 0,
   image: '',
