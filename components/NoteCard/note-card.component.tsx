@@ -74,7 +74,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
 
   const renderContent =
     note.noteType === NoteTypeEnum.TEXT ? (
-      <NoteCardContent>[{format(dc,'dd/MM/yy')}] {note.content}</NoteCardContent>
+      <NoteCardContent>[{format(dc,'dd/MM/yy')}] { ((note.content).length > 100) ? 
+        (((note.content).substring(0,97)) + '...') : 
+        note.content }</NoteCardContent>
     ) : (
       <NoteCardContent>
         {note.checkPoints

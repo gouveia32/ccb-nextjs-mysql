@@ -68,8 +68,8 @@ export const searchNotes = async (
   tagId?: string,
   Id?: string
 ): Promise<Note[]> => {
-  console.log("tagId:", tagId)
-  console.log("patientgId:", Id)
+  //console.log("tagId:", tagId)
+  //console.log("patientgId:", Id)
   const doctor = tagId
     ? Id === "none"
       ? await prisma.doctor.findFirst({               // com Tags sem Paciente
@@ -77,7 +77,7 @@ export const searchNotes = async (
         include: {
           notes: {
             where: {
-              content: { contains: query },
+              name: { contains: query },
               tags: { some: { id: tagId } },
             },
             include: {
@@ -97,7 +97,7 @@ export const searchNotes = async (
             where: {
               AND: [
                 { patientId: Id },
-                { content: { contains: query } },
+                { name: { contains: query } },
               ],
               tags: { some: { id: tagId } },
             },
@@ -117,7 +117,7 @@ export const searchNotes = async (
         include: {
           notes: {
             where: {
-              content: { contains: query },
+              name: { contains: query },
             },
             include: {
               tags: true,
@@ -134,10 +134,8 @@ export const searchNotes = async (
         include: {
           notes: {
             where: {
-              AND: [
-                { content: { contains: query } },
-                { patientId: Id },
-              ],
+              name: { contains: query },
+              patientId: Id,
             },
             include: {
               tags: true,
@@ -150,6 +148,7 @@ export const searchNotes = async (
         },
       });
   if (doctor) {
+    //console.log("notas:",doctor.notes)
     return doctor.notes;
   } else {
     return [];
