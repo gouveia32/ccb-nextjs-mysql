@@ -309,7 +309,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {renderSignIn}
       </NavTop>
       <NavContent>
-
         {renderDrawer}
         <NavRight>{children}</NavRight>
       </NavContent>

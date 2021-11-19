@@ -28,14 +28,21 @@ const HeaderRight = styled.div`
 
 const FootLeft = styled.div`
 width: 100%;
+padding: 0.5rem 0;
 border-top: 1px solid #000;
-margin-top: 0.5rem;
-padding-top: 0.6rem;
 display: flex;
 align-items: center;
 color: #fff;
+
 `;
 
+const FootRight = styled.div`
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+
+`;
 
 const ButtonRec = styled.button`
   background: #6fef1a6b;
@@ -59,6 +66,7 @@ export {
   HeaderLeft,
   HeaderRight,
   FootLeft,
+  FootRight,
   ButtonRec,
   ButtonDelete,
   ButtonNew,

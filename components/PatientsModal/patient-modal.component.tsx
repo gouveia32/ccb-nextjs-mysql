@@ -13,6 +13,7 @@ import {
   HeaderLeft,
   HeaderRight,
   FootLeft,
+  FootRight,
   ButtonRec,
   ButtonDelete,
   ButtonNew,
@@ -50,6 +51,8 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
+  const [del, setDel] = useState<boolean>(false);
+  
   let editPatient = edit ? { ...patient } : { ...newPatient };
 
   const handleClose = () => {
@@ -58,9 +61,10 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   };
 
   const handleDelete = () => {
-    onDeletePatient(editPatient);
+    setDel((prevState) => !prevState)
+    //onDeletePatient(editPatient);
     console.log("delete:", editPatient)
-    setOpen(false);
+    //setOpen(false);
   };
 
   const handleGravar = () => {
@@ -82,10 +86,25 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     </ButtonNew>
   )
 
+  const renderButtonRec = (
+    <ButtonRec>
+      <IconButton size={"small"} onClick={(event) => {
+        if (edit) {
+          onUpdatePatient(editPatient);
+        } else {
+          onAddPatient();
+        }
+        setOpen(false);
+      }}>
+        <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
+      </IconButton>
+    </ButtonRec>
+  )
+
   const renderButtonDelete = edit && (
     <ButtonDelete>
       <IconButton size={"small"} onClick={handleDelete}>
-        <DeleteOutlineOutlinedIcon />Apagar
+        <DeleteOutlineOutlinedIcon />{del ? "Confirme" : "Apagar"}
       </IconButton>
     </ButtonDelete>
   )
@@ -163,6 +182,54 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               }
             />
             <TextField
+              label={"Número:"}
+              defaultValue={editPatient.numero}
+              value={edit ? null : editPatient.numero}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                edit ? editPatient["numero"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.numero, value: event.target.value })
+              }
+            />
+            <TextField
+              label={"Bairro:"}
+              defaultValue={editPatient.bairro}
+              value={edit ? null : editPatient.bairro}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                edit ? editPatient["bairro"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.bairro, value: event.target.value })
+              }
+            />
+            <TextField
+              label={"Cidade:"}
+              defaultValue={editPatient.municipio}
+              value={edit ? null : editPatient.municipio}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                edit ? editPatient["municipio"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.municipio, value: event.target.value })
+              }
+            />
+            <TextField
+              label={"UF:"}
+              defaultValue={editPatient.uf}
+              value={edit ? null : editPatient.uf}
+              fullWidth={false}
+              size={"small"}
+              variant={"outlined"}
+              onChange={(event) =>
+                edit ? editPatient["uf"] = event.target.value
+                  : onChangePatient({ attr: cPatientModel.uf, value: event.target.value })
+              }
+            />
+            <TextField
               label={"Altura:"}
               type={"number"}
               defaultValue={editPatient.height}
@@ -191,24 +258,15 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           </Grid>
         </Grid>
 
-        <DialogActions>
-          <FootLeft>
-            {renderButtonNew}
-            <ButtonRec>
-              <IconButton size={"small"} onClick={(event) => {
-                if (edit) {
-                  onUpdatePatient(editPatient);
-                } else {
-                  onAddPatient();
-                }
-                setOpen(false);
-              }}>
-                <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
-              </IconButton>
-            </ButtonRec>
+
+        <FootLeft>
+          {renderButtonNew}
+          <FootRight>
+            {renderButtonRec}
             {renderButtonDelete}
-          </FootLeft>
-        </DialogActions>
+          </FootRight>
+        </FootLeft>
+
       </DialogContent>
     </Dialog >
   );
