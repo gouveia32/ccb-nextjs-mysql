@@ -104,6 +104,17 @@ export const addNewPatient = async (
   const newPatient = await prisma.patient.create({
     data: {
       name: patient.name,
+      email: patient.email,
+      phone: patient.phone,
+      logradoro: patient.logradoro,
+      numero: patient.numero,
+      bairro: patient.bairro,
+      municipio: patient.municipio,
+      uf: patient.uf,
+      cep: patient.cep,
+      height: patient.height,
+      weight: patient.weight,
+      image: patient.image,
     },
   });
   return newPatient;
@@ -114,8 +125,6 @@ export const addNewPatient = async (
  * @param patient
  */
 export const updatePatient = async (patient: PatientType): Promise<Patient | undefined> => {
-  const height = patient.height;
-  //console.log("paciente alt:",patient)
   return await prisma.patient.update({
     where: {
       id: patient.id,

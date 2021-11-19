@@ -52,7 +52,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [del, setDel] = useState<boolean>(false);
-  
+
   let editPatient = edit ? { ...patient } : { ...newPatient };
 
   const handleClose = () => {
@@ -61,6 +61,11 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   };
 
   const handleDelete = () => {
+    if (del) {
+      onDeletePatient(editPatient);
+      setOpen(false);
+   }
+
     setDel((prevState) => !prevState)
     //onDeletePatient(editPatient);
     console.log("delete:", editPatient)
@@ -94,7 +99,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         } else {
           onAddPatient();
         }
-        setOpen(false);
+        //setOpen(false);
       }}>
         <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
       </IconButton>
@@ -110,17 +115,14 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   )
 
   const renderHeader = (
-    <DialogTitle>
-      <HeaderLeft>
-        {edit ? 'ALTERAR' : 'NOVO'} PACIENTE
-        <HeaderRight>
-          <IconButton onClick={handleClose} size={"small"} >
-            <CloseOutlinedIcon />
-          </IconButton>
-        </HeaderRight>
-      </HeaderLeft>
-
-    </DialogTitle>
+    <HeaderLeft>
+      {edit ? 'ALTERAR' : 'NOVO'} PACIENTE
+      <HeaderRight>
+        <IconButton onClick={handleClose} size={"small"} >
+          <CloseOutlinedIcon />
+        </IconButton>
+      </HeaderRight>
+    </HeaderLeft>
   );
 
   const renderModal = (
@@ -129,7 +131,9 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       maxWidth={'md'}
       open={open}
       onClose={handleClose}>
-      {renderHeader}
+      <DialogTitle>
+        {renderHeader}
+      </DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-3" >
           <Grid item={true}>
@@ -170,10 +174,10 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
               }
             />
             <TextField
-              label={"Rua:"}
+              label={"Endereço:"}
               defaultValue={editPatient.logradoro}
               value={edit ? null : editPatient.logradoro}
-              fullWidth={false}
+              fullWidth={true}
               size={"small"}
               variant={"outlined"}
               onChange={(event) =>
@@ -257,8 +261,9 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             />
           </Grid>
         </Grid>
+      </DialogContent>
 
-
+      <DialogActions>
         <FootLeft>
           {renderButtonNew}
           <FootRight>
@@ -266,8 +271,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
             {renderButtonDelete}
           </FootRight>
         </FootLeft>
-
-      </DialogContent>
+      </ DialogActions>
     </Dialog >
   );
   //console.log("aqui...")
@@ -278,6 +282,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         name={"Paciente:"}
         onClick={() => {
           setEdit(true)
+          setDel(false)
           setOpen((prevState) => !prevState)
         }}
         icon={<EditOutlinedIcon />}
