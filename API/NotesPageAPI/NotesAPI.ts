@@ -273,6 +273,8 @@ class NotesApi {
   ): Generator<any> {
     const { query, tagId } = action.payload;
 
+    //console.log("Aqui Note->",query)
+
     yield delay(500);
 
     if (action.payload.query.length === 0) {

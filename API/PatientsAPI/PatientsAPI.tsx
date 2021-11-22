@@ -1,12 +1,14 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { all, call, put, select, takeLatest } from "redux-saga/effects";
+import { all, call, delay, put, select, takeLatest } from "redux-saga/effects";
 import { PatientObject, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
-import { del, post, put as update } from "../../lib/RestAPI";
+import { del, get, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
 import { RootState } from "../../store/RootState";
 import { createContext, useState } from "react";
 import { StringifyOptions } from "querystring";
+
+import { ApiLinks, PageLinks } from "../../lib/Links";
 
 import { parseCookies } from 'nookies'
 /**
@@ -17,7 +19,15 @@ export interface PatientsApiInterface {
   patients: PatientType[];
   patient: PatientType;
   patientsLoading: boolean;
+  searchPatients: PatientType[];
+  searchPatientQuery: string;
+  searchPatientsLoading: boolean;
 }
+
+
+export type SearchPatientQuery = {
+  query: string;
+};
 
 const PatientInit: PatientType = { ...PatientObject };
 
@@ -27,6 +37,9 @@ export const getInitialState = (): PatientsApiInterface => {
     patients: [],
     patient: PatientObject,
     patientsLoading: false,
+    searchPatients: [],
+    searchPatientQuery: "",
+    searchPatientsLoading: false,
   };
 };
 
@@ -85,6 +98,16 @@ class PatientsApi {
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
       deletePatient(state, action: PayloadAction<PatientType>) { },
+
+      setSearchPatients(state, action: PayloadAction<PatientType[]>) {
+        state.searchPatients = action.payload;
+        state.searchPatientsLoading = false;
+      },
+      searchPatients(state, action: PayloadAction<SearchPatientQuery>) {
+        state.searchPatientsLoading = true;
+        state.searchPatientQuery = action.payload.query;
+      },
+
     },
   });
 
@@ -186,17 +209,54 @@ class PatientsApi {
     }
   }
 
+  public *handleOnSearchPatients(
+    action: PayloadAction<SearchPatientQuery>
+  ): Generator<any> {
+    const { query } = action.payload;
+
+    console.log("Aqui->",query)
+    yield delay(500);
+
+    if (action.payload.query.length === 0) {
+      yield put(this.slice.actions.setSearchPatients([]));
+      return;
+    }
+
+    try {
+      const response: PatientType[] | any = yield call(
+        get,
+        `${ApiLinks.patients}/search?query=${query}$`
+      );
+
+      console.log("pesq:",query)
+      yield delay(300);
+
+      yield put(this.slice.actions.setSearchPatients(response));
+    } catch (e) {
+      console.log(e);
+      toast.error(`Sorry, something went wrong...`);
+    }
+  }
+
   /*
    * SAGA - MAIN
    */
   public *saga(): Generator<any> {
-    const { addPatient, fetchPatients, fetchPatient, deletePatient, updatePatient } = this.slice.actions;
+    const { 
+      addPatient, 
+      fetchPatients, 
+      fetchPatient, 
+      deletePatient, 
+      updatePatient, 
+      searchPatients 
+    } = this.slice.actions;
     yield all([
       yield takeLatest([fetchPatients.type], this.handleFetchPatients),
       yield takeLatest([fetchPatient.type], this.handleFetchPatient),
       yield takeLatest([addPatient.type], this.handleAddPatient),
       yield takeLatest([updatePatient.type], this.handleUpdatePatient),
       yield takeLatest([deletePatient.type], this.handleDeletePatient),
+      yield takeLatest([searchPatients.type], this.handleOnSearchPatients),
     ]);
   }
 
@@ -226,6 +286,22 @@ class PatientsApi {
     [this.selectDomain],
     (patientsApiState) => patientsApiState.patient
   );
+
+  public selectSearchPatients = createSelector(
+    [this.selectDomain],
+    (notesPageApiState) => notesPageApiState.searchPatients
+  );
+
+  public selectSearchPatientsQuery = createSelector(
+    [this.selectDomain],
+    (notesPageApiState) => notesPageApiState.searchPatientQuery
+  );
+
+  public selectSearcPatientsLoading = createSelector(
+    [this.selectDomain],
+    (notesPageApiState) => notesPageApiState.searchPatientsLoading
+  );
+
 }
 
 export default PatientsApi.getInstance();

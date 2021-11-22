@@ -73,7 +73,6 @@ export const getFirstPatient = async (): Promise<Patient> => {
  */
 export const searchPatients = async (
   query: string,
-  id?: string
 ): Promise<Patient[]> => {
   const patients = await prisma.patient.findMany({
     where: {
@@ -85,7 +84,7 @@ export const searchPatients = async (
       createdAt: "asc",
     }
   });
-  //console.log("doctor:",doctor);
+  //console.log("patients:",patients);
   if (patients) {
     return patients;
   } else {

@@ -1,10 +1,10 @@
 import { Patient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
-import { getAllPatients } from "../../../repositories/PatientRepository";
 import { cRestMethods } from "../../../lib/RestAPI";
 import {
   addNewPatient,
+  getAllPatients,
   getAllDoctorPatients,
   updatePatient,
 } from "../../../repositories/PatientRepository";

@@ -34,7 +34,7 @@ export default async function handler(
           tagId ? (tagId as string) : undefined,
           patientId ? (patientId as string) : undefined,
         );
-        //console.log("Aqui",patientId)
+        //console.log("Aqui query:",query)
         res.status(200).json(notes);
         break;
       case cRestMethods.DELETE:

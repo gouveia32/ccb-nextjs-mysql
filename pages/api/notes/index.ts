@@ -35,7 +35,7 @@ export default async function handler(
       case cRestMethods.GET:
         const doctorNotes = await getAllDoctorNotes(session, patientId);
         res.status(200).json(doctorNotes);
-        //console.log("Notas:",doctorNotes)
+        //console.log("Notas:::",doctorNotes)
         break;
       case cRestMethods.POST:
         await addNewNote(body, session, patientId);

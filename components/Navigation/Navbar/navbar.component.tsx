@@ -102,7 +102,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   let Doctor: DoctorType = useSelector(selectDoctor); //incl
 
 
-  console.log("Doctor..", Doctor);
+  //console.log("Doctor..", Doctor);
 
   function MyCookie() {
     const cookie = parseCookies(null);
@@ -122,7 +122,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
     dispatch(PatientsAPI.fetchPatient())    //pega o primeiro do cookie
 
-  }, [dispatch, session]);
+  }, [dispatch, session, searchField]);
 
   const renderMenuIcon = session && (
     <IconButton
@@ -298,7 +298,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const searchInField = (query: string) => {
     switch (searchField) {
-      case 'nota':
+      case 'note':
         dispatch(
           NotesAPI.searchNotes({
             query: query,
@@ -307,10 +307,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
               : undefined,
           })
         )
-      case 'paciente':
-
+        break;
+      case 'patient':
+        dispatch(
+          PatientsAPI.searchPatients({
+            query: query,
+          })
+        )
     }
-
   }
 
   const renderSearchField = session && (
@@ -327,10 +331,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <select onChange={(event) => {
       setSearchField(event.target.value)
     }}  >
-      <option value="nota" >
+      <option value="note" >
         Por nota
       </option>
-      <option value="paciente" >
+      <option value="patient" >
         Por paciente
       </option>
     </select>

@@ -16,17 +16,25 @@ export default async function handler(
 
   if (session) {
     const {
-      query: { id },
+      query: { id, query },
       method,
     } = req;
 
     switch (method) {
       case cRestMethods.GET:
-        const patient: Patient[] = await getPatientById(
-          id ? (id as string) : '',
-        );
-        //console.log("Aqui",id)
-        res.status(200).json(patient);
+        if (id === 'search') {
+          const patients: Patient[] = await searchPatients(
+            query as string,
+          );  
+          res.status(200).json(patients);
+        } else {
+          const patient: Patient[] = await getPatientById(
+            id ? (id as string) : '',
+          );
+          //console.log("Aqui",id)
+          res.status(200).json(patient);
+        }
+        //console.log("Aqui query:",id)
         break;
       case cRestMethods.DELETE:
         await deletePatient(id as string);
