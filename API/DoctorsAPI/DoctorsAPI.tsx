@@ -120,7 +120,7 @@ class DoctorsApi {
 
       const doctor: any = yield call(request);
 
-     //console.log("API:", doctor)
+     console.log("API:", doctor)
 
       yield put(this.slice.actions.setDoctor(doctor));
     } catch (e) {
@@ -177,7 +177,7 @@ class DoctorsApi {
     toast.info(`Apagando paciente...`);
 
     try {
-      const res: any = yield call(del, `/api/doctors/${action.payload.id}`);
+      const res: any = yield call(del, `/api/doctors/${action.payload.name}`);
       yield put(this.slice.actions.fetchDoctors());
       toast.success("Paciente apagado.");
     } catch (e) {

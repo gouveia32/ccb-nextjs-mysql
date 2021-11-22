@@ -285,7 +285,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           setDel(false)
           setOpen((prevState) => !prevState)
         }}
-        icon={<EditOutlinedIcon />}
+        icon={null}
       />
     </>
   );

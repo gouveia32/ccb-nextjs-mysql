@@ -114,7 +114,7 @@ const DoctorsModal: React.FC<DoctorsModalProps> = ({
 
   const renderHeader = (
     <HeaderLeft>
-      {edit ? 'ALTERAR' : 'NOVO'} PACIENTE
+      {edit ? 'ALTERAR' : 'NOVO'} MÉDICO
       <HeaderRight>
         <IconButton onClick={handleClose} size={"small"} >
           <CloseOutlinedIcon />
@@ -179,13 +179,13 @@ const DoctorsModal: React.FC<DoctorsModalProps> = ({
     <>
       {renderModal}
       <NavigationItem
-        name={"Paciente:"}
+        name={"Médico:"}
         onClick={() => {
           setEdit(true)
           setDel(false)
           setOpen((prevState) => !prevState)
         }}
-        icon={<EditOutlinedIcon />}
+        icon={null}
       />
     </>
   );

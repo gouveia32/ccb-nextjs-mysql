@@ -58,6 +58,16 @@ export const getDoctorById = async (id: string): Promise<Doctor[]> => {
   });
 };
 
+
+/**
+ * Get doctor bt Id
+ * @param id - session object of current doctor
+ */
+ export const getDoctorByName = async (name: string): Promise<Doctor[]> => {
+  return await prisma.doctor.findFirst({
+    where: { name: name },
+  });
+};
 /**
  * Get first doctor
  * 

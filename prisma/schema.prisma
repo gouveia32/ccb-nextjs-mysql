@@ -24,20 +24,20 @@ model Account {
   accessTokenExpires DateTime?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
-  doctor             Doctor     @relation(fields: [doctorId], references: [id])
+  doctor             Doctor    @relation(fields: [doctorId], references: [id])
 
   @@unique([providerId, providerAccountId])
   @@index([doctorId], name: "idx_account_doctor")
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String     @id @default(cuid())
   doctorId     String
   expires      DateTime
-  sessionToken String   @unique
-  accessToken  String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  sessionToken String     @unique
+  accessToken  String     @unique
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   doctor       Doctor     @relation(fields: [doctorId], references: [id])
   @@index([doctorId], name: "idx_doctor")
 }
