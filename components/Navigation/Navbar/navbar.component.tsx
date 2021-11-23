@@ -60,6 +60,8 @@ import {
 
 import { parseCookies, setCookie } from 'nookies'
 import PatientModal from "../../PatientsModal/patient-modal.component";
+import PatientsModalSearch from "../../PatientsModal/patient-modal-search.component";
+
 import DoctorModal from "../../DoctorModal/doctor-modal.component";
 
 
@@ -342,6 +344,30 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   //console.log("newPatient:",Patient)
   //const p: PatientType = patient ? patient : newPatient
+  const renderPatientModalSearch = session && (
+    <PatientsModalSearch
+      patients={patients}
+      newPatient={newPatient}
+      patientsLoading={patientsLoading}
+      onChangePatient={(value: ChangeActionType) => {
+        //console.log("p onChange value ", value)
+        dispatch(PatientsAPI.handleChange(value))
+        //console.log("p onChange", Patient)
+        selectChange
+      }}
+      onAddPatient={() => {
+        //console.log("newPatient add:",newPatient)
+        dispatch(PatientsAPI.addPatient())
+      }
+      }
+      onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
+      onDeletePatient={(patient: PatientType) => {
+        dispatch(PatientsAPI.deletePatient(patient));
+        refresh();
+      }}
+    />
+  );
+
   const renderPatientModal = session && (
     <PatientModal
       patient={Patient}
@@ -373,6 +399,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {renderLogo}
         {renderPatientModal}
         {renderPatientLinks}
+        {renderPatientModalSearch}
         {renderSearchField}
         {renderSelectField}
         {renderDoctorBar}

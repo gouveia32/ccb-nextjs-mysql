@@ -274,7 +274,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
       </ DialogActions>
     </Dialog >
   );
-  console.log("aqui...",patient)
+  //console.log("aqui...",patient)
   return (
     <>
       {renderModal}
