@@ -60,7 +60,7 @@ import {
 
 import { parseCookies, setCookie } from 'nookies'
 import PatientModal from "../../PatientsModal/patient-modal.component";
-import PatientsModalSearch from "../../PatientsModal/patient-modal-search.component";
+import PatientsModalSearch from "../../PatientsModal/patients-search/patient-modal-search.component";
 
 import DoctorModal from "../../DoctorModal/doctor-modal.component";
 
@@ -350,7 +350,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       newPatient={newPatient}
       patientsLoading={patientsLoading}
       onChangePatient={(value: ChangeActionType) => {
-        //console.log("p onChange value ", value)
+        console.log("p onChange value ", value)
         dispatch(PatientsAPI.handleChange(value))
         //console.log("p onChange", Patient)
         selectChange
