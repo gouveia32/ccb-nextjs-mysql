@@ -8,6 +8,11 @@ import {
   NavDoctor,
   NavDoctorImage,
 } from "./navbar.styles";
+
+import {
+  TextField,
+} from "@material-ui/core";
+
 import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import NavigationItem from "../NavItem/navitem.component";
@@ -160,7 +165,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    //console.log("Sel:",value)
+    console.log("setCookie:", value)
     setCookie(undefined, 'pe-patient', value ? value : '', {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
@@ -173,7 +178,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     refresh();
   };
 
-  const renderPatientLinks = session && (
+  const renderPatientLinks1 = session && (
     patientsLoading ? (
       <Loading size={25} />
     ) : (
@@ -193,6 +198,20 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         ))}
       </select>
     ));
+
+  const renderPatientLinks = session && (
+    patientsLoading ? (
+      <Loading size={25} />
+    ) : (
+      <TextField
+        label={"Paciente:"}
+        value={Patient.name}
+        fullWidth={false}
+        size={"small"}
+        variant={"filled"}
+      />
+    ));
+
 
   const renderDrawer = session &&
     (router.pathname.includes("/notes") ||
@@ -349,11 +368,20 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       patients={patients}
       newPatient={newPatient}
       patientsLoading={patientsLoading}
-      onChangePatient={(value: ChangeActionType) => {
-        console.log("p onChange value ", value)
-        dispatch(PatientsAPI.handleChange(value))
+      onChangePatient={(event: ChangeActionType) => {
+        const patient = event.value;
+        //console.log("p onChange value ", patient)
+        dispatch(PatientsAPI.handleChange(event))
+        setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        })
+
+        dispatch(PatientsAPI.fetchPatient()).payload
+        dispatch(NotesAPI.reset());
+        //console.log("selectChange ", Patient)
+        refresh();
         //console.log("p onChange", Patient)
-        selectChange
       }}
       onAddPatient={() => {
         //console.log("newPatient add:",newPatient)

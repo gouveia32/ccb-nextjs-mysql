@@ -68,14 +68,19 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
     </HeaderLeft>
   );
 
+  function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
   // Seleciona paciente
-  const selectChange = (key: string) => {
+  const selectChange = async (patient: PatientType) => {
 
-    console.log("Sel:",key)
-    setCookie(undefined, 'pe-patient', key ? key : '', {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    })
+    //console.log("Sel:",patient)
+    //setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
+    //  maxAge: 30 * 24 * 60 * 60,
+    //  path: '/',
+    //})
+    onChangePatient({attr: "patient",value: patient})
+    await sleep(500);
     setOpen(false);
   }
 
@@ -97,7 +102,7 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
                   icon={(index + 1)}
                   name={`${patient.name}   |   ${patient.email}`}
                   onClick={(event: any) => {
-                    selectChange(patient.id)
+                    selectChange(patient)
                   }}
                 />
               ))}
