@@ -69,7 +69,7 @@ export const searchNotes = async (
   Id?: string
 ): Promise<Note[]> => {
   //console.log("tagId:", tagId)
-  //console.log("patientgId:", Id)
+  //console.log("Note query:", query);
   const doctor = tagId
     ? Id === "DEFAULT"
       ? await prisma.doctor.findFirst({               // com Tags sem Paciente

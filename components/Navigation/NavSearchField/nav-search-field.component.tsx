@@ -35,7 +35,7 @@ const NavSearchField: React.FC<NavSearchFieldProps> = ({
         <TextField
           onChange={(event) => onSearch(event.target.value)}
           size={"small"}
-          fullWidth={true}
+          fullWidth={false}
           className="w-100 search-input"
           placeholder={"Digite o que deseja encontrar "}
           value={value}

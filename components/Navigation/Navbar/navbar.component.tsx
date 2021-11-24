@@ -82,8 +82,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const matchesMobileL = useMediaQuery(device.mobileL);
 
   const [openNav, setOpenNav] = useState(!matchesMobileL);
-  const [searchField, setSearchField] = useState("note")
-
+  
   const [session, loading] = useSession();
 
   const dispatch = useDispatch();
@@ -132,7 +131,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     dispatch(PatientsAPI.fetchPatients()) //carregas os pacientes
     dispatch(PatientsAPI.fetchPatient())    //pega o primeiro do cookie
 
-  }, [dispatch, session, searchField]);
+  }, [dispatch, session]);
 
   const renderMenuIcon = session && (
     <IconButton
@@ -335,7 +334,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <Link href={PageLinks.landingPage}>
       <NavLogo>
         <KeepLogo className="ms-2" />
-        <h2 className="m-0 ms-2">Notas</h2>
+        <h2 className="m-0 ms-2"></h2>
       </NavLogo>
     </Link>
   );
@@ -353,9 +352,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </NavDoctor>
   );
 
-  const searchInField = (query: string) => {
-    switch (searchField) {
-      case 'note':
+  const renderSearchField = session && (
+    <NavSearchField
+      onSearch={(query: string) =>
         dispatch(
           NotesAPI.searchNotes({
             query: query,
@@ -364,21 +363,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
               : undefined,
           })
         )
-        break;
-      case 'patient':
-        dispatch(
-          PatientsAPI.searchPatients({
-            query: query,
-          })
-        )
-    }
-  }
-
-  const renderSearchField = session && (
-    <NavSearchField
-      onSearch={(query: string) => {
-        searchInField(query)
-      }
       }
       value={searchNotesQuery}
     />

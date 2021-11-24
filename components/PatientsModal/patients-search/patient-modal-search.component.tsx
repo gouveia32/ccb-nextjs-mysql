@@ -18,6 +18,15 @@ import {
   ButtonDelete,
   ButtonNew,
 } from "../patient-modal.styles"
+import {
+  selectNewPatient,
+  PatientsAPI,
+  selectPatients,
+  selectPatientsLoading,
+  selectPatient,
+} from "../../../API/PatientsAPI/PatientsAPI";
+
+import { useDispatch, useSelector } from "react-redux";
 import { parseCookies, setCookie } from 'nookies'
 
 import SearchIcon from '@material-ui/icons/Search';
@@ -50,16 +59,31 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [strPesq, setStrPesq] = useState<string>("");
-
+  const dispatch = useDispatch();
+  
   const handleClose = () => {
     //console.log("c:", cPatientModel)
+
     setOpen(false);
   };
 
+  const handleSearchPatient = () => {
+    dispatch(
+      PatientsAPI.searchPatients({
+        query: strPesq,
+      })
+    )
+/*     dispatch(
+      PatientsAPI.searchPatients({
+        query: setStrPesq,
+      })
+    )
+ */    console.log("query:", strPesq)
+  }
 
   const renderHeader = (
     <HeaderLeft>
-      ESCOLHA UM PACIENTE..
+      PACIENTES
       <HeaderRight>
         <IconButton onClick={handleClose} size={"small"} >
           <CloseOutlinedIcon />
@@ -70,64 +94,68 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
- }
+  }
   // Seleciona paciente
   const selectChange = async (patient: PatientType) => {
 
-    onChangePatient({attr: "patient",value: patient})
+    onChangePatient({ attr: "patient", value: patient })
     await sleep(500);
     setOpen(false);
   }
 
-    const renderModal = (
-      <Dialog
-        fullWidth={false}
-        maxWidth={'md'}
-        open={open}
-        onClose={handleClose}>
-        <DialogTitle>
-          {renderHeader}
-          <TextField
+  const renderModal = (
+    <Dialog
+      fullWidth={false}
+      maxWidth={'md'}
+      open={open}
+      onClose={handleClose}>
+      <DialogTitle>
+        {renderHeader}
+        <TextField
           label={"Buscar por:"}
           defaultValue={strPesq}
           fullWidth={true}
           size={"small"}
           variant={"filled"}
+          onChange={(event) => setStrPesq(event.target.value)}
+          onKeyDown={(event) =>
+            event.keyCode === 13 && handleSearchPatient()
+          }
         />
-        </DialogTitle>
-        <DialogContent>
-          <Grid container={true} className="mb-3" >
-            <Grid item={true}>
-              {patients.map((patient: PatientType, index: number) => (
-                <PatientModalItem
-                  key={patient.id}
-                  icon={(index + 1)}
-                  name={`${patient.name}   |   ${patient.email}`}
-                  onClick={(event: any) => {
-                    selectChange(patient)
-                  }}
-                />
-              ))}
-            </Grid>
+      </DialogTitle>
+      <DialogContent>
+        <Grid container={true} className="mb-3" >
+          <Grid item={true}>
+            {patients.slice(0, 3).map((patient: PatientType, index: number) => (
+              <PatientModalItem
+                key={patient.id}
+                icon={(index + 1)}
+                name={`${patient.name}   |   ${patient.email}`}
+                onClick={(event: any) => {
+                  selectChange(patient)
+                }}
+              />
+            ))}
           </Grid>
-        </DialogContent>
+        </Grid>
+      </DialogContent>
 
-      </Dialog >
-    );
-    //console.log("aqui...",patient)
-    return (
-      <>
-        {renderModal}
-        <PatientModalItem
-          name={""}
-          onClick={() => {
-            setOpen((prevState) => !prevState)
-          }}
-          icon={<SearchIcon />}
-        />
-      </>
-    );
-  };
+    </Dialog >
+  );
+  //console.log("aqui...",patient)
+  return (
+    <>
+      {renderModal}
+      <PatientModalItem
+        name={""}
+        onClick={() => {
+          setOpen((prevState) => !prevState)
+        }}
+        icon={<SearchIcon />}
+      />
+    </>
+  );
+};
 
-  export default React.memo(PatientsModalSearch);
+export default React.memo(PatientsModalSearch);
 
