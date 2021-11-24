@@ -279,13 +279,13 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     <>
       {renderModal}
       <NavigationItem
-        name={"Paciente:"}
+        name={""}
         onClick={() => {
           setEdit(true)
           setDel(false)
           setOpen((prevState) => !prevState)
         }}
-        icon={null}
+        icon={<EditOutlinedIcon />}
       />
     </>
   );

@@ -17,6 +17,7 @@ import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import NavigationItem from "../NavItem/navitem.component";
 import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
+import SearchIcon from "@material-ui/icons/Search";
 import KeepLogo from "../../../resources/assets/keep.svg";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
@@ -68,6 +69,8 @@ import PatientModal from "../../PatientsModal/patient-modal.component";
 import PatientsModalSearch from "../../PatientsModal/patients-search/patient-modal-search.component";
 
 import DoctorModal from "../../DoctorModal/doctor-modal.component";
+
+import PatientModalItem from "../../PatientsModal/patients-search/patient-modal-item"
 
 
 export interface NavbarProps {
@@ -209,6 +212,39 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         fullWidth={false}
         size={"small"}
         variant={"filled"}
+        InputProps={{
+          endAdornment: <PatientsModalSearch
+            patients={patients}
+            newPatient={newPatient}
+            patientsLoading={patientsLoading}
+            onChangePatient={(event: ChangeActionType) => {
+              const patient = event.value;
+              //console.log("p onChange value ", patient)
+              dispatch(PatientsAPI.handleChange(event))
+              setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/',
+              })
+
+              dispatch(PatientsAPI.fetchPatient()).payload
+              dispatch(NotesAPI.reset());
+              //console.log("selectChange ", Patient)
+              refresh();
+              //console.log("p onChange", Patient)
+            }}
+            onAddPatient={() => {
+              //console.log("newPatient add:",newPatient)
+              dispatch(PatientsAPI.addPatient())
+            }
+            }
+            onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
+            onDeletePatient={(patient: PatientType) => {
+              dispatch(PatientsAPI.deletePatient(patient));
+              refresh();
+            }}
+          />,
+          disableUnderline: true
+        }}
       />
     ));
 
@@ -348,54 +384,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
-  const renderSelectField = session && (
-    <select onChange={(event) => {
-      setSearchField(event.target.value)
-    }}  >
-      <option value="note" >
-        Por nota
-      </option>
-      <option value="patient" >
-        Por paciente
-      </option>
-    </select>
-  )
-
-  //console.log("newPatient:",Patient)
-  //const p: PatientType = patient ? patient : newPatient
-  const renderPatientModalSearch = session && (
-    <PatientsModalSearch
-      patients={patients}
-      newPatient={newPatient}
-      patientsLoading={patientsLoading}
-      onChangePatient={(event: ChangeActionType) => {
-        const patient = event.value;
-        //console.log("p onChange value ", patient)
-        dispatch(PatientsAPI.handleChange(event))
-        setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
-        })
-
-        dispatch(PatientsAPI.fetchPatient()).payload
-        dispatch(NotesAPI.reset());
-        //console.log("selectChange ", Patient)
-        refresh();
-        //console.log("p onChange", Patient)
-      }}
-      onAddPatient={() => {
-        //console.log("newPatient add:",newPatient)
-        dispatch(PatientsAPI.addPatient())
-      }
-      }
-      onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
-      onDeletePatient={(patient: PatientType) => {
-        dispatch(PatientsAPI.deletePatient(patient));
-        refresh();
-      }}
-    />
-  );
-
   const renderPatientModal = session && (
     <PatientModal
       patient={Patient}
@@ -425,11 +413,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
-        {renderPatientModal}
         {renderPatientLinks}
-        {renderPatientModalSearch}
+        {renderPatientModal}
         {renderSearchField}
-        {renderSelectField}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>

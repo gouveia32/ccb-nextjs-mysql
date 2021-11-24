@@ -19,9 +19,8 @@ import {
   ButtonNew,
 } from "../patient-modal.styles"
 import { parseCookies, setCookie } from 'nookies'
-import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
+
+import SearchIcon from '@material-ui/icons/Search';
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 
@@ -50,6 +49,7 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
   onDeletePatient,
 }: PatientsModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [strPesq, setStrPesq] = useState<string>("");
 
   const handleClose = () => {
     //console.log("c:", cPatientModel)
@@ -59,7 +59,7 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
 
   const renderHeader = (
     <HeaderLeft>
-      ESCOLHA UM PACIENTE
+      ESCOLHA UM PACIENTE..
       <HeaderRight>
         <IconButton onClick={handleClose} size={"small"} >
           <CloseOutlinedIcon />
@@ -74,11 +74,6 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
   // Seleciona paciente
   const selectChange = async (patient: PatientType) => {
 
-    //console.log("Sel:",patient)
-    //setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
-    //  maxAge: 30 * 24 * 60 * 60,
-    //  path: '/',
-    //})
     onChangePatient({attr: "patient",value: patient})
     await sleep(500);
     setOpen(false);
@@ -92,6 +87,13 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
         onClose={handleClose}>
         <DialogTitle>
           {renderHeader}
+          <TextField
+          label={"Buscar por:"}
+          defaultValue={strPesq}
+          fullWidth={true}
+          size={"small"}
+          variant={"filled"}
+        />
         </DialogTitle>
         <DialogContent>
           <Grid container={true} className="mb-3" >
@@ -117,11 +119,11 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
       <>
         {renderModal}
         <PatientModalItem
-          name={"??"}
+          name={""}
           onClick={() => {
             setOpen((prevState) => !prevState)
           }}
-          icon={null}
+          icon={<SearchIcon />}
         />
       </>
     );
