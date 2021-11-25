@@ -290,17 +290,17 @@ class PatientsApi {
 
   public selectSearchPatients = createSelector(
     [this.selectDomain],
-    (notesPageApiState) => notesPageApiState.searchPatients
+    (patientsPageApiState) => patientsPageApiState.searchPatients
   );
 
   public selectSearchPatientsQuery = createSelector(
     [this.selectDomain],
-    (notesPageApiState) => notesPageApiState.searchPatientsQuery
+    (patientsPageApiState) => patientsPageApiState.searchPatientsQuery
   );
 
   public selectSearcPatientsLoading = createSelector(
     [this.selectDomain],
-    (notesPageApiState) => notesPageApiState.searchPatientsLoading
+    (patientsPageApiState) => patientsPageApiState.searchPatientsLoading
   );
 
 }

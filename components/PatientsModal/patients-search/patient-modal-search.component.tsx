@@ -75,7 +75,7 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
     dispatch(
       PatientsAPI.searchPatients({
         query: strPesq,
-      })
+      }) 
     )
 /*     dispatch(
       PatientsAPI.searchPatients({
@@ -154,7 +154,6 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
       <PatientModalItem
         name={""}
         onClick={() => {
-          setOpen((prevState) => !prevState)
         }}
         icon={<SearchIcon />}
       />

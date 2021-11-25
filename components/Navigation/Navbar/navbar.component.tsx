@@ -10,10 +10,29 @@ import {
 } from "./navbar.styles";
 
 import {
+  HeaderLeft,
+  HeaderRight,
+  FootLeft,
+  FootRight,
+  ButtonRec,
+  ButtonDelete,
+  ButtonNew,
+} from "../../PatientsModal/patient-modal.styles"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  Divider,
+  Grid,
+  IconButton,
   TextField,
+  Button, 
+  useMediaQuery,
 } from "@material-ui/core";
 
-import { Button, IconButton, useMediaQuery } from "@material-ui/core";
+import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
+
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import NavigationItem from "../NavItem/navitem.component";
 import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
@@ -66,7 +85,6 @@ import {
 
 import { parseCookies, setCookie } from 'nookies'
 import PatientModal from "../../PatientsModal/patient-modal.component";
-import PatientsModalSearch from "../../PatientsModal/patients-search/patient-modal-search.component";
 
 import DoctorModal from "../../DoctorModal/doctor-modal.component";
 
@@ -82,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const matchesMobileL = useMediaQuery(device.mobileL);
 
   const [openNav, setOpenNav] = useState(!matchesMobileL);
-  
+
   const [session, loading] = useSession();
 
   const dispatch = useDispatch();
@@ -102,14 +120,15 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const patients: PatientType[] = useSelector(selectPatients);
   //const newPatient: PatientType = useSelector(selectNewPatient);
 
-
-
   let newPatient: PatientType = useSelector(selectNewPatient); //incl
   let Patient: PatientType = useSelector(selectPatient); //incl
 
   let newDoctor: DoctorType = useSelector(selectNewDoctor); //incl
   let Doctor: DoctorType = useSelector(selectDoctor); //incl
 
+  const [patientSearchStr, setPatientSearchStr] = useState("")
+  const [openPatientModalSearch, setOpenPatientModalSearch] = useState(false)
+  const [strPesq, setStrPesq] = useState<string>("");
 
   //console.log("Doctor..", Doctor);
 
@@ -180,6 +199,24 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     refresh();
   };
 
+  const handleClose = () => {
+    //console.log("c:", cPatientModel)
+
+    setOpenPatientModalSearch(false);
+  };
+
+  const renderHeader = (
+    <HeaderLeft>
+      PACIENTES
+      <HeaderRight>
+        <IconButton onClick={handleClose} size={"small"} >
+          <CloseOutlinedIcon />
+        </IconButton>
+      </HeaderRight>
+    </HeaderLeft>
+  );
+
+
   const renderPatientLinks1 = session && (
     patientsLoading ? (
       <Loading size={25} />
@@ -201,47 +238,71 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </select>
     ));
 
+
+
+
+  const PatientsModalSearch = (
+    <Dialog
+      fullWidth={false}
+      maxWidth={'md'}
+      open={openPatientModalSearch}
+      >
+      <DialogTitle>
+      {renderHeader}
+        <TextField
+          label={"Buscar por:"}
+          defaultValue={strPesq}
+          fullWidth={true}
+          size={"small"}
+          variant={"filled"}
+          onChange={(event) => setStrPesq(event.target.value)}
+
+        />
+      </DialogTitle>
+      <DialogContent>
+        <Grid container={true} className="mb-3" >
+          <Grid item={true}>
+            {patients.slice(0, 3).map((patient: PatientType, index: number) => (
+              <PatientModalItem
+                key={patient.id}
+                icon={(index + 1)}
+                name={`${patient.name}   |   ${patient.email}`}
+              />
+            ))}
+          </Grid>
+        </Grid>
+      </DialogContent>
+
+    </Dialog >
+  );
+
+
+
+
+
+
+
+
   const renderPatientLinks = session && (
     patientsLoading ? (
       <Loading size={25} />
     ) : (
+      
       <TextField
-        label={"Paciente:"}
-        value={Patient.name}
+        label={Patient.name}
+        value={patientSearchStr}
+        onChange={(event) => setPatientSearchStr(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.keyCode === 13) {
+            setOpenPatientModalSearch((prevState) => !prevState)
+            setPatientSearchStr("")
+          }
+        }}
+
         fullWidth={false}
         size={"small"}
         variant={"filled"}
         InputProps={{
-          endAdornment: <PatientsModalSearch
-            patients={patients}
-            newPatient={newPatient}
-            patientsLoading={patientsLoading}
-            onChangePatient={(event: ChangeActionType) => {
-              const patient = event.value;
-              //console.log("p onChange value ", patient)
-              dispatch(PatientsAPI.handleChange(event))
-              setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
-                maxAge: 30 * 24 * 60 * 60,
-                path: '/',
-              })
-
-              dispatch(PatientsAPI.fetchPatient()).payload
-              dispatch(NotesAPI.reset());
-              //console.log("selectChange ", Patient)
-              refresh();
-              //console.log("p onChange", Patient)
-            }}
-            onAddPatient={() => {
-              //console.log("newPatient add:",newPatient)
-              dispatch(PatientsAPI.addPatient())
-            }
-            }
-            onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
-            onDeletePatient={(patient: PatientType) => {
-              dispatch(PatientsAPI.deletePatient(patient));
-              refresh();
-            }}
-          />,
           disableUnderline: true
         }}
       />
@@ -397,6 +458,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
+        {PatientsModalSearch}
         {renderPatientLinks}
         {renderPatientModal}
         {renderSearchField}
