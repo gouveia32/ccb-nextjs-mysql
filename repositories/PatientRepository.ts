@@ -75,7 +75,7 @@ export const searchPatients = async (
   query: string,
 ): Promise<Patient[]> => {
   query = query.substr(0,query.length -1)
-  console.log("patients query:", query);
+  //console.log("patients query:", query);
   const patients = await prisma.patient.findMany({
     where: {
       name: {
@@ -84,7 +84,7 @@ export const searchPatients = async (
     },
   });
 
-  console.log("patients:", patients);
+  //console.log("patients:", patients);
   if (patients) {
     return patients;
   } else {

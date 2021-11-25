@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,8 @@ import {
 import {
   selectNewPatient,
   PatientsAPI,
+  selectSearchPatients,
+  selectSearchPatientsQuery,
   selectPatients,
   selectPatientsLoading,
   selectPatient,
@@ -60,7 +62,9 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [strPesq, setStrPesq] = useState<string>("");
   const dispatch = useDispatch();
-  
+
+  const searchPatientsQuery = useSelector(selectSearchPatientsQuery);
+
   const handleClose = () => {
     //console.log("c:", cPatientModel)
 
@@ -78,7 +82,8 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
         query: setStrPesq,
       })
     )
- */    console.log("query:", strPesq)
+ */    console.log("query:::", patients)
+      setOpen(true)
   }
 
   const renderHeader = (
@@ -113,7 +118,7 @@ const PatientsModalSearch: React.FC<PatientsModalProps> = ({
         {renderHeader}
         <TextField
           label={"Buscar por:"}
-          defaultValue={strPesq}
+          defaultValue={searchPatientsQuery}
           fullWidth={true}
           size={"small"}
           variant={"filled"}

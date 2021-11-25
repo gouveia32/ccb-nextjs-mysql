@@ -293,6 +293,7 @@ class NotesApi {
       yield delay(300);
 
       yield put(this.slice.actions.setSearchNotes(response));
+      //console.log("pesq:",response)
     } catch (e) {
       console.log(e);
       toast.error(`Sorry, something went wrong...`);
