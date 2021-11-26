@@ -122,7 +122,7 @@ class PatientsApi {
     try {
       const patients: any = yield call(request);
 
-      //console.log("Pacientes:", patients)
+      console.log("Pacientes filtrado:", patients)
 
       yield put(this.slice.actions.setPatients(patients));
     } catch (e) {
@@ -231,7 +231,7 @@ class PatientsApi {
 
       yield delay(300);
 
-      //yield put(this.slice.actions.setSearchPatients(response));
+      yield put(this.slice.actions.setSearchPatients(response));
 
     } catch (e) {
       console.log(e);

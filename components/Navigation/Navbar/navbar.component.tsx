@@ -191,7 +191,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       path: '/',
     })
 
-    dispatch(PatientsAPI.fetchPatient()).payload
+    dispatch(PatientsAPI.fetchPatients()).payload
     dispatch(NotesAPI.reset());
     //console.log("selectChange ", Patient)
     handleClose()
@@ -253,7 +253,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <DialogContent>
         <Grid container={true} className="mb-3" >
           <Grid item={true}>
-            {patients.slice(0, 3).map((patient: PatientType, index: number) => (
+            {patients.slice(0, 10).map((patient: PatientType, index: number) => (
               <PatientModalItem
                 key={patient.id}
                 icon={(index + 1)}
@@ -280,8 +280,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         query: patientSearchStr,
       })
     )
-    console.log("query:::", patients)
-    console.log("query:::", patientSearchStr)
+    const ps = selectPatients;
+    console.log("query:::", ps)
+    console.log("query str:::", patientSearchStr)
     setOpenPatientModalSearch((prevState) => !prevState)
     setPatientSearchStr("")
 
@@ -293,8 +294,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     ) : (
 
       <TextField
-        label={Patient.name}
-        value={patientSearchStr}
+        label={"Paciente:" + Patient.name}
+        defaultValue={Patient.name}
+        
         onChange={(event) => setPatientSearchStr(event.target.value)}
         onKeyDown={(event) => {
           if (event.keyCode === 13) {
@@ -302,7 +304,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           }
         }}
 
-        fullWidth={false}
+        fullWidth={true}
         size={"small"}
         variant={"filled"}
         InputProps={{
@@ -352,7 +354,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   //console.log("session:",session)
   const renderDoctorBar = session && (
     <NavDoctor>
-      <DoctorModal
+{/*       <DoctorModal
         doctor={Doctor}
         newDoctor={newDoctor}
         doctorsLoading={doctorsLoading}
@@ -373,7 +375,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           refresh();
         }}
       />
-      {/* <NavDoctorImage imageUrl={session?.user?.image}></NavDoctorImage> */}
+ */}      {/* <NavDoctorImage imageUrl={session?.user?.image}></NavDoctorImage> */}
       <h6 className="m-0 ms-2 me-3">
         <strong>{session?.user?.name} </strong>
       </h6>
@@ -461,10 +463,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
+        {renderSearchField}
         {PatientsModalSearch}
         {renderPatientLinks}
         {renderPatientModal}
-        {renderSearchField}
         {renderDoctorBar}
         {renderSignIn}
       </NavTop>
