@@ -27,7 +27,7 @@ import {
   Grid,
   IconButton,
   TextField,
-  Button, 
+  Button,
   useMediaQuery,
 } from "@material-ui/core";
 
@@ -117,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const patientsLoading: boolean = useSelector(selectPatientsLoading); //incl
   const doctorsLoading: boolean = useSelector(selectDoctorsLoading); //incl
-  const patients: PatientType[] = useSelector(selectPatients);
+  let patients: PatientType[] = useSelector(selectPatients);
   //const newPatient: PatientType = useSelector(selectNewPatient);
 
   let newPatient: PatientType = useSelector(selectNewPatient); //incl
@@ -183,20 +183,22 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   //
   // Seleciona paciente
-  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
+  const selectChange = (patient: PatientType) => {
 
-    console.log("setCookie:", value)
-    setCookie(undefined, 'pe-patient', value ? value : '', {
+ 
+    setCookie(undefined, 'pe-patient', patient.id ? patient.id : '', {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     })
 
-
     dispatch(PatientsAPI.fetchPatient()).payload
     dispatch(NotesAPI.reset());
     //console.log("selectChange ", Patient)
+    handleClose()
+    Patient = patient
+    console.log("setCookie:", Patient)
     refresh();
+
   };
 
   const handleClose = () => {
@@ -217,47 +219,36 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   );
 
 
-  const renderPatientLinks1 = session && (
-    patientsLoading ? (
-      <Loading size={25} />
-    ) : (
-      <select onChange={selectChange} >
-        <option value="DEFAULT" >
-          Selecione um paciente
-        </option>
-        {patients && patients.map(item => (
-          <option
-            key={item.id}
-            value={item.id}
-            label={item.name}
-            selected={item.id === MyCookie()}
-          >
-            {item.name}
+  /*   const renderPatientLinks1 = session && (
+      patientsLoading ? (
+        <Loading size={25} />
+      ) : (
+        <select onChange={selectChange} >
+          <option value="DEFAULT" >
+            Selecione um paciente
           </option>
-        ))}
-      </select>
-    ));
-
-
-
+          {patients && patients.map(item => (
+            <option
+              key={item.id}
+              value={item.id}
+              label={item.name}
+              selected={item.id === MyCookie()}
+            >
+              {item.name}
+            </option>
+          ))}
+        </select>
+      ));
+   */
 
   const PatientsModalSearch = (
     <Dialog
       fullWidth={false}
       maxWidth={'md'}
       open={openPatientModalSearch}
-      >
+    >
       <DialogTitle>
-      {renderHeader}
-        <TextField
-          label={"Buscar por:"}
-          defaultValue={strPesq}
-          fullWidth={true}
-          size={"small"}
-          variant={"filled"}
-          onChange={(event) => setStrPesq(event.target.value)}
-
-        />
+        {renderHeader}
       </DialogTitle>
       <DialogContent>
         <Grid container={true} className="mb-3" >
@@ -267,6 +258,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
                 key={patient.id}
                 icon={(index + 1)}
                 name={`${patient.name}   |   ${patient.email}`}
+                onClick={(event: any) => {
+                  selectChange(patient)
+                }}
               />
             ))}
           </Grid>
@@ -280,22 +274,31 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
 
 
+  const handleSearchPatient = () => {
+    dispatch(
+      PatientsAPI.searchPatients({
+        query: patientSearchStr,
+      })
+    )
+    console.log("query:::", patients)
+    console.log("query:::", patientSearchStr)
+    setOpenPatientModalSearch((prevState) => !prevState)
+    setPatientSearchStr("")
 
-
+  }
 
   const renderPatientLinks = session && (
     patientsLoading ? (
       <Loading size={25} />
     ) : (
-      
+
       <TextField
         label={Patient.name}
         value={patientSearchStr}
         onChange={(event) => setPatientSearchStr(event.target.value)}
         onKeyDown={(event) => {
           if (event.keyCode === 13) {
-            setOpenPatientModalSearch((prevState) => !prevState)
-            setPatientSearchStr("")
+            handleSearchPatient()
           }
         }}
 
