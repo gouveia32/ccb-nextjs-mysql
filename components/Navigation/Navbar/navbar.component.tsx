@@ -350,6 +350,29 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </NavLeft>
     );
 
+  //console.log("session:",session)
+  const renderDoctorBar = session && (
+    <NavDoctor>
+      <NavDoctorImage imageUrl={session?.user?.image}></NavDoctorImage>
+      <h6 className="m-0 ms-2 me-3">
+        <strong>{session?.user?.name} </strong>
+      </h6>
+      {matchesMobileL ? (
+        <IconButton size={"small"} onClick={() => signOut()}>
+          <ExitToAppOutlinedIcon />
+        </IconButton>
+      ) : (
+        <Button
+          size={"small"}
+          variant={"outlined"}
+          onClick={() => signOut()}
+          startIcon={<ExitToAppOutlinedIcon />}
+        >
+          Sair
+        </Button>
+      )}
+    </NavDoctor>
+  );
   const renderLogo = (
     <Link href={PageLinks.landingPage}>
       <NavLogo>
@@ -420,6 +443,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         {PatientsModalSearch}
         {renderPatientLinks}
         {renderSearchField}
+        {renderDoctorBar}
         {renderSignIn}
       </NavTop>
       <NavContent>
