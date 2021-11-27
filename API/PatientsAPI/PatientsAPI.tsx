@@ -55,7 +55,7 @@ class PatientsApi {
     this.handleAddPatient = this.handleAddPatient.bind(this);
     this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
     this.handleDeletePatient = this.handleDeletePatient.bind(this);
-
+    this.handleOnSearchPatients = this.handleOnSearchPatients.bind(this);
     this.saga = this.saga.bind(this);
   }
 
@@ -98,6 +98,7 @@ class PatientsApi {
       setSearchPatients(state, action: PayloadAction<PatientType[]>) {
         state.searchPatients = action.payload;
         state.searchPatientsLoading = false;
+        //console.log("setPat:",state.searchPatients)
       },
       addPatient() { },
       updatePatient(state, action: PayloadAction<PatientType>) { },
@@ -122,7 +123,7 @@ class PatientsApi {
     try {
       const patients: any = yield call(request);
 
-      console.log("Pacientes filtrado:", patients)
+      //console.log("Pacientes filtrado:", patients)
 
       yield put(this.slice.actions.setPatients(patients));
     } catch (e) {
@@ -227,7 +228,7 @@ class PatientsApi {
         `${ApiLinks.patients}/search?query=${query}$`
       );
 
-      console.log("pesq:",response)
+      //console.log("pesqAPI:",response)
 
       yield delay(300);
 
@@ -298,7 +299,7 @@ class PatientsApi {
     (patientsPageApiState) => patientsPageApiState.searchPatientsQuery
   );
 
-  public selectSearcPatientsLoading = createSelector(
+  public selectSearchPatientsLoading = createSelector(
     [this.selectDomain],
     (patientsPageApiState) => patientsPageApiState.searchPatientsLoading
   );
@@ -320,6 +321,7 @@ export const {
   selectPatientsLoading,
   selectSearchPatients,
   selectSearchPatientsQuery,
+  selectSearchPatientsLoading,
   saga: PatientsApiSaga,
   handleUpdatePatient,
   handleDeletePatient,
