@@ -37,7 +37,7 @@ const NavSearchField: React.FC<NavSearchFieldProps> = ({
           size={"small"}
           fullWidth={false}
           className="w-100 search-input"
-          placeholder={"Digite o que deseja encontrar "}
+          placeholder={"procurar uma nota "}
           value={value}
           InputProps={{
             startAdornment: <SearchIcon fontSize={"small"} className="me-2" />,

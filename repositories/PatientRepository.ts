@@ -99,7 +99,6 @@ export const searchPatients = async (
 export const addNewPatient = async (
   patient: Patient,
 ): Promise<Patient | undefined> => {
-
   const newPatient = await prisma.patient.create({
     data: {
       name: patient.name,

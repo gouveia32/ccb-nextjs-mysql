@@ -30,6 +30,7 @@ import {
   Button,
   useMediaQuery,
 } from "@material-ui/core";
+import { toast } from "react-toastify";
 
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
@@ -175,7 +176,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     tags.map((tag: TagType, index: number) => (
       <NavigationItem
         key={tag.id}
-        icon={(index + 1)}
+        icon={null}
         name={tag.name}
         url={`${PageLinks.tagsPage}/${tag.id}`}
         isTag={true}
@@ -198,10 +199,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
     //console.log("selectChange ", Patient)
     handleClose()
-    //Patient = patient
     //console.log("setCookie:", patient)
     refresh();
-
   };
 
   const handleClose = () => {
@@ -240,7 +239,9 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
                 <PatientModalItem
                   key={patient.id}
                   icon={(index + 1)}
-                  name={`${patient.name}   |   ${patient.phone}`}
+                  name={`${patient.name}
+                  ${patient.email ? "   |   " + patient.email : ""}
+                  ${patient.phone ? "   |   " + patient.phone : ""}`}
                   onClick={(event: any) => {
                     selectChange(patient)
                   }}
@@ -254,9 +255,10 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     ));
 
   const handleSearchPatient = () => {
+    const search = patientSearchStr.length === 0 ? "%" : patientSearchStr
     dispatch(
       PatientsAPI.searchPatients({
-        query: patientSearchStr,
+        query: search,
       })
     )
     const ps = selectPatients;
@@ -264,7 +266,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     //console.log("query str:::", patientSearchStr)
     setOpenPatientModalSearch((prevState) => !prevState)
     setPatientSearchStr("")
-
   }
 
   const renderPatientLinks = session && (
@@ -285,28 +286,29 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         size={"small"}
         variant={"filled"}
         InputProps={{
-          endAdornment: <PatientModal
-            patient={Patient}
-            newPatient={newPatient}
-            patientsLoading={patientsLoading}
-            onChangePatient={(value: ChangeActionType) => {
-              //console.log("p onChange value ", value)
-              dispatch(PatientsAPI.handleChange(value))
-              //console.log("p onChange", Patient)
-              selectChange
-            }}
-            onAddPatient={() => {
-              //console.log("newPatient add:",newPatient)
-              dispatch(PatientsAPI.addPatient())
-            }
-            }
-            onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
-            onDeletePatient={(patient: PatientType) => {
-              dispatch(PatientsAPI.deletePatient(patient));
-              refresh();
-            }}
-          />,
-          disableUnderline: true
+          endAdornment:
+            <PatientModal
+              patient={Patient}
+              newPatient={newPatient}
+              patientsLoading={patientsLoading}
+              onChangePatient={(value: ChangeActionType) => {
+                //console.log("p onChange value ", value)
+                dispatch(PatientsAPI.handleChange(value))
+                //console.log("p onChange", Patient)
+                selectChange
+              }}
+              onAddPatient={() => {
+                //console.log("newPatient add:",newPatient)
+                dispatch(PatientsAPI.addPatient())
+                dispatch(PatientsAPI.fetchPatient()).payload
+                console.log("newPatient add:", Patient)
+              }}
+              onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
+              onDeletePatient={(patient: PatientType) => {
+                dispatch(PatientsAPI.deletePatient(patient));
+                refresh();
+              }}
+            />,
         }}
       />
     ));
@@ -386,38 +388,38 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     />
   );
 
- /*  const renderPatientModal = session && (
-    <PatientModal
-      patient={Patient}
-      newPatient={newPatient}
-      patientsLoading={patientsLoading}
-      onChangePatient={(value: ChangeActionType) => {
-        //console.log("p onChange value ", value)
-        dispatch(PatientsAPI.handleChange(value))
-        //console.log("p onChange", Patient)
-        selectChange
-      }}
-      onAddPatient={() => {
-        //console.log("newPatient add:",newPatient)
-        dispatch(PatientsAPI.addPatient())
-      }
-      }
-      onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
-      onDeletePatient={(patient: PatientType) => {
-        dispatch(PatientsAPI.deletePatient(patient));
-        refresh();
-      }}
-    />
-  ); */
+  /*  const renderPatientModal = session && (
+     <PatientModal
+       patient={Patient}
+       newPatient={newPatient}
+       patientsLoading={patientsLoading}
+       onChangePatient={(value: ChangeActionType) => {
+         //console.log("p onChange value ", value)
+         dispatch(PatientsAPI.handleChange(value))
+         //console.log("p onChange", Patient)
+         selectChange
+       }}
+       onAddPatient={() => {
+         //console.log("newPatient add:",newPatient)
+         dispatch(PatientsAPI.addPatient())
+       }
+       }
+       onUpdatePatient={(patient: PatientType) => dispatch(PatientsAPI.updatePatient(patient))}
+       onDeletePatient={(patient: PatientType) => {
+         dispatch(PatientsAPI.deletePatient(patient));
+         refresh();
+       }}
+     />
+   ); */
 
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
-        {renderSearchField}
         {PatientsModalSearch}
         {renderPatientLinks}
+        {renderSearchField}
         {renderSignIn}
       </NavTop>
       <NavContent>

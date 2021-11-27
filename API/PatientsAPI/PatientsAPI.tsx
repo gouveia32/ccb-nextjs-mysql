@@ -163,11 +163,13 @@ class PatientsApi {
     toast.info(`Adicionando um paciente...`);
 
     try {
+      //console.log("paciente adicionando:",patient)
       const response = yield call(post, "/api/patients", patient);
       toast.success("Paciente adicionado.");
 
       yield put(this.slice.actions.reset());
       yield put(this.slice.actions.fetchPatients());
+      //yield put(this.slice.actions.fetchPatient());    //seleciona o ultimo adicionado
     } catch (e) {
       console.log(e);
       toast.error("O paciente não foi adicionado. Algo deu errado...");

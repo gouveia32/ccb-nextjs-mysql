@@ -76,7 +76,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     console.log("Vou gravar: ", edit, " ", newPatient)
     onUpdatePatient(newPatient)
     //edit ? onUpdatePatient(newPatient) : onAddPatient(newPatient);
-    setOpen(false);
+    setOpen(edit);
     //console.log("c:", cPatientModel)
   };
 
@@ -99,7 +99,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         } else {
           onAddPatient();
         }
-        //setOpen(false);
+        setOpen(edit);
       }}>
         <CheckOutlinedIcon />{edit ? 'Alterar' : 'Inserir'}
       </IconButton>

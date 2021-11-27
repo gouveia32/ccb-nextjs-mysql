@@ -34,6 +34,7 @@ export default async function handler(
         res.status(200).json(doctorPatients);
         break;
       case cRestMethods.POST:
+        //console.log("Aqui:::",body)
         await addNewPatient(body);
         res.status(201).json({ message: "Paciente Inserido." });
         break;
