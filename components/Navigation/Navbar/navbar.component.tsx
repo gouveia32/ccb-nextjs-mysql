@@ -195,9 +195,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     })
 
     dispatch(PatientsAPI.fetchPatient()).payload
-    //dispatch(NotesAPI.reset());
-
-    //console.log("selectChange ", Patient)
     handleClose()
     //console.log("setCookie:", patient)
     refresh();
@@ -205,7 +202,6 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const handleClose = () => {
     //console.log("c:", cPatientModel)
-
     setOpenPatientModalSearch(false);
   };
 
@@ -274,16 +270,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     ) : (
 
       <TextField
-        label={Patient.name}
+        label={Patient.name ? Patient.name : "paciente?" }
         defaultValue={patientSearchStr}
         onChange={(event) => setPatientSearchStr(event.target.value)}
         onKeyDown={(event) => {
-          if (event.keyCode === 13) {
-            handleSearchPatient()
-          }
+          if (event.keyCode === 13) {handleSearchPatient()}
         }}
         fullWidth={false}
-        size={"small"}
+        size={"medium"}
         variant={"filled"}
         InputProps={{
           endAdornment:
