@@ -17,8 +17,6 @@ import {
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 
-import { delay } from "redux-saga/effects";
-
 export interface SignInProps {
   providers: Record<string, ClientSafeProvider> | null;
 }
@@ -65,9 +63,7 @@ export default function SignInPage({ providers }: SignInProps) {
         fullWidth={true}
         onClick={() => {
           signIn("credentials", { doctorName: doctorName })
-          delay(500)
-        }
-        }
+        }}
       >
         Entrar
       </Button>
