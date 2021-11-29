@@ -47,6 +47,28 @@ export const NoteCardHeader = styled.div`
   }
 `;
 
+export const NoteCardFooter = styled.div`
+  padding: 0.2rem 0;
+  font-weight: bold;
+  border-top: 1px solid #000;
+  margin-top: 0.5rem;
+
+  display: flex;
+  align-items: center;
+
+  span {
+    flex: 1;
+  }
+
+  svg {
+    transition: 0.3s all;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+`;
+
+
 export const NoteCardContent = styled.div`
   text-align: justify;
   max-height: 800px;

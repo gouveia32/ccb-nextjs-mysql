@@ -14,8 +14,15 @@ import {
 } from "./note-card.styles";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
+import PeopleIcon from '@material-ui/icons/People';
 import AddNote from "../AddNote/add-note.component";
 import { parseISO, format } from 'date-fns';
+import { parseCookies, setCookie } from 'nookies'
+import { useDispatch, useSelector } from "react-redux";
+import {
+  PatientsAPI,
+} from "../../API/PatientsAPI/PatientsAPI";
+
 
 const transition = {
   type: "spring",
@@ -56,14 +63,39 @@ const NoteCard: React.FC<NoteCardProps> = ({
 }: NoteCardProps) => {
   const [modalOpen, setModalOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleOnDelete = (e: any) => {
     e.stopPropagation();
     onDeleteNote();
   };
 
+  const handleChangePatient = (e: any) => {
+    const cookie = parseCookies(null);
+    const patientId = cookie['pe-patient'];
+
+    console.log("pId:", note.patientId);
+    if (patientId === "") {
+      return (
+        <IconButton onClick={() => {
+          setCookie(undefined, 'pe-patient', note.patientId ? note.patientId : '', {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          })
+          dispatch(PatientsAPI.fetchPatient()).payload
+          e.stopPropagation();
+
+        }} size={"small"}>
+          <PeopleIcon />
+        </IconButton>
+      )
+    }
+  }
+
   const renderHeader = (
     <NoteCardHeader>
       <span>{note.name}</span>
+      {handleChangePatient}
       <IconButton onClick={handleOnDelete} size={"small"}>
         <DeleteOutlineOutlinedIcon />
       </IconButton>
@@ -74,9 +106,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
 
   const renderContent =
     note.noteType === NoteTypeEnum.TEXT ? (
-      <NoteCardContent>[{format(dc,'dd/MM/yy')}] { ((note.content).length > 100) ? 
-        (((note.content).substring(0,97)) + '...') : 
-        note.content }</NoteCardContent>
+      <NoteCardContent>[{format(dc, 'dd/MM/yy')}] {((note.content).length > 100) ?
+        (((note.content).substring(0, 97)) + '...') :
+        note.content}</NoteCardContent>
     ) : (
       <NoteCardContent>
         {note.checkPoints
