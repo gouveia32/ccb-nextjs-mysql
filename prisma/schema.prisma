@@ -76,7 +76,6 @@ model Patient  {
   notes         Note[]
 }
 
-
 model VerificationRequest {
   id         String   @id @default(cuid())
   identifier String

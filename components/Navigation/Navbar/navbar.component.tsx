@@ -26,6 +26,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Tooltip,
   TextField,
   Button,
   useMediaQuery,
@@ -37,6 +38,7 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import NavigationItem from "../NavItem/navitem.component";
 import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SearchIcon from "@material-ui/icons/Search";
 import KeepLogo from "../../../resources/assets/keep.svg";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -209,9 +211,24 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     <HeaderLeft>
       PACIENTES
       <HeaderRight>
-        <IconButton onClick={handleClose} size={"small"} >
-          <CloseOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Todos Pacientes">
+          <IconButton
+            color="inherit"
+            className="ms-1"
+            aria-label="open drawer"
+            onClick={() => {
+              selectChange(newPatient)
+            }}
+            edge="start"
+          >
+            <DoneAllIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Fechar">
+          <IconButton onClick={handleClose} size={"small"} >
+            <CloseOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       </HeaderRight>
     </HeaderLeft>
   );
@@ -270,11 +287,11 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     ) : (
 
       <TextField
-        label={Patient.name ? Patient.name : "paciente?" }
+        label={Patient.name ? Patient.name : "paciente?"}
         defaultValue={patientSearchStr}
         onChange={(event) => setPatientSearchStr(event.target.value)}
         onKeyDown={(event) => {
-          if (event.keyCode === 13) {handleSearchPatient()}
+          if (event.keyCode === 13) { handleSearchPatient() }
         }}
         fullWidth={false}
         size={"medium"}

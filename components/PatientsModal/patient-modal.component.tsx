@@ -7,6 +7,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Tooltip,
   TextField,
 } from "@material-ui/core";
 import {
@@ -64,7 +65,7 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     if (del) {
       onDeletePatient(editPatient);
       setOpen(false);
-   }
+    }
 
     setDel((prevState) => !prevState)
     //onDeletePatient(editPatient);
@@ -82,12 +83,14 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 
   const renderButtonNew = edit && (
     <ButtonNew>
-      <IconButton size={"small"} onClick={(event) => {
-        setEdit(false)
-        editPatient = { ...newPatient };
-      }}>
-        <AddOutlinedIcon />Novo
-      </IconButton>
+      <Tooltip title="Inserir Novo  paciente">
+        <IconButton size={"small"} onClick={(event) => {
+          setEdit(false)
+          editPatient = { ...newPatient };
+        }}>
+          <AddOutlinedIcon />Novo
+        </IconButton>
+      </Tooltip>
     </ButtonNew>
   )
 
@@ -108,9 +111,11 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
 
   const renderButtonDelete = edit && (
     <ButtonDelete>
-      <IconButton size={"small"} onClick={handleDelete}>
-        <DeleteOutlineOutlinedIcon />{del ? "Confirme" : "Apagar"}
-      </IconButton>
+      <Tooltip title={del ? "Confirme para Apagar o Paciente" : "Apagar o Paciente"}>
+        <IconButton size={"small"} onClick={handleDelete}>
+          <DeleteOutlineOutlinedIcon />{del ? "Confirme" : "Apagar"}
+        </IconButton>
+      </Tooltip>
     </ButtonDelete>
   )
 
@@ -118,9 +123,11 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
     <HeaderLeft>
       {edit ? 'ALTERAR' : 'NOVO'} PACIENTE
       <HeaderRight>
-        <IconButton onClick={handleClose} size={"small"} >
-          <CloseOutlinedIcon />
-        </IconButton>
+        <Tooltip title="Fechar">
+          <IconButton onClick={handleClose} size={"small"} >
+            <CloseOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       </HeaderRight>
     </HeaderLeft>
   );
@@ -267,7 +274,9 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
         <FootLeft>
           {renderButtonNew}
           <FootRight>
-            {renderButtonRec}
+            <Tooltip title="Gravar os dados do paciente">
+              {renderButtonRec}
+            </Tooltip>
             {renderButtonDelete}
           </FootRight>
         </FootLeft>
@@ -285,7 +294,11 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
           setDel(false)
           setOpen((prevState) => !prevState)
         }}
-        icon={<EditOutlinedIcon />}
+        icon={
+          <Tooltip title="Alterar/Inserir Paciente">
+            <EditOutlinedIcon />
+          </Tooltip>
+        }
       />
     </>
   );

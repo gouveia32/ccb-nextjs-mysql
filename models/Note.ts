@@ -17,6 +17,7 @@ export interface NoteModel {
   createdAt: string;
   tags: TagType[];
   checkPoints?: CheckPointType[];
+  patientId: string;
 }
 
 export type NoteType = NoteModel;
@@ -31,6 +32,7 @@ export const NoteObject: NoteType = {
   createdAt: new Date(Date.now()).toString(),
   tags: [],
   checkPoints: [],
+  patientId: "",
 };
 
 
@@ -44,4 +46,5 @@ export enum cNoteModel {
   createdAt = "createdAt",
   tags = "tags",
   checkPoints = "checkPoints",
+  patientId = "patientId:", 
 }
