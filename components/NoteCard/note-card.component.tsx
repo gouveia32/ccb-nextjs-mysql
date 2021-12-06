@@ -113,6 +113,14 @@ const NoteCard: React.FC<NoteCardProps> = ({
           e.stopPropagation();
           setModalOpen(false)
 
+          dispatch(
+            NotesAPI.searchNotes({
+              query: "",
+              tagId: undefined,
+            })
+          )
+          refresh();
+
         }} size={"small"}>
           <PeopleIcon />
         </IconButton>
