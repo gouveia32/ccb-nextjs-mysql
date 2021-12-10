@@ -33,7 +33,7 @@ import nookies from 'nookies'
 export interface NotesPageProps {
   session: Session | null;
   doctorNotes: NoteType[];
-  patientId: any;
+  patientId: string;
 }
 
 export default function NotesPage({ session, doctorNotes, patientId }: NotesPageProps) {

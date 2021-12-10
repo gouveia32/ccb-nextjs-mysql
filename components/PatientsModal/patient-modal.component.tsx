@@ -29,6 +29,8 @@ import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined"
 import { cPatientModel, PatientObject, PatientType } from "../../models/Patient";
 import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
+import { NavItem } from "../Navigation/NavItem/navitem.styles";
+
 
 
 export interface PatientsModalProps {
@@ -287,19 +289,35 @@ const PatientsModal: React.FC<PatientsModalProps> = ({
   return (
     <>
       {renderModal}
-      <NavigationItem
-        name={""}
+      <Button
+        size={"small"}
         onClick={() => {
           setEdit(true)
           setDel(false)
           setOpen((prevState) => !prevState)
         }}
-        icon={
-          <Tooltip title="Alterar/Inserir Paciente">
+        startIcon={
+          <Tooltip title="Alterar Paciente">
             <EditOutlinedIcon />
           </Tooltip>
         }
       />
+
+      <Button
+        size={"small"}
+        onClick={() => {
+          setEdit(false)
+          setDel(false)
+          editPatient = { ...newPatient };
+          setOpen((prevState) => !prevState)
+        }}
+        startIcon={
+          <Tooltip title="Inserir Novo Paciente">
+            <AddOutlinedIcon />
+          </Tooltip>
+        }
+      />
+
     </>
   );
 };

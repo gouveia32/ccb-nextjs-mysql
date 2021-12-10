@@ -83,27 +83,6 @@ const NoteCard: React.FC<NoteCardProps> = ({
     if (patientId === "") {
       return (
         <Tooltip title="Selecione o paciente desta nota">
-          <IconButton onClick={() => {
-            setCookie(undefined, 'pe-patient', note.patientId ? note.patientId : '', {
-              maxAge: 30 * 24 * 60 * 60,
-              path: '/',
-            })
-            dispatch(PatientsAPI.fetchPatient()).payload
-            refresh();
-            e.stopPropagation();
-
-          }} size={"small"}>
-            <PeopleIcon />
-          </IconButton>
-        </Tooltip>
-      )
-    }
-  }
-
-  const renderHeader = (
-    <NoteCardHeader>
-      <span>{note.name}</span>
-      <Tooltip title="Selecione o paciente desta nota">
         <IconButton onClick={(e) => {
           setCookie(undefined, 'pe-patient', note.patientId ? note.patientId : '', {
             maxAge: 30 * 24 * 60 * 60,
@@ -125,6 +104,14 @@ const NoteCard: React.FC<NoteCardProps> = ({
           <PeopleIcon />
         </IconButton>
       </Tooltip>
+      )
+    }
+  }
+
+  const renderHeader = (
+    <NoteCardHeader>
+      <span>{note.name}</span>
+      {handleChangePatient(null)}
       <IconButton onClick={handleOnDelete} size={"small"}>
         <DeleteOutlineOutlinedIcon />
       </IconButton>
